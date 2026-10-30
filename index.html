@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BrightPlay – Fun Learning Games</title>
+  <meta name="description" content="BrightPlay: create and play colourful educational games – quizzes, matching pairs and spelling challenges. Works offline.">
+  <meta name="theme-color" content="#6c4cf5">
+
+  <!-- Installable web app (iPad / iPhone "Add to Home Screen") -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="BrightPlay">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#/" onclick="document.getElementById('main').focus();return false;">Skip to content</a>
+
+  <header class="topbar">
+    <a class="brand" href="#/" aria-label="BrightPlay home">
+      <img src="icons/icon.svg" alt="" class="brand-logo" width="44" height="44">
+      <span class="brand-name">Bright<span>Play</span></span>
+    </a>
+    <nav class="mainnav" aria-label="Main">
+      <a href="#/" data-nav="home"><span class="nav-ico" aria-hidden="true">🏠</span><span>Home</span></a>
+      <a href="#/library" data-nav="library"><span class="nav-ico" aria-hidden="true">📚</span><span>Library</span></a>
+      <a href="#/create" data-nav="create"><span class="nav-ico" aria-hidden="true">✏️</span><span>Create</span></a>
+      <a href="#/backup" data-nav="backup"><span class="nav-ico" aria-hidden="true">💾</span><span>Backup</span></a>
+    </nav>
+    <button class="icon-btn sound-toggle" id="soundToggle" type="button" aria-label="Sound on" title="Sound on/off">🔊</button>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <noscript>
+      <div class="panel" style="margin:2rem auto;max-width:600px;text-align:center">
+        <h2>Please turn on JavaScript</h2>
+        <p>BrightPlay needs JavaScript to run its games.</p>
+      </div>
+    </noscript>
+  </main>
+
+  <!-- Full-screen game player -->
+  <div id="player" class="player" hidden aria-modal="true" role="dialog" aria-label="Game"></div>
+
+  <!-- Modal dialog + toasts -->
+  <div id="modalRoot"></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function (e) { console.warn('SW registration failed', e); });
+      });
+    }
+  </script>
+</body>
+</html>
