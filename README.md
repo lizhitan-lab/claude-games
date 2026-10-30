@@ -25,6 +25,7 @@ It is a plain static website (HTML, CSS and JavaScript). There is **no server, n
   - options to shuffle questions or answers, show the number of letters, and allow “Hear the word”
   - **Preview** before saving, plus a warning if you try to leave with unsaved changes
 - **Edit, duplicate, export or delete** any game from its card (✏️ or ⋯ buttons).
+- **Share by link** (🔗 on a card, in the ⋯ menu, or after saving): the link opens a play-only page with just that game. The person who opens it cannot see your library, create games or change anything.
 - **Scores**: best stars and number of plays appear on each card, with a 🏅 badge for a new personal best.
 - **Backup page**: export all games or chosen games to a `.json` file, import a backup (drop a file on desktop), restore the sample games, or delete everything.
 - Large touch targets, sound effects (with a mute button), confetti and a layout that adapts to iPad, iPhone and desktop.
@@ -36,6 +37,7 @@ It is a plain static website (HTML, CSS and JavaScript). There is **no server, n
 
 ```
 index.html              The app page
+play.html               Play-only page that shared game links open
 manifest.webmanifest    App name, colours and icons (for installing)
 sw.js                   Service worker (offline support)
 netlify.toml            Optional Netlify settings (no build needed)
@@ -45,6 +47,8 @@ js/storage.js           Saving to local storage, import and export
 js/ui.js                Pop-ups, messages, sounds, confetti, file helpers
 js/games.js             The Quiz, Matching and Spelling games
 js/editor.js            The game creator / editor
+js/share.js             Share links: packs a game into a link, plus the Share dialog
+js/play.js              The play-only screen for shared games
 js/app.js               Pages and navigation
 icons/                  App icons (SVG + PNG, including the iPad/iPhone icon)
 tests/smoke-test.js     Optional automated test (developers only)
@@ -107,6 +111,20 @@ Tap **Backup → ⬆️ Choose backup file**, then pick the `.json` file from th
 4. Tap **▶️ Preview** to try it, then **💾 Save game**. It now appears in the Library.
 
 To change a game later, tap ✏️ on its card. To copy, export or delete it, tap ⋯.
+
+---
+
+## 🔗 Sharing a game
+
+1. In the Library, tap **🔗** on a game's card (or **⋯ → Share link**, or **Share** after saving a game).
+2. Tap **📋 Copy link** (or **📤 Send…** on iPad/iPhone to use Messages, Mail, WhatsApp and so on) and send it.
+3. The person who opens the link sees only that game with a big **▶ Play** button. There are no menus, no library and no editor.
+
+How it works: the whole game is packed into the link itself (after the `#`), so no server or account is needed and nothing is uploaded anywhere. Because of that:
+- **Uploaded photos are not included** in links (they would make the link far too long). Emoji pictures are included.
+- **Editing a game does not change links you already sent.** Share it again to get an updated link.
+- Links for big games are long. Always use the Copy button so the whole link is copied.
+- The link opens `play.html` on your own BrightPlay website, so the site must be published (e.g. on Netlify) for others to open it.
 
 ---
 

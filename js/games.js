@@ -82,7 +82,7 @@
     var pct = Math.round(r.percent);
     var stars = starsFor(pct);
     var best = null;
-    if (!state.opts.preview && state.game.id) best = BP.Store.recordScore(state.game.id, { percent: pct, stars: stars });
+    if (!state.opts.preview && !state.opts.shared && state.game.id) best = BP.Store.recordScore(state.game.id, { percent: pct, stars: stars });
     var msg = pct === 100 ? 'Perfect score!' : stars === 3 ? 'Superstar!' : stars === 2 ? 'Great work!' : 'Good try – keep practising!';
     var starHtml = '';
     for (var i = 1; i <= 3; i++) starHtml += '<span class="star ' + (i <= stars ? 'on' : '') + '" style="animation-delay:' + (i * 0.2) + 's">★</span>';
@@ -97,7 +97,7 @@
       }).join('') + '</div>' +
       '<div class="results-actions">' +
       '<button type="button" class="btn btn-primary btn-lg" data-act="again">🔁 Play again</button>' +
-      '<button type="button" class="btn btn-light btn-lg" data-act="exit">' + (state.opts.preview ? '✏️ Back to editor' : '📚 Choose another game') + '</button>' +
+      '<button type="button" class="btn btn-light btn-lg" data-act="exit">' + (state.opts.preview ? '✏️ Back to editor' : state.opts.shared ? '🏠 Done' : '📚 Choose another game') + '</button>' +
       '</div>' +
       (r.review && r.review.length ? '<h3 class="review-title">Your answers</h3><ol class="review">' + r.review.map(function (v) {
         return '<li class="' + (v.ok ? 'ok' : 'bad') + '"><span class="review-mark" aria-hidden="true">' + (v.ok ? '✅' : '❌') + '</span><div><div class="review-q">' + esc(v.q) + '</div>' +

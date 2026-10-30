@@ -298,6 +298,34 @@ async function playSpell(page, id, mode) {
   await page.click('#btnSamples');
   ok(!!(await getGame(page, 'sample-shapes')), 'restore samples brings it back');
 
+  console.log('Share link (play-only)');
+  await page.goto(BASE + '#/library');
+  await page.waitForSelector('.game-card');
+  await page.click('.game-card[data-id="sample-opposites"] [data-act="share"]');
+  await page.waitForSelector('#shareLink');
+  const link = await page.inputValue('#shareLink');
+  ok(/play\.html#[zj]\./.test(link), 'share creates a play.html link');
+  await page.click('.modal .btn-light');
+  const guestCtx = await browser.newContext({ viewport: { width: 1024, height: 768 } });
+  const guest = await guestCtx.newPage();
+  guest.on('pageerror', (e) => errors.push('guest: ' + e.message));
+  await guest.goto(link);
+  await guest.waitForSelector('#sharePlay');
+  ok((await guest.textContent('.share-body h1')).trim() === 'Opposites', 'shared link shows the game title');
+  ok(!(await guest.$('.mainnav')) && !(await guest.$('a[href="#/create"]')) && !(await guest.$('a[href^="#/"]')), 'shared page has no navigation to the full app');
+  await shot(guest, 'shared-intro');
+  await guest.click('#sharePlay');
+  await guest.waitForSelector('.match .tile');
+  await playMatch(guest, false);
+  ok((await guest.textContent('.results-score .sub')).includes('7 pairs'), 'guest can play the shared game to the end');
+  ok(await guest.evaluate(() => !localStorage.getItem('brightplay.games.v1') && !localStorage.getItem('brightplay.scores.v1')), 'shared page does not create a library or scores');
+  await guest.click('[data-act="exit"]');
+  await guest.waitForSelector('#sharePlay');
+  await guest.goto(link.split('#')[0] + '#z.broken');
+  await guest.waitForSelector('.empty h1');
+  ok((await guest.textContent('.empty h1')).includes('does not work'), 'broken link shows a friendly message');
+  await guestCtx.close();
+
   console.log('Mobile layouts');
   for (const [name, dev] of [['ipad', devices['iPad (gen 7)']], ['iphone', devices['iPhone 13']]]) {
     const ctx = await browser.newContext({ ...dev });

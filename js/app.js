@@ -94,6 +94,7 @@
       (opts.compact ? '' :
         '<div class="card-actions">' +
         '<button type="button" class="btn btn-primary btn-play" data-act="play">▶ Play</button>' +
+        '<button type="button" class="tool" data-act="share" aria-label="Share ' + esc(g.title) + '" title="Share link">🔗</button>' +
         '<button type="button" class="tool" data-act="edit" aria-label="Edit ' + esc(g.title) + '" title="Edit">✏️</button>' +
         '<button type="button" class="tool" data-act="more" aria-label="More options for ' + esc(g.title) + '" title="More">⋯</button>' +
         '</div>') +
@@ -110,6 +111,7 @@
       if (act === 'play') go('#/play/' + encodeURIComponent(id));
       else if (act === 'edit') go('#/edit/' + encodeURIComponent(id));
       else if (act === 'more') moreMenu(id, refresh);
+      else if (act === 'share') { var sg = Store.get(id); if (sg) BP.Share.share(sg); }
     });
   }
 
@@ -120,6 +122,7 @@
       title: g.title, icon: g.icon,
       buttons: [
         { label: '✏️ Edit', value: 'edit', cls: 'btn-light' },
+        { label: '🔗 Share link', value: 'share', cls: 'btn-light' },
         { label: '📄 Duplicate', value: 'dup', cls: 'btn-light' },
         { label: '⬇️ Export', value: 'export', cls: 'btn-light' },
         { label: '🗑️ Delete', value: 'delete', cls: 'btn-danger-light' },
@@ -128,6 +131,7 @@
     }).then(function (v) {
       if (v === 'play') go('#/play/' + encodeURIComponent(id));
       else if (v === 'edit') go('#/edit/' + encodeURIComponent(id));
+      else if (v === 'share') BP.Share.share(g);
       else if (v === 'dup') {
         try { Store.duplicate(id); UI.toast('Copy created 📄', 'good'); refresh(); } catch (e) { UI.alert('Could not copy', e.message, '😟'); }
       } else if (v === 'export') exportGames([id], UI.slug(g.title));
@@ -353,12 +357,14 @@
           title: 'Game saved!', icon: '🎉', message: '"' + saved.title + '" is now in your library.',
           buttons: [
             { label: '✏️ Keep editing', value: 'stay', cls: 'btn-light' },
+            { label: '🔗 Share', value: 'share', cls: 'btn-light' },
             { label: '📚 Library', value: 'lib', cls: 'btn-light' },
             { label: '▶ Play now', value: 'play', cls: 'btn-primary' }
           ],
           cancelValue: 'stay'
         }).then(function (v2) {
           if (v2 === 'stay') { if (id === 'new') go('#/edit/' + encodeURIComponent(saved.id)); return; }
+          if (v2 === 'share') { if (id === 'new') go('#/edit/' + encodeURIComponent(saved.id)); BP.Share.share(saved); return; }
           go(v2 === 'play' ? '#/play/' + encodeURIComponent(saved.id) : '#/library');
         });
       },
@@ -474,11 +480,15 @@
   st.addEventListener('click', function () { Store.pref('sound', !UI.soundOn()); paintSound(); UI.sound('tap'); });
   paintSound();
 
-  window.addEventListener('hashchange', onHash);
-  window.addEventListener('beforeunload', function (e) {
-    if (inEditor && BP.Editor.isDirty()) { e.preventDefault(); e.returnValue = ''; }
-  });
-  route();
+  function start() {
+    window.addEventListener('hashchange', onHash);
+    window.addEventListener('beforeunload', function (e) {
+      if (inEditor && BP.Editor.isDirty()) { e.preventDefault(); e.returnValue = ''; }
+    });
+    route();
+  }
+  // A host page can set BP.DEFER_START and call BP.App.start() itself (e.g. to show a shared game instead)
+  if (!BP.DEFER_START) start();
 
-  BP.App = { go: go, route: route };
+  BP.App = { go: go, route: route, start: start };
 })();

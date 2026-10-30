@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Play a game – BrightPlay</title>
+  <meta name="description" content="Play a learning game someone shared with you on BrightPlay.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#6c4cf5">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="play-only">
+  <header class="topbar">
+    <span class="brand">
+      <img src="icons/icon.svg" alt="" class="brand-logo" width="44" height="44">
+      <span class="brand-name">Bright<span>Play</span></span>
+    </span>
+    <button class="icon-btn sound-toggle" id="soundToggle" type="button" aria-label="Sound on" title="Sound on/off">🔊</button>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <noscript><div class="empty"><h1>Please turn on JavaScript</h1><p>BrightPlay needs JavaScript to run its games.</p></div></noscript>
+  </main>
+
+  <div id="player" class="player" hidden aria-modal="true" role="dialog" aria-label="Game"></div>
+  <div id="modalRoot"></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/share.js"></script>
+  <script src="js/play.js"></script>
+  <script>
+    (function () {
+      var main = document.getElementById('main');
+      var st = document.getElementById('soundToggle');
+      function paint() { var on = BP.UI.soundOn(); st.textContent = on ? '🔊' : '🔇'; st.setAttribute('aria-label', on ? 'Sound on' : 'Sound off'); }
+      st.addEventListener('click', function () { BP.Store.pref('sound', !BP.UI.soundOn()); paint(); });
+      paint();
+      function load() {
+        BP.Player.close(true);
+        var code = location.hash.replace(/^#/, '');
+        if (!code) { BP.PlayOnly.message(main, '🔗', 'No game here yet', 'Open the full game link you were sent to start playing.'); return; }
+        BP.Share.decode(code).then(function (g) { BP.PlayOnly.show(main, g); })
+          .catch(function (e) { BP.PlayOnly.message(main, '🧩', 'This link does not work', e.message); });
+      }
+      window.addEventListener('hashchange', load);
+      load();
+    })();
+  </script>
+</body>
+</html>

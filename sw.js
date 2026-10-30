@@ -1,15 +1,18 @@
 /* BrightPlay service worker – makes the app work offline.
    Bump CACHE_VERSION whenever you change any app file so devices pick up the update. */
-var CACHE_VERSION = 'brightplay-v1.0.0';
+var CACHE_VERSION = 'brightplay-v1.1.0';
 var APP_SHELL = [
   './',
   './index.html',
+  './play.html',
   './manifest.webmanifest',
   './css/styles.css',
   './js/data.js',
   './js/storage.js',
   './js/ui.js',
   './js/games.js',
+  './js/share.js',
+  './js/play.js',
   './js/editor.js',
   './js/app.js',
   './icons/icon.svg',
