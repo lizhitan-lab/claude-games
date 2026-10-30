@@ -57,6 +57,39 @@
     });
   }
 
+  /* Letters-and-digits form (base32), for hosts that only pass plain #names through a link */
+  var B32 = 'abcdefghijklmnopqrstuvwxyz234567';
+  function b32FromBytes(bytes) {
+    var out = '', bits = 0, val = 0;
+    for (var i = 0; i < bytes.length; i++) {
+      val = (val << 8) | bytes[i]; bits += 8;
+      while (bits >= 5) { out += B32[(val >>> (bits - 5)) & 31]; bits -= 5; }
+    }
+    if (bits > 0) out += B32[(val << (5 - bits)) & 31];
+    return out;
+  }
+  function bytesFromB32(str) {
+    var out = [], bits = 0, val = 0;
+    for (var i = 0; i < str.length; i++) {
+      var v = B32.indexOf(str[i]);
+      if (v < 0) throw new Error('bad');
+      val = ((val << 5) | v) & 0xffff; bits += 5;
+      if (bits >= 8) { out.push((val >>> (bits - 8)) & 255); bits -= 8; }
+    }
+    return new Uint8Array(out);
+  }
+  function encodeName(game, keepImages) {
+    var bytes = new TextEncoder().encode(JSON.stringify(playable(game, !!keepImages)));
+    if (!canZip) return Promise.resolve('j' + b32FromBytes(bytes));
+    return pipe(bytes, CompressionStream).then(function (z) { return 'z' + b32FromBytes(z); });
+  }
+  function decodeName(name) {
+    var m = /^([zj])([a-z2-7]+)$/.exec(String(name || '').trim());
+    if (!m) return Promise.reject(new Error('This game link is broken or incomplete. Ask for the link again and make sure you copy all of it.'));
+    var code = m[1] + '.' + b64urlFromBytes(bytesFromB32(m[2]));
+    return decode(code);
+  }
+
   /* ---------- providers: how a link is made ---------- */
   // Default (the website): everything is packed into the link itself, so no server is needed.
   var provider = {
@@ -119,6 +152,8 @@
     share: share,
     encode: encode,
     decode: decode,
+    encodeName: encodeName,
+    decodeName: decodeName,
     playable: playable,
     setProvider: function (p) { provider = p; }
   };
