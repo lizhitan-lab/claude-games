@@ -71,7 +71,7 @@ const TitleScene = {
     textBig('WORLD', 160 - 16 * 3 + 4, 70 + bob, 3, '#ffe060', '#3a2008');
     textC('A pixel fishing adventure', 160, 108, '#c8e8ff');
     this.menu.draw(!ui.length);
-    textC(saveStatusLine(), 160, 202, saveStatus === 'cloud' ? '#a8ffa8' : '#c8e8ff', '#081838');
+    textC(saveStatusLine(), 160, 202, saveStatus === 'cloud' ? '#a8ffa8' : saveStatus === 'blocked' ? '#ff9090' : '#c8e8ff', '#081838');
     textC('Arrows/WASD move - Z/Enter OK - X back - Esc menu', 160, 214, '#8fb0e0', '#081838');
   },
 };

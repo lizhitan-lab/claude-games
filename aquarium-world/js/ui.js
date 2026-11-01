@@ -226,6 +226,7 @@ function doSave(i = curSlot) {
   if (saveGame(i)) { sfx('coin'); toast('Saved to Slot ' + (i + 1) + '!', '#b0ffb0'); } else { sfx('err'); toast('Save failed!', '#ffb0b0'); }
 }
 function saveStatusLine() {
+  if (saveStatus === 'blocked') return 'Saving is blocked here: use Backup!';
   return saveStatus === 'cloud' ? 'Saves are kept in your claude.ai account'
     : saveStatus === 'checking' ? 'Connecting to your saves...' : 'Saves are kept in this browser only';
 }
@@ -347,7 +348,7 @@ class SlotUI {
       text('At: ' + m.where, 40, y + 38, '#80e0ff');
       if (m.when) text('Saved ' + m.when + (i === curSlot && G ? '  (current)' : ''), 40, y + 52, '#a8b8f0');
     } else if (i < SLOT_COUNT) textC(this.mode === 'load' ? 'Nothing saved here yet.' : 'A fresh slot for a new adventure.', 160, y + 30, '#a8b0d0');
-    textC(saveStatusLine(), 160, y + 82, saveStatus === 'cloud' ? '#a8ffa8' : '#c8d0f0', '#101028');
+    textC(saveStatusLine(), 160, y + 82, saveStatus === 'cloud' ? '#a8ffa8' : saveStatus === 'blocked' ? '#ff9090' : '#c8d0f0', '#101028');
   }
 }
 class MainMenu {

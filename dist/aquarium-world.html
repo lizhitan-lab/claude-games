@@ -1,0 +1,3101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0c2a6a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Aquarium">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAJz0lEQVR4AeycT4hcRRCHi0FNJCoiJKccEgwY9CB4EA0I4kERPAkiGNBEDYJ/QFEPnkQEb4JCEGM0BlG8iDcPgh48eBE8eBDiKR4iBhdBxIDCm13zmMzydrZrd3te9+uuV1+gdt/U61dd9VX/poehs5MjH1xcw2DgdQ1MhH8QcEwAAThuPqWLIABWgWsCCMB1+ynesQBoPgQufwRamzaCwcDrGmAH4G3QNQEE4Lr9FI8AWAOuCSAAj+2n5nUCCGAdBRceCUxWm0YwGHhdA+wAHt/2qHmdAAJYR8GFRwIIwGPXHde8WDoCWCTCa1cEEICrdlPsIoGJ1zMg1N1wBmza8P8BFt8ReO2LAB+BfPWbahcIOBLArPJTj90sc5t5+OmZgDsBeG42tW8mgAA2M8HjiICLs0Dzjzzt725v29dz83oWxnvd7ABdRXDtjgAC8NByalQJuBDAiU9+kbl1Scx97e+un2s/BFwIwE87qTSWAAKIJcb4URFwdxbo6Y9/lrlxHqj/eaDTj98ic7PIkx1gVO9nFLNIYLvXCGA7QtwfNQEEMOr2Utx2BBDAdoS4P2oCCGDU7aW47QiYOQv04fHbZG7ez6+UqH/OfvF3d4Et3pu/LpHvTucc8Q7QbQ3XEAgTQABhLnidEEAAThrdt8wnT/8kIevGDd1vfd0xtV0jgNo6Qj6DEkAAg+JmstoIVHcW6MyJ2yVkXXCh+63P4lmULDlP+5/x2Wle3b7s9JmaxrEDdDvItTsCCMBdyym4S6A6ARx//0cJWTfp0P3W1x3D9TAEWu5zG2bGtLNUJ4C05RENAlsTQABb8+GuMQKx6U7WmqlYsG5hFvIlRxvrih2gqyyu3RFAAO5aTsFdAsUE8Nt7j0rIusl1r4+d/EHm1vVzPSMQYrmMbxbNz89iAvCDmEprJjAiAdSMmdxqJTBZnTZSwjQgJXIZw5waz1j/GFjE1MAOELtCGD8qAghgVO2kmFgC2QXw+6mjErILF85JyEJjW19sYbWNb2vIaSGWy/i0HGvjmSqf7AJIlShxtiDAraUJIICl0fHgGAhM1ppGcloqSDlzHCJ2Kg6l4gzBqMQc7AClVhTzVkEAAVTRBpIoRaA6AWjfXFz86AkJWSlw2ryhHFufVlcqv5bP2P1966tOAH0L4nkIxBBAADG0GDs6AtnPAuUmFnPuY4ixuestFX8IdiXmYAcotaKYtwoCCKCKNpBEKQKGBVAK2WzeP84+JSGb3d38c9euXZLTmi8OSwrbnPnME6q19c3u2v2JAOz2jswTEEAACSASwi4BM2eBNMQlzo+0c2r5ePO3LCwbO4C3FUu9GwgggA04jLwgzWQEzAhAOzOz8ukzErJYQqEYW/l+fUckxmLzKTVeq2ll5bwETeGvsStVlzavGQFoBeCHQB8CCKAPPZ41T8D8WSCtA7HnSrQ4+NMSiO1L7vHsAGn7S7TMBFKHRwCpiRLPFAHzAtC+Hfrz8+ckxrRvPzR/bJcvfXZQclpsPrHjtdw1Pppf60lsPqnGmxdAKhDE8UkAAfjsO1VfIWD+LNCVOvhlnECp80SGdgDjHSb9KgkggCrbQlJDEcgugJseeVdCtn//YYmxWCDat0OxcRg/bgLZBTBufFRnnQACsN5B8u9FIPtZIO0sR6+svT3soF5tneT2swM4WFyUqBNAADob7jggUEwANz78toQsN/Pg/2paOZ97WvPx9z//r4QstjDtjNBfX74sIYuNHzu+mABiE2U8BHIQQAA5qBIzGYHcgbKfBYo945G7YOLbIhC7fmLHswPYWg9km5gAAkgMlHC2CCAAW/0qlu2Fk7slZMUSSjQxAkgEkjA2CVQsAJtAydoWgcnatJGazBY+ss1NIPfaZAfI3UHiV00AAVTdHpLLTcCdALS/b7Pn6HnJabkbSfzlCLgTwHKYBn6K6QYjgAAGQ81ENRKYrDaN1GQ1QiKncgRyr012gHK9ZeYKCCCACppACuUIFBPAP1+/LiHLjeLAiyIhyz3vnofOCnY2yL7tx3UPvCGtLVruvhQTQO7CiA+BnRBAADuhxJjREih2Fmi0RClsKQK5z/xo8dkBlmoXD42FAAIYSyepYykC2QVw6Zs3JWSb/3rzOdnKF1ud9penY+MwfhgCe+77VkKWe/bsAshdAPEh0IcAAuhDj2fNE8h+Fsg8IQooSoCzQEXxM/nYCfARqIYOk0MxAskEcP3930nIclemfdtz7b2vSYzt3XtQYix3XVbi7z10TGJM60mpepMJoFQBzAuBPgQQQB96PGueQLKzQLWR0M5+aP7a8h9rPrH8tfGp/OwAY11pRuoqnSYCKN0B5i9KwIwAtG97dt/zqoQslmooxla+mG+M2rGx+ZQaH/ONTjt2K0ahe6Xq0uY1IwCtAPwQ6EMAAfShx7PmCSQ7C1SKRO6zIlr8UvXWNq/GJ9av1aXFueHB7yVk2njNX3AH0ErGD4HhCCCA4VgzU4UEEMCSTbnm7pckxtpvTEL23+67JMZCMVL6Ympqxy6Jr5rHEEA1rSCREgQQQAnqzFkNAfNngVKdCckdZ0PHK36Rm4MWX0OSarwWhx1AI4/fBQEE4KLNFKkRqE4A2pmfq+98QUKmFVabP5R769Pq1fztMzmtNm6586lOALkLJj4EugQQQJcG19kJ1DbBZK2ZSgrLXViKHGuMEcutxhpS5KRx0GLHjtfisANoJPG7IIAAXLSZIjUC2QVw1R3PSsi0bzlCY1ufVoB1f1tbjFmvt7b8swugtoLJBwJdAgMKoDst1xCog8BkddpICtPK0WLHjtfi4E/Tv9IcY9dD7HitPnYAjSR+FwQQgIs2U6RGoJgA9r11REKmJYofAjkIFBNAjmKqjUli1RJAANW2hsSGIDBZaxpJYVqyWuzY8Voc/Gn6V5pj7HqIHa/Vxw6gkcTvggACcNFmitQIIACNDP4kBGoPggBq7xD5ZSWAALLiJXjtBDgLlOgslHbWBH+zo7NmmlA0frHjtTjsABpJ/C4IIAAXbaZIjcDkq1f+lhR2Zt8+2Wiz11rs0NjWp43Hn6ZPtXJsex8yLd/Q2Nanjdf87ADaWwN+FwQQgIs2U6RGYHLg0K2CwcDrGmAH0N4a8LsggABytJmYZgggADOtItEcBBBADqrENEMAAZhpFYnmIIAAclAlphkCCMBMq2wkai1LBGCtY+SblAACSIqTYNYIIABrHSPfpAQQQFKcBLNGAAFY6xj5JiWQUABJ8yIYBAYhgAAGwcwktRJAALV2hrwGIYAABsHMJLUSQAC1doa8BiGAAFJgJoZZAgjAbOtIPAUBBJCCIjHMEkAAZltH4ikIIIAUFIlhlgACMNu6OhK3nsX/AAAA//+XSG7oAAAABklEQVQDAIRWXQJdc1o1AAAAAElFTkSuQmCC">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAJSUlEQVR4AeydP6hcVRCHh0VNJCoiJFUKgwGDFoKFaEAQC0WwEkQwoIkaBP+AohZWIoKdoBDEGI1BFBuxsxC0sLARLCwErWIRMRgEEQMK9731XR5L7tuds7ln7zl3Z875hMm7O3fuOTPf/N4hb2fznBx+//wUg0EpGpgI/0GgIAIIuqBmUooIgkYFRRFA0EW1k2IQdDUaqKPQyXSjEQwGpWiAE7qOg6uaKhF0Na2uo1AEXUefq6kSQVfT6joKnWw2jdRu1F+OBjih6zi4qqkSQVfT6joKRdB19LmaKhF0Na2uo1AEXUefq6nyMqPvhrE4Hw1wpQFO6GrOrjoKRdB19LmaKosX9MlHb5KZVdPVigstXtAV97bK0hF0lW1Xii7EVeRnOWZ/xWi/dvvUvp4Zn99oivwMDyd0V/FcuydQpKCPf/yLzKzboZmv/dr1c10OgSIFXU57qCSWAIKOJUa8aQLFj76f+ugnmdmK/7LZ1eg3ZY2nHrtZZpZy3ZxrcUKbPm9ILpYAgo4lRrxpAgjadHtILpYAgo4lRrxpAgjadHtILpbAsNF35l+B8MGxW2VmjKrzjapnjOe/dsU0f699bbEnnNDdrnHtngCCdt9CCugSQNBdGpVeP3HqR9Gsi+Ny97ux67xG0Oukz97JCZgZfZ8+fpvMW7fa+Xuz1znHqLWv3eXvhQUndLdrXLsngKDdt5ACugTMCPrYez/IvHUTnb83e92N4TotgRnj9mvalfOtZkbQ+Upk5ZoIIOiaul1BrZNpsyFWrcvfao7Txi6/GplxQne/a7h2TwBBu28hBXQJjC7o3959RDTrJjW7Pnrie5nZzFfzV41brK90fqMLunSg1LdeAgh6vfzZPTGByeZGI7lMWzeUvxaLb2dvQuxi/KUz5YSOUQOx5glkFfTvJ4/IvJ0797NoNh/XvjZPT0mwzTuXadxifVpuShluXVkF7ZYKibslgKDdto7ENQJbo+9ma/Sdx7QNY3zTJk9eOdeNqc9KbAIe2TQUmxsntBVVkUcSAgg6CUYWsULAjKC1n9bPf/i4aGYFnpabVkcqn5W6LedhRtCWIZGbHwII2k+vyLQHgayj7x77rxRiZXzbK3kHQVZ4psiDE9qB4EixPwEE3Z8VkQ4IIOgeTfrjzJOimfborl27JJc1nx+SoablrNXW+rRY6z4Ebb1D5BdFAEFH4SLYOoF1fpZjZTax8/2h8Ssn6vzBodzW8TwntHPRkf5OAqYFHRoZX/jkadFsZ2nLX2nPh3y/vi3S15bvuv67Wh0XLpwV1QKcNU7rr2w7A9OC3k6RPyHQnwCC7s+KSAcEXI6+Q1xjRqehNfCvRmA5+2a03yzACb1a/3jKKAEEbbQxpLUaAZeCDr378ednz0pf037aD/li0F789IDkspg8YmJD+YZ4aP4Q95g8UsS6FHSKwlmjTAIIusy+VluVy9F3Sd0qvZaxx9+c0KUrqrL6EHRlDS+93KyCvuHhd2Te9u8/JH0tFr727kfsGsT7JpBV0L7RkL1HAllH39o41CMkcl6dgKaBnD7DJ/TqEHmyXgIIut7eF1n56IK+/qG3RLNcdNUPrl84m2s7l+vuf+5f0SymGG0c3vr++uIl0Sxm7ZjY0QUdkxyxEIglgKBjiRFvmkDW0XfM2NM0JZJLTmCHNhL+nxo4oZO3igXXSQBBr5M+eycngKCTI/W34LkTu0Uzf5WIIGiPXSPnIAEEHUTDDY8EJtONRiyYR3gj5FzsFrk0xwldrGTqLKx4QYf+RfOeI2clh9UpIztVFy9oO6jJZAwCCHoMyuwxGoHJ5tbY0YKNVjEbmSCQS3N+T2gTbSEJawQQtLWOkM8gAqML+p+vXhPNBlWx5OEbXxDRbMkjg27tefCM1Gga49Z3zf2vi2aDIC95eHRBL8mFWxAYTABBD0bIApYIjD76tlQ8ueQnkGLEHbMGJ3T+nrLDiAQQ9Iiw2So/gayCvvj1GzJv2u+fC/liy9d+Z17sGsSnJbDn3m9Es7S7XFotq6AvbcMVBMYhgKDH4cwuIxHI+lmOkWqoeBu/pfNZDr+9I/MRCST5K8e1930rmuWqQ/vhr/Vdfc+r0tf27j0gfS1XHdbX3XvwqPS1EPexa0wi6LGTZj8IhAgg6BAZ/C4JJBl9W6k8ZkRqJedS8gixD9UXih/qL/aEDoHEXzYBBF12f6urzrSg23cuNNt99yuiWUz3tOdDvr7vhrRxMTmsI7bvuxZtXIiH5l9HLdqepgWtJYwPAssIIOhldLjnjkCS0ffYVecam4bWHbs+K/uFeMT4Q7Voa1z3wHeimRbb8Un3mhM6RBy/SwII2mXbSDpEAEGHyHT8V931ovS19t0Bzf7bfaf0Ne35VL6+dbRxHQRuLhG0m1aRaB8CLkffQ8ejOZ/vA32dMTlr19YO1To0Vnu+9XFCh4iX4K+wBgRdYdNLLtmMoLUR95V3PC+aWW6Ilm/r0+oL+dr4XGaZXYrczAg6RTGsAQEEjQaKIjCZNhsy1HIRGZqXpedjGFnKe2guobq1dWNitedbX60ndIgdfucEELTzBpL+TgJZBX3F7c/IvIV+sp+Pa1/vTNX3q7aevua70vVmn1XQ6y2N3WskgKBr7HrBNU82NxoZaiE+2roxsdrz+Ib3a0yGMf2OiQ3VsHhCh1bFDwEHBEYX9L43D4tmDliRogMCowvaARNSdEwAQTtuHqkvEtgafTdbo+9htrjstmfaLK67fWfxTy0W3yI/b0wWO73t0erYvrP4pxYb8nFCL/KrxlNioQi6xK5WXBOCrrj5JZaOoEvsasU1IeiKm19i6Yy+E4z+Q2NY/E3we0ZjEwrWYkM+TmiVIk6vBBC0186Rt0pg8uXLf8tQO71vn2imravFtT4tFt/w3qybYdtbzbS8tLjWp8WGfJzQ6vc5Tq8EELTXzpG3SmBy48FbBINBKRqIPqHVbwucEDBCAEEbaQRppCGAoNNwZBUjBBC0kUaQRhoCCDoNR1YxQgBBG2mEwTRcpoSgXbaNpEMEEHSIDH6XBBC0y7aRdIgAgg6Rwe+SAIJ22TaSDhFA0CEyy/zcM0sAQZttDYmtQgBBr0KNZ8wSQNBmW0NiqxBA0KtQ4xmzBBC02daQ2CoEUgt6lRx4BgLJCCDoZChZyAIBBG2hC+SQjACCToaShSwQ+B8AAP//5vNmtQAAAAZJREFUAwC1c1fB0+A6egAAAABJRU5ErkJggg==">
+<title>Aquarium World</title>
+<style>
+  html,body{margin:0;height:100%;background:#05070f;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+  #wrap{position:fixed;inset:0;box-sizing:border-box;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;align-items:center;justify-content:center}
+  canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;box-shadow:0 0 0 2px #1a2340,0 0 40px #0a1a40}
+  #touch{display:none;width:100%;max-width:520px;height:150px;position:relative;flex:none}
+  body.touch #touch{display:block}
+  .tb{position:absolute;background:#1c2850;border:2px solid #6a80c0;color:#dfe6ff;font:bold 16px monospace;
+      display:flex;align-items:center;justify-content:center;border-radius:10px;opacity:.85}
+  .tb.on{background:#3a5aa0}
+  #dpad{position:absolute;left:8px;top:4px;width:150px;height:142px;touch-action:none}
+  #dpad .tb{pointer-events:none}
+  #nameInput{position:fixed;display:none;z-index:5;box-sizing:border-box;border:0;outline:none;padding:0;margin:0;
+      background:transparent;color:transparent;caret-color:transparent;font-size:16px;-webkit-user-select:text;user-select:text}
+  .overlay{position:fixed;display:none;z-index:5;margin:0;padding:0;border:0;opacity:0;cursor:pointer;font-size:16px}
+  #help{color:#7f8fbf;font:12px monospace;margin-top:8px;text-align:center}
+  body.touch #help{display:none}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c" width="320" height="240"></canvas>
+  <div id="help">Arrows/WASD: move &nbsp; Z/Enter/Space: confirm &nbsp; X/Backspace: cancel (hold to run) &nbsp; Esc/M: menu</div>
+  <div id="touch">
+    <div id="dpad">
+      <div class="tb" data-d="up"    style="left:50px;top:2px;width:50px;height:44px">&#9650;</div>
+      <div class="tb" data-d="left"  style="left:0;top:48px;width:50px;height:44px">&#9664;</div>
+      <div class="tb" data-d="right" style="left:100px;top:48px;width:50px;height:44px">&#9654;</div>
+      <div class="tb" data-d="down"  style="left:50px;top:94px;width:50px;height:44px">&#9660;</div>
+    </div>
+    <div class="tb" data-k="b"     style="right:96px;top:70px;width:62px;height:62px;border-radius:50%">B</div>
+    <div class="tb" data-k="a"     style="right:16px;top:30px;width:70px;height:70px;border-radius:50%">A</div>
+    <div class="tb" data-k="menu"  style="right:110px;top:10px;width:64px;height:34px">MENU</div>
+  </div>
+</div>
+<input id="nameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" aria-label="Name">
+<input id="fileInput" class="overlay" type="file" accept=".json,application/json,text/plain" aria-label="Load a save file">
+<button id="exportBtn" class="overlay" type="button" aria-label="Save this slot to a file"></button>
+<script>
+// ---- js/engine.js ----
+'use strict';
+// ============ Core / utils ============
+const W = 320, H = 240, TS = 16;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+let T = 0; // global frame counter
+
+const rnd = (a, b) => a + Math.random() * (b - a);
+const irnd = (a, b) => Math.floor(rnd(a, b + 1));
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function mkCanvas(w, h) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  c.getContext('2d').imageSmoothingEnabled = false;
+  return c;
+}
+function seeded(seed) {
+  let s = seed >>> 0;
+  return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+}
+function hash2(x, y) {
+  let h = (x * 374761393 + y * 668265263) >>> 0;
+  h = ((h ^ (h >>> 13)) * 1274126177) >>> 0;
+  return (h ^ (h >>> 16)) >>> 0;
+}
+function shade(hex, amt) { // amt -1..1
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  if (amt >= 0) { r += (255 - r) * amt; g += (255 - g) * amt; b += (255 - b) * amt; }
+  else { r *= 1 + amt; g *= 1 + amt; b *= 1 + amt; }
+  return '#' + [r, g, b].map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+}
+function fmt(n) { return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+function rect(x, y, w, h, c, g = ctx) { g.fillStyle = c; g.fillRect(x, y, w, h); }
+function pline(x0, y0, x1, y1, c, g = ctx, th = 1) { // pixel line
+  x0 = Math.round(x0); y0 = Math.round(y0); x1 = Math.round(x1); y1 = Math.round(y1);
+  const dx = Math.abs(x1 - x0), dy = -Math.abs(y1 - y0), sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
+  let err = dx + dy; g.fillStyle = c;
+  for (let i = 0; i < 2000; i++) {
+    g.fillRect(x0, y0, th, th);
+    if (x0 === x1 && y0 === y1) break;
+    const e2 = 2 * err;
+    if (e2 >= dy) { err += dy; x0 += sx; }
+    if (e2 <= dx) { err += dx; y0 += sy; }
+  }
+}
+function pellipse(cx, cy, rx, ry, c, g = ctx) { // filled pixel ellipse
+  g.fillStyle = c;
+  for (let y = -ry; y <= ry; y++) {
+    const w = Math.round(rx * Math.sqrt(Math.max(0, 1 - (y * y) / (ry * ry + 0.0001))));
+    g.fillRect(Math.round(cx - w), Math.round(cy + y), w * 2 + 1, 1);
+  }
+}
+function pring(cx, cy, rx, ry, c, g = ctx) {
+  g.fillStyle = c;
+  const n = Math.max(12, Math.round((rx + ry) * 3));
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    g.fillRect(Math.round(cx + Math.cos(a) * rx), Math.round(cy + Math.sin(a) * ry), 1, 1);
+  }
+}
+
+// ============ Bitmap font (5x7) ============
+const GLYPHS = {
+  A: '0E11111F111111', B: '1E11111E11111E', C: '0E11101010110E', D: '1C12111111121C', E: '1F10101E10101F',
+  F: '1F10101E101010', G: '0E11101711110F', H: '1111111F111111', I: '0E04040404040E', J: '0702020202120C',
+  K: '11121418141211', L: '1010101010101F', M: '111B1515111111', N: '11111915131111', O: '0E11111111110E',
+  P: '1E11111E101010', Q: '0E11111115120D', R: '1E11111E141211', S: '0F10100E01011E', T: '1F040404040404',
+  U: '1111111111110E', V: '11111111110A04', W: '1111111515150A', X: '11110A040A1111', Y: '1111110A040404',
+  Z: '1F01020408101F',
+  a: '00000E010F110F', b: '1010161911111E', c: '00000E1010110E', d: '01010D1311110F', e: '00000E111F100E',
+  f: '0609081C080808', g: '000F11110F010E', h: '10101619111111', i: '04000C0404040E', j: '0200060202120C',
+  k: '10101214181412', l: '0C04040404040E', m: '00001A15151111', n: '00001619111111', o: '00000E1111110E',
+  p: '00001E111E1010', q: '00000D130F0101', r: '00001619101010', s: '00000E100E011E', t: '08081C08080906',
+  u: '0000111111130D', v: '00001111110A04', w: '0000111115150A', x: '0000110A040A11', y: '000011110F010E',
+  z: '00001F0204081F',
+  '0': '0E11131519110E', '1': '040C040404040E', '2': '0E11010204081F', '3': '1F02040201110E', '4': '02060A121F0202',
+  '5': '1F101E0101110E', '6': '0608101E11110E', '7': '1F010204080808', '8': '0E11110E11110E', '9': '0E11110F01020C',
+  ' ': '00000000000000', '.': '00000000000C0C', ',': '000000000C0408', '!': '04040404040004', '?': '0E110102040004',
+  ':': '000C0C000C0C00', ';': '000C0C000C0408', '-': '0000001F000000', '+': '0004041F040400', "'": '0C040800000000',
+  '"': '0A0A0A00000000', '/': '00010204081000', '(': '02040808080402', ')': '08040202020408', '%': '18190204081303',
+  '>': '08040201020408', '<': '02040810080402', '*': '0004150E150400', '#': '0A0A1F0A1F0A0A', '=': '00001F001F0000',
+  '&': '0C12140815120D', '_': '0000000000001F', '^': '040E1504040400', '|': '00040404150E04',
+  '~': '000A1F1F0E0400', // heart
+  '$': '0E1F1B1B1F0E00', // coin
+};
+const FONT_CHARS = Object.keys(GLYPHS);
+const charIndex = {};
+const fontAtlas = mkCanvas(FONT_CHARS.length * 6, 8);
+(() => {
+  const g = fontAtlas.getContext('2d'); g.fillStyle = '#fff';
+  FONT_CHARS.forEach((ch, i) => {
+    charIndex[ch] = i;
+    const s = GLYPHS[ch];
+    for (let r = 0; r < 7; r++) {
+      const b = parseInt(s.substr(r * 2, 2), 16);
+      for (let c = 0; c < 5; c++) if (b & (16 >> c)) g.fillRect(i * 6 + c, r, 1, 1);
+    }
+  });
+})();
+const tintCache = {};
+function fontFor(color) {
+  let c = tintCache[color];
+  if (!c) {
+    c = mkCanvas(fontAtlas.width, 8);
+    const g = c.getContext('2d');
+    g.drawImage(fontAtlas, 0, 0);
+    g.globalCompositeOperation = 'source-in';
+    g.fillStyle = color; g.fillRect(0, 0, c.width, 8);
+    tintCache[color] = c;
+  }
+  return c;
+}
+function drawRaw(str, x, y, color, g) {
+  const f = fontFor(color);
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === ' ') continue;
+    let idx = charIndex[str[i]];
+    if (idx === undefined) idx = charIndex['?'];
+    g.drawImage(f, idx * 6, 0, 5, 7, x + i * 6, y, 5, 7);
+  }
+}
+function text(str, x, y, color = '#fff', shadow = '#101028', g = ctx) {
+  str = String(str); x = Math.round(x); y = Math.round(y);
+  if (shadow) drawRaw(str, x + 1, y + 1, shadow, g);
+  drawRaw(str, x, y, color, g);
+}
+const tw = s => String(s).length * 6 - 1;
+function textR(str, xr, y, c, s, g) { text(str, xr - tw(str), y, c, s, g); }
+function textC(str, cx, y, c, s, g) { text(str, Math.round(cx - tw(str) / 2), y, c, s, g); }
+function textBig(str, x, y, scale, color, outline = '#101028', g = ctx) {
+  str = String(str);
+  const t = mkCanvas(str.length * 6 + 2, 9), tg = t.getContext('2d');
+  for (const [ox, oy] of [[0, 0], [2, 0], [0, 2], [2, 2], [1, 0], [0, 1], [2, 1], [1, 2]]) drawRaw(str, ox, oy, outline, tg);
+  drawRaw(str, 1, 1, color, tg);
+  g.drawImage(t, Math.round(x), Math.round(y), t.width * scale, t.height * scale);
+}
+function wrap(str, max) {
+  const out = [];
+  for (const para of String(str).split('\n')) {
+    let line = '';
+    for (const w of para.split(' ')) {
+      if (!line.length) line = w;
+      else if ((line + ' ' + w).length <= max) line += ' ' + w;
+      else { out.push(line); line = w; }
+    }
+    out.push(line);
+  }
+  return out;
+}
+
+// ============ Input ============
+const inp = { held: {}, pressed: {}, holdT: {} };
+const KEYMAP = {
+  ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right',
+  KeyZ: 'a', Enter: 'a', Space: 'a', KeyJ: 'a', KeyX: 'b', Backspace: 'b', KeyK: 'b', ShiftLeft: 'b', ShiftRight: 'b',
+  Escape: 'menu', KeyM: 'menu', Tab: 'menu',
+};
+let textHandler = null; // set by name-entry UI
+function vpress(k) { if (!inp.held[k]) { inp.pressed[k] = true; inp.holdT[k] = 0; } inp.held[k] = true; }
+function vrelease(k) { inp.held[k] = false; }
+const nameInput = document.getElementById('nameInput');
+addEventListener('keydown', e => {
+  audioUnlock();
+  if (document.activeElement === nameInput) return; // the name box handles its own typing
+  if (textHandler && textHandler(e)) { e.preventDefault(); return; }
+  const k = KEYMAP[e.code];
+  if (k) { e.preventDefault(); if (!e.repeat) vpress(k); }
+});
+addEventListener('keyup', e => { const k = KEYMAP[e.code]; if (k) vrelease(k); });
+addEventListener('blur', () => { for (const k in inp.held) inp.held[k] = false; });
+inp.rep = k => !!inp.pressed[k] || (inp.held[k] && inp.holdT[k] > 16 && inp.holdT[k] % 4 === 0);
+function inputEndFrame() {
+  inp.pressed = {};
+  for (const k in inp.held) if (inp.held[k]) inp.holdT[k] = (inp.holdT[k] || 0) + 1;
+}
+// touch
+(() => {
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (isTouch) document.body.classList.add('touch');
+  // d-pad: one surface, so sliding a finger between arrows changes direction
+  const dp = document.getElementById('dpad'), arrows = {};
+  dp.querySelectorAll('.tb').forEach(el => { arrows[el.dataset.d] = el; });
+  let dpDir = null, dpId = null;
+  const dpSet = d => {
+    if (dpDir === d) return;
+    if (dpDir) { vrelease(dpDir); arrows[dpDir].classList.remove('on'); }
+    dpDir = d;
+    if (d) { vpress(d); arrows[d].classList.add('on'); }
+  };
+  const dpAt = e => {
+    const r = dp.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+    if (Math.hypot(dx, dy) < 10) return null;
+    return Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up');
+  };
+  dp.addEventListener('pointerdown', e => { e.preventDefault(); audioUnlock(); dpId = e.pointerId; try { dp.setPointerCapture(e.pointerId); } catch (_) {} dpSet(dpAt(e)); });
+  dp.addEventListener('pointermove', e => { if (e.pointerId === dpId) dpSet(dpAt(e)); });
+  const dpOff = e => { if (e.pointerId === dpId) { dpId = null; dpSet(null); } };
+  dp.addEventListener('pointerup', dpOff); dp.addEventListener('pointercancel', dpOff);
+  document.querySelectorAll('#touch > .tb').forEach(el => {
+    const k = el.dataset.k;
+    const on = e => { e.preventDefault(); audioUnlock(); el.classList.add('on'); vpress(k); };
+    const off = e => { e.preventDefault(); el.classList.remove('on'); vrelease(k); };
+    el.addEventListener('pointerdown', on);
+    el.addEventListener('pointerup', off);
+    el.addEventListener('pointercancel', off);
+    el.addEventListener('pointerleave', off);
+  });
+})();
+// ---- tapping the game screen ----
+// UIs register tap areas while drawing (game coordinates); the next frame's tap is matched against them.
+let hits = [], pendingTap = null, canvasHoldA = false, canvasDown = false;
+function hit(x, y, w, h, fn) { hits.push({ x, y, w, h, fn }); }
+cv.addEventListener('pointerdown', e => {
+  e.preventDefault(); audioUnlock(); canvasDown = true;
+  const r = cv.getBoundingClientRect();
+  pendingTap = { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+});
+const canvasUp = () => { canvasDown = false; if (canvasHoldA) { canvasHoldA = false; vrelease('a'); } };
+cv.addEventListener('pointerup', canvasUp); cv.addEventListener('pointercancel', canvasUp); cv.addEventListener('pointerleave', canvasUp);
+function tapA() { inp.pressed.a = true; }
+function holdA() { vpress('a'); if (canvasDown) canvasHoldA = true; else vrelease('a'); } // a tap already lifted still counts as one press
+function processTap(fallback) {
+  if (!pendingTap) return;
+  const t = pendingTap; pendingTap = null;
+  for (let i = hits.length - 1; i >= 0; i--) {
+    const h = hits[i];
+    if (t.x >= h.x && t.x < h.x + h.w && t.y >= h.y && t.y < h.y + h.h) { h.fn(t); return; }
+  }
+  if (fallback) fallback(t);
+}
+// Real HTML controls laid over a drawn button, for things browsers only allow from a genuine
+// tap/click (file picker, share sheet). Call overlayAt() each frame while the button is shown.
+const overlayUsed = new Set();
+function overlayAt(el, x, y, w, h) {
+  const cr = cv.getBoundingClientRect(), sx = cr.width / W, sy = cr.height / H;
+  Object.assign(el.style, { display: 'block', left: cr.left + x * sx + 'px', top: cr.top + y * sy + 'px', width: w * sx + 'px', height: h * sy + 'px' });
+  overlayUsed.add(el);
+}
+function overlaysEndFrame() {
+  for (const el of document.querySelectorAll('.overlay')) if (!overlayUsed.has(el)) el.style.display = 'none';
+  overlayUsed.clear();
+}
+function resize() {
+  const touch = document.body.classList.contains('touch');
+  const availH = innerHeight - (touch ? 160 : 30);
+  const s = Math.min((innerWidth - 32) / W, availH / H);
+  const sc = s >= 1 ? Math.floor(s) : s;
+  cv.style.width = W * sc + 'px';
+  cv.style.height = H * sc + 'px';
+}
+addEventListener('resize', resize); resize();
+
+// ============ Audio ============
+let AC = null, soundOn = true, musicOn = true, noiseBuf = null;
+function audioUnlock() {
+  if (!AC) {
+    try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; }
+  }
+  if (AC && AC.state === 'suspended') AC.resume();
+}
+function toneAt(freq, dur, type, vol, t, slide = 0) {
+  if (!AC) return;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t);
+  if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(20, freq + slide), t + dur);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.02);
+}
+function tone(freq, dur, type = 'square', vol = 0.06, when = 0, slide = 0) {
+  if (!AC) return; toneAt(freq, dur, type, vol, AC.currentTime + when, slide);
+}
+function noise(dur, vol = 0.12, when = 0) {
+  if (!AC) return;
+  if (!noiseBuf) {
+    noiseBuf = AC.createBuffer(1, AC.sampleRate * 0.5, AC.sampleRate);
+    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  const s = AC.createBufferSource(), g = AC.createGain(), f = AC.createBiquadFilter();
+  f.type = 'lowpass'; f.frequency.value = 1200;
+  s.buffer = noiseBuf; const t = AC.currentTime + when;
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  s.connect(f); f.connect(g); g.connect(AC.destination); s.start(t); s.stop(t + dur);
+}
+const SFX = {
+  blip: () => tone(880, 0.035, 'square', 0.035),
+  ok: () => { tone(660, 0.05, 'square', 0.05); tone(990, 0.06, 'square', 0.05, 0.05); },
+  cancel: () => tone(520, 0.08, 'square', 0.045, 0, -260),
+  err: () => tone(140, 0.16, 'sawtooth', 0.06),
+  coin: () => { tone(988, 0.06, 'square', 0.05); tone(1319, 0.22, 'square', 0.05, 0.06); },
+  cast: () => tone(260, 0.3, 'triangle', 0.1, 0, 700),
+  splash: () => noise(0.35, 0.18),
+  nibble: () => tone(700, 0.04, 'square', 0.04),
+  bite: () => { tone(1200, 0.06, 'square', 0.07); tone(1500, 0.08, 'square', 0.07, 0.08); },
+  catch: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.16, 'square', 0.06, i * 0.09)),
+  rare: () => [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(f, 0.2, 'square', 0.06, i * 0.08)),
+  fail: () => [392, 330, 262].forEach((f, i) => tone(f, 0.2, 'triangle', 0.1, i * 0.13)),
+  level: () => [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, 0.13, 'square', 0.06, i * 0.08)),
+  tick: () => tone(1600, 0.02, 'square', 0.03),
+  reel: () => tone(180 + Math.random() * 60, 0.025, 'square', 0.02),
+  warp: () => { tone(200, 0.7, 'sine', 0.1, 0, 900); tone(300, 0.7, 'sine', 0.06, 0.1, 900); },
+  door: () => { tone(330, 0.06, 'square', 0.05); tone(247, 0.1, 'square', 0.05, 0.07); },
+  bump: () => tone(90, 0.05, 'square', 0.04),
+};
+function sfx(n) { if (soundOn && AC && SFX[n]) { try { SFX[n](); } catch (e) {} } }
+
+// tiny chiptune sequencer (MIDI notes, 0 = rest)
+const SONGS = {
+  title: { tempo: 0.17, mel: [60, 64, 67, 72, 71, 67, 64, 67, 65, 69, 72, 77, 76, 72, 69, 72, 67, 71, 74, 79, 77, 74, 71, 74, 72, 0, 67, 0, 72, 0, 0, 0], bass: [48, 53, 55, 48] },
+  town: { tempo: 0.15, mel: [72, 0, 76, 79, 77, 76, 74, 0, 72, 74, 76, 72, 74, 0, 67, 0, 72, 0, 76, 79, 81, 79, 77, 76, 74, 76, 77, 74, 72, 0, 0, 0], bass: [48, 48, 53, 55, 48, 57, 55, 48] },
+  home: { tempo: 0.22, mel: [64, 0, 67, 0, 72, 0, 71, 69, 67, 0, 64, 0, 65, 0, 67, 0, 64, 0, 67, 0, 72, 0, 74, 76, 74, 0, 72, 0, 71, 0, 0, 0], bass: [48, 45, 41, 43, 48, 45, 43, 48] },
+  map: { tempo: 0.18, mel: [67, 0, 72, 0, 74, 76, 74, 72, 69, 0, 72, 0, 67, 0, 0, 0, 65, 0, 69, 0, 72, 74, 72, 69, 67, 0, 69, 71, 72, 0, 0, 0], bass: [48, 45, 41, 43] },
+  fish: { tempo: 0.2, mel: [69, 0, 72, 0, 76, 0, 74, 72, 69, 0, 0, 67, 69, 0, 0, 0, 72, 0, 76, 0, 79, 0, 76, 74, 72, 0, 74, 0, 69, 0, 0, 0], bass: [45, 45, 50, 52, 45, 48, 50, 45] },
+  shop: { tempo: 0.16, mel: [76, 74, 72, 74, 76, 76, 76, 0, 74, 74, 74, 0, 76, 79, 79, 0, 76, 74, 72, 74, 76, 76, 76, 76, 74, 74, 76, 74, 72, 0, 0, 0], bass: [48, 43, 48, 43, 48, 43, 43, 48] },
+};
+let curSong = null, songStep = 0, nextNoteT = 0;
+const midi = n => 440 * Math.pow(2, (n - 69) / 12);
+function playSong(name) { if (curSong === name) return; curSong = name; songStep = 0; nextNoteT = 0; }
+function musicTick() {
+  if (!AC || !musicOn || !curSong) return;
+  const s = SONGS[curSong];
+  if (nextNoteT < AC.currentTime) nextNoteT = AC.currentTime + 0.02;
+  while (nextNoteT < AC.currentTime + 0.12) {
+    const i = songStep % s.mel.length, n = s.mel[i];
+    if (n) toneAt(midi(n), s.tempo * 0.9, 'square', 0.018, nextNoteT);
+    if (i % 4 === 0) toneAt(midi(s.bass[(i / 4) % s.bass.length]), s.tempo * 3.5, 'triangle', 0.05, nextNoteT);
+    nextNoteT += s.tempo; songStep++;
+  }
+}
+
+// ============ Windows ============
+function drawWin(x, y, w, h, style = 'blue') {
+  x = Math.round(x); y = Math.round(y);
+  const top = style === 'dark' ? '#283048' : style === 'gold' ? '#7a5a20' : '#4868c8';
+  const bot = style === 'dark' ? '#0c1020' : style === 'gold' ? '#3a2408' : '#141c60';
+  const steps = Math.max(1, Math.floor((h - 4) / 3));
+  for (let i = 0; i < steps; i++) {
+    const t = i / steps;
+    rect(x + 2, y + 2 + i * 3, w - 4, i === steps - 1 ? h - 4 - i * 3 : 3, mix(top, bot, t));
+  }
+  rect(x + 1, y, w - 2, 1, '#0a0a14'); rect(x + 1, y + h - 1, w - 2, 1, '#0a0a14');
+  rect(x, y + 1, 1, h - 2, '#0a0a14'); rect(x + w - 1, y + 1, 1, h - 2, '#0a0a14');
+  rect(x + 1, y + 1, w - 2, 1, '#f0f0f8'); rect(x + 1, y + 1, 1, h - 2, '#f0f0f8');
+  rect(x + 1, y + h - 2, w - 2, 1, '#9aa0b8'); rect(x + w - 2, y + 1, 1, h - 2, '#9aa0b8');
+}
+const mixCache = {};
+function mix(a, b, t) {
+  const k = a + b + t.toFixed(2);
+  if (mixCache[k]) return mixCache[k];
+  const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+  const c = [16, 8, 0].map(s => Math.round(((pa >> s) & 255) * (1 - t) + ((pb >> s) & 255) * t));
+  return (mixCache[k] = '#' + c.map(v => v.toString(16).padStart(2, '0')).join(''));
+}
+function drawCursor(x, y) { // pointing hand-ish arrow
+  const b = Math.floor(T / 8) % 2;
+  x = Math.round(x) - b;
+  rect(x, y, 2, 7, '#101028'); rect(x + 2, y + 1, 2, 5, '#101028'); rect(x + 4, y + 2, 2, 3, '#101028'); rect(x + 6, y + 3, 1, 1, '#101028');
+  rect(x, y + 1, 2, 5, '#fff'); rect(x + 2, y + 2, 2, 3, '#fff'); rect(x + 4, y + 3, 2, 1, '#fff');
+}
+function bar(x, y, w, h, frac, c, bg = '#101028') {
+  rect(x, y, w, h, bg); rect(x, y, Math.round(w * clamp(frac, 0, 1)), h, c);
+}
+
+</script>
+<script>
+// ---- js/data.js ----
+'use strict';
+// ============ Game data ============
+const RODS = {
+  bamboo: { name: 'Bamboo Rod', price: 0, power: 1, zone: 0, color: '#c8a050', desc: 'A trusty starter rod. Nothing fancy.' },
+  fiber: { name: 'Fiberglass Rod', price: 400, power: 2, zone: 7, color: '#e0e0e8', desc: 'Light and flexible. Bigger catch bar.' },
+  carbon: { name: 'Carbon Rod', price: 1500, power: 4, zone: 13, color: '#404048', desc: 'Strong carbon fiber. Reels in faster.' },
+  titan: { name: 'Titanium Rod', price: 4500, power: 6, zone: 20, color: '#a0c8e0', desc: 'Pro-grade rod for tough, wild fish.' },
+  leviathan: { name: 'Leviathan Rod', price: 12000, power: 9, zone: 30, color: '#f0c040', desc: 'Legendary rod said to tame any beast.' },
+};
+const BAITS = {
+  worm: { name: 'Worm', price: 5, bite: 1.0, tier: 0, rare: 0, color: '#d07080', desc: 'Cheap and reliable. Small fish love it.' },
+  cricket: { name: 'Cricket', price: 12, bite: 0.88, tier: 1, rare: 0.005, color: '#605030', desc: 'Lively bait. Slightly faster bites.' },
+  shrimp: { name: 'Shrimp', price: 25, bite: 0.76, tier: 2, rare: 0.012, color: '#f09060', desc: 'Attracts bigger, pickier fish.' },
+  minnow: { name: 'Minnow Lure', price: 60, bite: 0.66, tier: 3, rare: 0.022, color: '#c0d0e0', desc: 'Predators cannot resist a minnow.' },
+  glow: { name: 'Glow Bait', price: 150, bite: 0.56, tier: 4, rare: 0.04, color: '#80ffc0', desc: 'Glows in deep water. Rare fish notice.' },
+  golden: { name: 'Golden Lure', price: 500, bite: 0.46, tier: 5, rare: 0.08, color: '#ffd040', desc: 'Shimmering lure. Legends whisper of it.' },
+};
+const NO_BAIT = { name: 'No Bait', bite: 1.8, tier: -1, rare: -0.01, desc: 'Fish rarely bite a bare hook.' };
+
+const GEAR = {
+  strawhat: { name: 'Straw Hat', slot: 'head', price: 200, focus: 1, color: '#e8c860', hat: 'straw', desc: 'Keeps the sun off. Helps you focus.' },
+  sailor: { name: 'Sailor Cap', slot: 'head', price: 800, focus: 2, luck: 1, color: '#f4f4f8', hat: 'cap', desc: 'A crisp cap worn by old sea dogs.' },
+  captain: { name: 'Captain Hat', slot: 'head', price: 3000, focus: 4, luck: 2, color: '#28366a', hat: 'cap', desc: 'Commands respect from fish and folk.' },
+  crown: { name: 'Crown of Tides', slot: 'head', price: 10000, focus: 6, luck: 4, color: '#f0d040', hat: 'crown', desc: 'A royal crown that hums with the tide.' },
+  vest: { name: 'Fishing Vest', slot: 'body', price: 300, stamina: 1, color: '#5a9a4a', desc: 'Many pockets. Line slips less.' },
+  leather: { name: 'Leather Armor', slot: 'body', price: 1000, stamina: 2, power: 1, color: '#9a6232', desc: 'Sturdy leather for long fights.' },
+  scale: { name: 'Scale Mail', slot: 'body', price: 3500, stamina: 4, power: 2, color: '#3a96a8', desc: 'Forged from shed dragonfish scales.' },
+  abyssal: { name: 'Abyssal Plate', slot: 'body', price: 11000, stamina: 6, power: 3, color: '#4a2e86', desc: 'Armor from the deepest trench.' },
+  knife: { name: 'Fish Knife', slot: 'weapon', price: 250, power: 1, desc: 'A sharp knife. Cuts line tension.' },
+  harpoon: { name: 'Harpoon', slot: 'weapon', price: 1200, power: 2, luck: 1, desc: 'Lends power to every pull.' },
+  trident: { name: 'Trident', slot: 'weapon', price: 4500, power: 4, luck: 2, desc: 'Three prongs, three times the might.' },
+  spear: { name: "Poseidon's Spear", slot: 'weapon', price: 14000, power: 6, luck: 4, desc: 'Wielded by the ocean king himself.' },
+  charm: { name: 'Lucky Charm', slot: 'charm', price: 0, luck: 3, noShop: true, desc: 'A clover charm from the Prize Wheel.' },
+};
+const SLOTS = [['head', 'Head'], ['body', 'Body'], ['weapon', 'Weapon'], ['charm', 'Charm']];
+
+const TANKS = {
+  bowl: { name: 'Fish Bowl', price: 300, cap: 2, mult: 1.0, desc: 'A cozy bowl. Holds 2 fish.' },
+  glass: { name: 'Glass Tank', price: 900, cap: 4, mult: 1.2, desc: 'Classic tank. Holds 4 fish. x1.2 visitors.' },
+  reef: { name: 'Reef Tank', price: 2500, cap: 6, mult: 1.5, desc: 'Living coral! Holds 6 fish. x1.5 visitors.' },
+  grand: { name: 'Grand Aquarium', price: 7000, cap: 10, mult: 2.0, desc: 'A showpiece. Holds 10 fish. x2 visitors.' },
+  dome: { name: 'Ocean Dome', price: 20000, cap: 16, mult: 3.0, desc: 'A glass dome sea. Holds 16 fish. x3!' },
+};
+const MAX_TANKS = 8;
+const DECOR = {
+  coral: { name: 'Coral Garden', price: 500, bonus: 4, spot: 4, desc: 'Colorful coral. +4 AC a day.' },
+  statue: { name: 'Fish Statue', price: 1500, bonus: 10, spot: 1, desc: 'A proud stone fish. +10 AC a day.' },
+  fountain: { name: 'Fountain', price: 3500, bonus: 22, spot: 2, desc: 'Splashing fountain. +22 AC a day.' },
+  lighthouse: { name: 'Lighthouse', price: 8000, bonus: 45, spot: 3, desc: 'Guides visitors in. +45 AC a day.' },
+  castle: { name: 'Crystal Castle', price: 16000, bonus: 90, spot: 0, desc: 'A sparkling castle. +90 AC a day.' },
+  arch: { name: 'Shell Arch', price: 1000, bonus: 7, spot: 5, desc: 'A seashell archway. +7 AC a day.' },
+};
+const HOUSES = [
+  { name: 'Grass Hut', price: 0, bonus: 0 },
+  { name: 'Cozy Cottage', price: 2000, bonus: 8, desc: 'Upgrade your hut to a cottage. +8 AC a day.' },
+  { name: 'Seaside Villa', price: 6500, bonus: 25, desc: 'A breezy villa. +25 AC a day.' },
+  { name: 'Coral Palace', price: 18000, bonus: 70, desc: 'A palace fit for a fish king. +70 AC a day.' },
+];
+const THEMES = [
+  { name: 'Kelp Meadow', grass: '#4fa45a', dark: '#3c8648', light: '#74c070', tree: '#2a7a4a', treeL: '#48a060', trunk: '#6a4424', path: '#cdb486', pathD: '#a88e60', flower: ['#f0f070', '#f8f8f8'] },
+  { name: 'Coral Isle', grass: '#e8d092', dark: '#cdb070', light: '#f8e6b4', tree: '#d8506c', treeL: '#f28aa0', trunk: '#8a5a30', path: '#f4ecd8', pathD: '#d0c4a8', flower: ['#ff7088', '#60c8f0'] },
+  { name: 'Moonlit Bay', grass: '#3c4c8e', dark: '#2c3872', light: '#5868b0', tree: '#1e2a5e', treeL: '#4a62a8', trunk: '#3a3050', path: '#8c90b8', pathD: '#6a6e98', flower: ['#f8f0a0', '#a0e8ff'] },
+  { name: 'Sakura Grove', grass: '#76b45a', dark: '#5c9448', light: '#98d078', tree: '#e488aa', treeL: '#f8c0d6', trunk: '#6a4030', path: '#d8c09a', pathD: '#b49a70', flower: ['#ffb0d0', '#ffffff'] },
+];
+const FLAG_COLORS = [['Ocean Blue', '#3070e0'], ['Coral Red', '#e04848'], ['Kelp Green', '#40b050'], ['Sun Gold', '#f0c030'], ['Royal Purple', '#9050d0'], ['Pearl White', '#f0f0f0']];
+
+// Fish species. d = difficulty (1-10). w = spawn weight. beh = movement behaviour.
+// shape: len/ht (sprite px), col/belly/fin colours, pat pattern
+const FISH = {
+  boot: { name: 'Old Boot', min: 25, max: 32, val: 2, d: 0.5, beh: 'smooth', junk: true, desc: 'Someone lost this... a long time ago.' },
+  // Willow Pond
+  bluegill: { name: 'Bluegill', min: 12, max: 24, val: 12, d: 1, w: 40, beh: 'smooth', len: 16, ht: 11, col: '#4a7ab8', belly: '#f0b048', fin: '#2a4a88', pat: 'stripes' },
+  perch: { name: 'Yellow Perch', min: 15, max: 32, val: 20, d: 2, w: 32, beh: 'smooth', len: 18, ht: 9, col: '#d0b830', belly: '#f8ecb0', fin: '#e07030', pat: 'stripes' },
+  carp: { name: 'Common Carp', min: 30, max: 75, val: 34, d: 3, w: 22, beh: 'sinker', len: 22, ht: 11, col: '#a8823a', belly: '#e8d090', fin: '#7a5420', pat: 'scales' },
+  catfish: { name: 'Channel Catfish', min: 40, max: 95, val: 52, d: 4, w: 14, beh: 'sinker', len: 24, ht: 9, col: '#6e7084', belly: '#d8d8e0', fin: '#4a4c5e', pat: 'spots', whisk: true },
+  koi: { name: 'Golden Koi', min: 45, max: 85, val: 480, d: 6, beh: 'dart', rare: true, len: 22, ht: 11, col: '#f4a420', belly: '#fff0c0', fin: '#f8f8f8', pat: 'koi' },
+  // Crystal Lake
+  trout: { name: 'Rainbow Trout', min: 30, max: 62, val: 46, d: 3, w: 36, beh: 'smooth', len: 22, ht: 9, col: '#7aa074', belly: '#f0f0e0', fin: '#5a8058', pat: 'rainbow' },
+  pike: { name: 'Northern Pike', min: 50, max: 115, val: 78, d: 5, w: 26, beh: 'dart', len: 28, ht: 8, col: '#5a8a50', belly: '#e0e8c0', fin: '#a07040', pat: 'spots' },
+  salmon: { name: 'Silver Salmon', min: 50, max: 92, val: 95, d: 5, w: 20, beh: 'floater', len: 24, ht: 10, col: '#a8b8c8', belly: '#f8d8d8', fin: '#7088a0', pat: 'spots' },
+  sturgeon: { name: 'Lake Sturgeon', min: 80, max: 190, val: 145, d: 6, w: 12, beh: 'sinker', len: 30, ht: 9, col: '#6a6058', belly: '#c8c0b0', fin: '#4a4038', pat: 'plates' },
+  arowana: { name: 'Crystal Arowana', min: 60, max: 115, val: 950, d: 8, beh: 'dart', rare: true, len: 28, ht: 10, col: '#b0f0ff', belly: '#ffffff', fin: '#60c0f0', pat: 'shine' },
+  // Misty Marsh
+  loach: { name: 'Mud Loach', min: 15, max: 32, val: 55, d: 3, w: 34, beh: 'sinker', len: 22, ht: 7, col: '#7a6a40', belly: '#c8b880', fin: '#5a4a28', pat: 'spots', whisk: true },
+  gar: { name: 'Longnose Gar', min: 60, max: 155, val: 125, d: 6, w: 26, beh: 'dart', len: 30, ht: 7, col: '#6a8048', belly: '#d8d8a8', fin: '#4a5830', pat: 'spots' },
+  snakehead: { name: 'Snakehead', min: 40, max: 105, val: 175, d: 7, w: 20, beh: 'dart', len: 28, ht: 9, col: '#4a5038', belly: '#a8a888', fin: '#2e3424', pat: 'blotch' },
+  bowfin: { name: 'Bowfin', min: 40, max: 92, val: 200, d: 7, w: 14, beh: 'floater', len: 26, ht: 10, col: '#5a6a38', belly: '#c8d0a0', fin: '#304020', pat: 'eyespot' },
+  leviathan: { name: 'Marsh Leviathan', min: 150, max: 320, val: 1650, d: 9, beh: 'wild', rare: true, len: 32, ht: 12, col: '#2a4a30', belly: '#7aa070', fin: '#a03028', pat: 'blotch' },
+  // Moonfall Lake
+  starfin: { name: 'Starfin', min: 20, max: 42, val: 165, d: 6, w: 34, beh: 'dart', len: 18, ht: 10, col: '#28306a', belly: '#4858a0', fin: '#f0e070', pat: 'stars' },
+  ghostpike: { name: 'Ghost Pike', min: 70, max: 145, val: 290, d: 8, w: 26, beh: 'dart', len: 28, ht: 8, col: '#d8e0f0', belly: '#ffffff', fin: '#a0b0d0', pat: 'none' },
+  lunarkoi: { name: 'Lunar Koi', min: 40, max: 92, val: 390, d: 8, w: 20, beh: 'floater', len: 22, ht: 11, col: '#c8c0e8', belly: '#f8f0ff', fin: '#8070c0', pat: 'koi2' },
+  angler: { name: 'Abyss Angler', min: 50, max: 125, val: 500, d: 9, w: 12, beh: 'sinker', len: 22, ht: 13, col: '#202030', belly: '#383850', fin: '#101018', pat: 'none', lure: true },
+  dragonfish: { name: 'Celestial Dragonfish', min: 150, max: 320, val: 4400, d: 10, beh: 'wild', rare: true, len: 32, ht: 11, col: '#f0c040', belly: '#fff4c0', fin: '#a050f0', pat: 'shine' },
+};
+const LAKES = [
+  { id: 'willow', name: 'Willow Pond', lv: 1, fish: ['bluegill', 'perch', 'carp', 'catfish'], rare: 'koi', mx: 74, my: 150, water: '#3a9a9a', desc: 'A calm pond shaded by willows. Great for beginners.' },
+  { id: 'crystal', name: 'Crystal Lake', lv: 5, fish: ['trout', 'pike', 'salmon', 'sturgeon'], rare: 'arowana', mx: 248, my: 146, water: '#3a90e0', desc: 'Clear mountain water fed by glaciers.' },
+  { id: 'marsh', name: 'Misty Marsh', lv: 10, fish: ['loach', 'gar', 'snakehead', 'bowfin'], rare: 'leviathan', mx: 78, my: 62, water: '#5a7a48', desc: 'Murky, foggy waters. Fierce fish lurk here.' },
+  { id: 'moonfall', name: 'Moonfall Lake', lv: 15, fish: ['starfin', 'ghostpike', 'lunarkoi', 'angler'], rare: 'dragonfish', mx: 244, my: 54, water: '#4a3a9a', desc: 'A lake where the moon fell. Only for experts.' },
+];
+
+const MAX_COOLER = 40;
+const SAVE_KEY = 'aquariumWorldSave_v1';
+const MAX_LEVEL = 40;
+
+// ============ State ============
+let G = null;
+function newGame(gender, name) {
+  G = {
+    v: 1,
+    player: {
+      gender, name, level: 1, xp: 0, ac: 0,
+      rods: ['bamboo'], rod: 'bamboo', baits: { worm: 10 }, bait: 'worm',
+      gear: [], equip: { head: null, body: null, weapon: null, charm: null },
+    },
+    world: { name: 'Coralia', theme: 0, flag: 0, house: 0, tanks: [], decor: [] },
+    cooler: [], log: {}, day: 1, lastCollect: 1, flags: {},
+    stats: { caught: 0, earned: 0, spins: 0 },
+    loc: { scene: 'city', x: 15, y: 4, dir: 'down' },
+  };
+}
+// ============ Save slots ============
+// Each slot is kept twice: in the player's private cloud area of the artifact's database
+// (survives page updates, other devices, cleared browsers) and in this browser's storage
+// (works offline / in the plain HTML file). Whichever copy is newer wins.
+const SLOT_COUNT = 3;
+let curSlot = 0;
+const slots = new Array(SLOT_COUNT).fill(null);     // parsed save data per slot
+let cloud = null, cloudUid = null;                  // set once the database answers
+let saveStatus = 'local';                           // 'checking' | 'cloud' | 'local' | 'blocked'
+function storageWorks() { try { localStorage.setItem('aw_test', '1'); const ok = localStorage.getItem('aw_test') === '1'; localStorage.removeItem('aw_test'); return ok; } catch (e) { return false; } }
+const slotKey = i => 'aquariumWorld_slot' + (i + 1);
+function lsGet(k) { try { const s = localStorage.getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+function lsSet(k, json) { try { localStorage.setItem(k, json); return true; } catch (e) { return false; } }
+let onSlotsChanged = () => {};
+function initSaves() {
+  // ask the browser not to clear this site's storage when space runs low
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+  if (!storageWorks()) saveStatus = 'blocked'; // e.g. some phones opening a downloaded file
+  for (let i = 0; i < SLOT_COUNT; i++) slots[i] = lsGet(slotKey(i));
+  const old = lsGet(SAVE_KEY); // single save from earlier versions -> slot 1
+  if (old && !slots[0]) { old.savedAt = old.savedAt || 1; slots[0] = old; lsSet(slotKey(0), JSON.stringify(old)); }
+  if (!(window.claude && typeof window.claude.use === 'function')) return;
+  saveStatus = 'checking';
+  (async () => {
+    const giveUp = new Promise(r => setTimeout(() => r(null), 10000));
+    try {
+      const got = await Promise.race([Promise.all([claude.use('db'), claude.use('user')]), giveUp]);
+      const db = got && got[0], user = got && got[1];
+      const uid = db && user ? await user.id() : null;
+      if (!uid) { saveStatus = 'local'; onSlotsChanged(); return; }
+      const docs = await Promise.all(slots.map((_, i) => db.doc('data/users/' + uid + '/slot' + (i + 1)).get()));
+      cloud = db; cloudUid = uid; saveStatus = 'cloud';
+      docs.forEach((d, i) => {
+        const body = d.exists ? d.data() : null;
+        let remote = null;
+        try { remote = body && typeof body.json === 'string' ? JSON.parse(body.json) : null; } catch (e) {}
+        const local = slots[i];
+        if (remote && (!local || (remote.savedAt || 0) >= (local.savedAt || 0))) { slots[i] = remote; lsSet(slotKey(i), body.json); }
+        else if (local) cloudWrite(i, JSON.stringify(local)); // upload saves made before cloud was available
+      });
+    } catch (e) { saveStatus = cloud ? 'cloud' : 'local'; }
+    onSlotsChanged();
+  })();
+}
+const pending = {}, inflight = {};
+function cloudWrite(i, json) {
+  if (!cloud) return;
+  pending[i] = json;
+  if (inflight[i]) return; // the running write picks up the newest copy when it finishes
+  inflight[i] = true;
+  (async () => {
+    while (pending[i]) {
+      const j = pending[i]; pending[i] = null;
+      const ref = cloud.doc('data/users/' + cloudUid + '/slot' + (i + 1));
+      try { await ref.set({ json: j, savedAt: Date.now() }); }
+      catch (e) {
+        if (e && e.code === 'unavailable') { await new Promise(r => setTimeout(r, 800 + Math.random() * 800)); try { await ref.set({ json: j, savedAt: Date.now() }); } catch (e2) {} }
+        else if (e && (e.code === 'invalid_argument' || e.code === 'revoked' || e.code === 'not_granted')) { cloud = null; saveStatus = 'local'; break; }
+      }
+    }
+    inflight[i] = false;
+  })();
+}
+function hasSave() { return slots.some(Boolean); }
+function latestSlot() { let b = -1; slots.forEach((s, i) => { if (s && (b < 0 || (s.savedAt || 0) > (slots[b].savedAt || 0))) b = i; }); return b; }
+function saveGame(i = curSlot) {
+  if (!G) return false;
+  curSlot = i; G.savedAt = Date.now();
+  const json = JSON.stringify(G);
+  slots[i] = JSON.parse(json);
+  const ok = lsSet(slotKey(i), json);
+  cloudWrite(i, json);
+  return ok || !!cloud;
+}
+function loadGame(i = latestSlot()) {
+  if (i < 0 || !slots[i]) return false;
+  G = JSON.parse(JSON.stringify(slots[i])); curSlot = i;
+  G.flags = G.flags || {}; G.stats = G.stats || { caught: 0, earned: 0, spins: 0 }; G.log = G.log || {};
+  return true;
+}
+function slotSummary(s) {
+  if (!s) return null;
+  const where = s.loc && s.loc.scene === 'home' ? (s.world && s.world.name || 'Home') : 'Aquarium World';
+  let when = '';
+  if (s.savedAt > 1) {
+    const d = new Date(s.savedAt), p2 = n => String(n).padStart(2, '0');
+    when = 'JanFebMarAprMayJunJulAugSepOctNovDec'.substr(d.getMonth() * 3, 3) + ' ' + d.getDate() + ', ' + p2(d.getHours()) + ':' + p2(d.getMinutes());
+  }
+  return { name: s.player.name, level: s.player.level, day: s.day, ac: s.player.ac, where, when, caught: (s.stats && s.stats.caught) || 0 };
+}
+function stats() {
+  const s = { power: 0, focus: 0, stamina: 0, luck: 0 };
+  for (const slot in G.player.equip) {
+    const id = G.player.equip[slot]; if (!id) continue;
+    const g = GEAR[id]; for (const k in s) s[k] += g[k] || 0;
+  }
+  return s;
+}
+const xpNeed = lv => Math.floor(22 * Math.pow(lv, 1.55));
+function addXP(n) { // returns levels gained
+  const p = G.player; let ups = 0; p.xp += n;
+  while (p.level < MAX_LEVEL && p.xp >= xpNeed(p.level)) { p.xp -= xpNeed(p.level); p.level++; ups++; }
+  if (p.level >= MAX_LEVEL) p.xp = 0;
+  return ups;
+}
+function curBait() { const p = G.player; return p.bait && p.baits[p.bait] > 0 ? BAITS[p.bait] : NO_BAIT; }
+function tankIncome(t) {
+  const sum = t.fish.reduce((a, f) => a + f.value, 0);
+  return sum * 0.06 * TANKS[t.type].mult;
+}
+function dailyIncome() {
+  let inc = 0;
+  for (const t of G.world.tanks) inc += tankIncome(t);
+  for (const d of G.world.decor) inc += DECOR[d].bonus;
+  inc += HOUSES[G.world.house].bonus;
+  // set bonus: display every species of a lake
+  return Math.round(inc);
+}
+function fishOfTheDay() {
+  const ids = Object.keys(FISH).filter(k => !FISH[k].junk && !FISH[k].rare);
+  return ids[hash2(G.day, 77) % ids.length];
+}
+function sellPrice(f) { return f.id === fishOfTheDay() ? Math.round(f.value * 1.5) : f.value; }
+
+</script>
+<script>
+// ---- js/art.js ----
+'use strict';
+// ============ Sprite helpers ============
+function makeSprite(rows, pal, outline = '#141420') {
+  const h = rows.length, w = rows[0].length;
+  const c = mkCanvas(w + 2, h + 2), g = c.getContext('2d');
+  const filled = (x, y) => y >= 0 && y < h && x >= 0 && x < w && rows[y][x] !== '.' && !!pal[rows[y][x]];
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (filled(x, y)) { g.fillStyle = pal[rows[y][x]]; g.fillRect(x + 1, y + 1, 1, 1); }
+  if (outline) {
+    g.fillStyle = outline;
+    for (let y = -1; y <= h; y++) for (let x = -1; x <= w; x++) {
+      if (filled(x, y)) continue;
+      if (filled(x - 1, y) || filled(x + 1, y) || filled(x, y - 1) || filled(x, y + 1)) g.fillRect(x + 1, y + 1, 1, 1);
+    }
+  }
+  return c;
+}
+function flipH(src) {
+  const c = mkCanvas(src.width, src.height), g = c.getContext('2d');
+  g.translate(src.width, 0); g.scale(-1, 1); g.drawImage(src, 0, 0); return c;
+}
+
+// ============ Characters ============
+const CHAR = {
+  boy: {
+    down: ['................', '.....HHHHHH.....', '....HHHHHHHH....', '...HHHHHHHHHH...', '...HHSSSSSSHH...', '...HSSSSSSSSH...',
+      '...SSESSSSESS...', '...SSESSSSESS...', '....SSSSSSSS....', '.....SSSSSS.....', '....CCCCCCCC....', '...SCCCCCCCCS...', '...SCCCCCCCCS...'],
+    up: ['................', '.....HHHHHH.....', '....HHHHHHHH....', '...HHHHHHHHHH...', '...HHHHHHHHHH...', '...HHHHHHHHHH...',
+      '...HHHHHHHHHH...', '...SHHHHHHHHS...', '....HHHHHHHH....', '.....SSSSSS.....', '....CCCCCCCC....', '...SCCCCCCCCS...', '...SCCCCCCCCS...'],
+    left: ['................', '.....HHHHHH.....', '....HHHHHHHH....', '...HHHHHHHHHH...', '...HHSSSHHHHH...', '...HSSSSSHHHH...',
+      '...SESSSSSHHH...', '...SESSSSSSHH...', '...SSSSSSSSH....', '.....SSSSSS.....', '.....CCCCCC.....', '.....CCCCCC.....', '.....SCCCCC.....'],
+    legs: {
+      down: [['....PPPPPPPP....', '....PPP..PPP....', '....BBB..BBB....'],
+        ['....PPPPPPPP....', '....PPP..BBB....', '....BBB.........'],
+        ['....PPPPPPPP....', '....BBB..PPP....', '.........BBB....']],
+      left: [['.....PPPPPP.....', '......PPPP......', '......BBBB......'],
+        ['.....PPPPPP.....', '.....PP..PP.....', '....BB....BB....'],
+        ['.....PPPPPP.....', '......PP.PP.....', '.....BBB.BB.....']],
+    },
+  },
+  girl: {
+    down: ['................', '.....HHHHHH.RR..', '....HHHHHHHHRR..', '...HHHHHHHHHH...', '...HHSSSSSSHH...', '...HSSSSSSSSH...',
+      '..HHSESSSSESHH..', '..HHSESSSSESHH..', '..HHSSSSSSSSHH..', '..HH.SSSSSS.HH..', '..H.CCCCCCCC.H..', '...SCCCCCCCCS...',
+      '...SDDDDDDDDS...', '...DDDDDDDDDD...'],
+    up: ['................', '.....HHHHHH.....', '....HHHHHHHH....', '...HHHHHHHHHH...', '...HHHHRRHHHH...', '...HHHHRRHHHH...',
+      '..HHHHHHHHHHHH..', '..HHHHHHHHHHHH..', '..HHHHHHHHHHHH..', '..HHHHHHHHHHHH..', '..HHCCCCCCCCHH..', '...SCCCCCCCCS...',
+      '...SDDDDDDDDS...', '...DDDDDDDDDD...'],
+    left: ['................', '.....HHHHHH.....', '....HHHHHHHHR...', '...HHHHHHHHHRR..', '...HHSSSHHHHH...', '...HSSSSSHHHHH..',
+      '...SESSSSSHHHH..', '...SESSSSSHHHH..', '...SSSSSSSHHHH..', '.....SSSSSHHH...', '.....CCCCCCH....', '.....CCCCCC.....',
+      '....DDDDDDDD....', '....DDDDDDDD....'],
+    legs: {
+      down: [['.....SS..SS.....', '.....BB..BB.....'], ['.....SS..BB.....', '.....BB.........'], ['.....BB..SS.....', '..........BB....']],
+      left: [['......SSSS......', '......BBBB......'], ['.....SS..SS.....', '....BB....BB....'], ['......SS.SS.....', '.....BB..BB.....']],
+    },
+  },
+};
+CHAR.boy.legs.up = CHAR.boy.legs.down; CHAR.girl.legs.up = CHAR.girl.legs.down;
+const HATS = {
+  cap: { down: ['................', '....AAAAAAAA....', '...AAAAAAAAAA...', '..AAAAAAAAAAAA..'], left: ['................', '....AAAAAAAA....', '...AAAAAAAAAA...', '.AAAAAAAAAAA....'] },
+  straw: { down: ['................', '.....AAAAAA.....', '....AAAAAAAA....', '.AAAAAAAAAAAAAA.'], left: ['................', '.....AAAAAA.....', '....AAAAAAAA....', 'AAAAAAAAAAAAAA..'] },
+  crown: { down: ['...A..A..A..A...', '...AAAAAAAAAA...', '...AGAAAGAAAGA..'.slice(0, 16), '................'], left: ['...A..A..A..A...', '...AAAAAAAAAA...', '...AAGAAAGAAA...', '................'] },
+};
+HATS.cap.up = HATS.cap.down; HATS.straw.up = HATS.straw.down; HATS.crown.up = HATS.crown.down;
+const charCache = {};
+function charSprites(type, col, hat) {
+  const key = type + JSON.stringify(col) + (hat ? hat.type + hat.color : '');
+  if (charCache[key]) return charCache[key];
+  const def = CHAR[type];
+  const pal = { H: col.hair, S: col.skin || '#f2c8a0', E: '#1a1a2a', C: col.shirt, P: col.pants || '#30406a', B: col.shoes || '#5a3420', D: col.dress || col.shirt, R: col.ribbon || '#40c0e0', A: hat ? hat.color : '#fff', G: '#e03050' };
+  const out = {};
+  for (const dir of ['down', 'up', 'left']) {
+    out[dir] = [0, 1, 2].map(f => {
+      let rows = def[dir].concat(def.legs[dir][f]);
+      if (hat) {
+        const hr = HATS[hat.type][dir];
+        rows = rows.map((r, i) => {
+          if (i >= hr.length) return r;
+          let s = ''; for (let x = 0; x < 16; x++) s += hr[i][x] && hr[i][x] !== '.' ? hr[i][x] : r[x]; return s;
+        });
+      }
+      return makeSprite(rows, pal);
+    });
+  }
+  out.right = out.left.map(flipH);
+  return (charCache[key] = out);
+}
+const WALKSEQ = [0, 1, 0, 2];
+function playerColors() {
+  const p = G.player, girl = p.gender === 'girl';
+  const body = p.equip.body ? GEAR[p.equip.body].color : null;
+  return girl ? { hair: '#b04060', shirt: body || '#f4f4f4', dress: body ? shade(body, -0.25) : '#e04878', ribbon: '#40c0e0', shoes: '#803040' }
+    : { hair: '#4a2a18', shirt: body || '#3070d0', pants: '#2c3458', shoes: '#5a3420' };
+}
+function playerSprites() {
+  const p = G.player;
+  const h = p.equip.head ? { type: GEAR[p.equip.head].hat, color: GEAR[p.equip.head].color } : null;
+  return charSprites(p.gender, playerColors(), h);
+}
+
+// ============ Tiles ============
+const TL = { GRASS: 0, PATH: 1, TREE: 2, FLOWER: 3, WATER: 4, PLAZA: 5, BUSH: 6, SAND: 7 };
+const SOLID_TILES = new Set([TL.TREE, TL.WATER, TL.BUSH]);
+const CITY_THEME = { grass: '#58a844', dark: '#448a36', light: '#7cc458', tree: '#2c7434', treeL: '#4c9c44', trunk: '#6a4424', path: '#d4b484', pathD: '#ac8c5c', flower: ['#f86a7a', '#f8f070', '#ffffff'] };
+const tilesetCache = new Map();
+function tileset(th) {
+  if (tilesetCache.has(th)) return tilesetCache.get(th);
+  const mk = fn => { const c = mkCanvas(16, 16); fn(c.getContext('2d')); return c; };
+  const grassFn = (seed) => g => {
+    rect(0, 0, 16, 16, th.grass, g);
+    const r = seeded(seed);
+    for (let i = 0; i < 10; i++) { const x = Math.floor(r() * 16), y = Math.floor(r() * 15); rect(x, y, 1, 2, th.dark, g); }
+    for (let i = 0; i < 5; i++) { const x = Math.floor(r() * 16), y = Math.floor(r() * 16); rect(x, y, 1, 1, th.light, g); }
+  };
+  const ts = {};
+  ts.grass = [1, 2, 3].map(s => mk(grassFn(s * 31)));
+  ts.flower = [7, 8].map(s => mk(g => {
+    grassFn(s)(g); const r = seeded(s * 99);
+    for (let i = 0; i < 3; i++) {
+      const x = 2 + Math.floor(r() * 11), y = 2 + Math.floor(r() * 11), c = th.flower[Math.floor(r() * th.flower.length)];
+      rect(x, y + 1, 1, 2, th.dark, g); rect(x - 1, y, 3, 1, c, g); rect(x, y - 1, 1, 3, c, g); rect(x, y, 1, 1, '#f8e040', g);
+    }
+  }));
+  ts.path = mk(g => {
+    rect(0, 0, 16, 16, th.path, g);
+    const r = seeded(5);
+    for (let i = 0; i < 6; i++) { const x = Math.floor(r() * 14), y = Math.floor(r() * 14); rect(x, y, 3, 2, th.pathD, g); rect(x, y, 2, 1, shade(th.path, 0.25), g); }
+  });
+  ts.plaza = mk(g => {
+    rect(0, 0, 16, 16, '#b8b4c4', g);
+    rect(0, 7, 16, 1, '#8c88a0', g); rect(0, 15, 16, 1, '#8c88a0', g); rect(7, 0, 1, 8, '#8c88a0', g); rect(15, 8, 1, 8, '#8c88a0', g);
+    rect(1, 1, 5, 1, '#d4d0e0', g); rect(9, 9, 5, 1, '#d4d0e0', g);
+  });
+  ts.sand = mk(g => { rect(0, 0, 16, 16, '#e8d49a', g); const r = seeded(9); for (let i = 0; i < 8; i++) rect(Math.floor(r() * 16), Math.floor(r() * 16), 1, 1, '#c8b070', g); });
+  ts.tree = mk(g => {
+    grassFn(3)(g);
+    rect(3, 13, 10, 2, th.dark, g);
+    rect(7, 10, 2, 5, th.trunk, g);
+    pellipse(8, 7, 6, 6, '#101c18', g); pellipse(8, 7, 5, 5, th.tree, g);
+    pellipse(7, 5, 3, 3, th.treeL, g); rect(5, 3, 2, 1, shade(th.treeL, 0.3), g);
+    rect(10, 9, 2, 1, shade(th.tree, -0.3), g); rect(4, 9, 1, 1, shade(th.tree, -0.3), g);
+  });
+  ts.bush = mk(g => {
+    grassFn(4)(g);
+    pellipse(8, 10, 6, 4, '#101c18', g); pellipse(8, 10, 5, 3, th.tree, g); pellipse(7, 9, 3, 2, th.treeL, g);
+  });
+  tilesetCache.set(th, ts);
+  return ts;
+}
+function drawTile(field, ts, x, y, sx, sy) {
+  const t = field.tile(x, y), hv = hash2(x, y);
+  switch (t) {
+    case TL.GRASS: ctx.drawImage(ts.grass[hv % 3], sx, sy); break;
+    case TL.FLOWER: ctx.drawImage(ts.flower[hv % 2], sx, sy); break;
+    case TL.PATH: ctx.drawImage(ts.path, sx, sy); break;
+    case TL.PLAZA: ctx.drawImage(ts.plaza, sx, sy); break;
+    case TL.SAND: ctx.drawImage(ts.sand, sx, sy); break;
+    case TL.TREE: ctx.drawImage(ts.tree, sx, sy); break;
+    case TL.BUSH: ctx.drawImage(ts.bush, sx, sy); break;
+    case TL.WATER: drawWater(field, x, y, sx, sy); break;
+  }
+}
+function drawWater(f, x, y, sx, sy) {
+  rect(sx, sy, 16, 16, '#3a7ed4');
+  const ph = (T / 12 + x * 3 + y * 5) | 0;
+  rect(sx + (ph % 12), sy + 4 + (y % 2) * 6, 4, 1, '#6aa8ec');
+  rect(sx + ((ph + 6) % 12), sy + 11 - (y % 2) * 6, 3, 1, '#5a98e0');
+  const land = (dx, dy) => f.tile(x + dx, y + dy) !== TL.WATER;
+  if (land(0, -1)) { rect(sx, sy, 16, 2, '#2a5a9a'); rect(sx, sy + 2, 16, 1, '#9ad0f8'); }
+  if (land(0, 1)) rect(sx, sy + 15, 16, 1, '#bfe4ff');
+  if (land(-1, 0)) rect(sx, sy, 1, 16, '#bfe4ff');
+  if (land(1, 0)) rect(sx + 15, sy, 1, 16, '#bfe4ff');
+}
+
+// ============ Buildings ============
+function makeBuilding(w, h, o) {
+  const c = mkCanvas(w * 16, h * 16), g = c.getContext('2d');
+  const roofH = (h - 2) * 16, cw = w * 16;
+  // walls
+  rect(2, roofH - 2, cw - 4, h * 16 - roofH + 2, o.wall, g);
+  for (let y = roofH + 3; y < h * 16; y += 5) rect(2, y, cw - 4, 1, shade(o.wall, -0.12), g);
+  rect(2, h * 16 - 2, cw - 4, 2, shade(o.wall, -0.35), g);
+  // windows
+  const win = wx => {
+    rect(wx - 1, roofH + 5, 14, 12, '#3a2a20', g); rect(wx, roofH + 6, 12, 10, '#ffe08a', g);
+    rect(wx, roofH + 6, 12, 3, '#fff4c0', g); rect(wx + 5, roofH + 6, 1, 10, '#3a2a20', g); rect(wx, roofH + 11, 12, 1, '#3a2a20', g);
+    rect(wx - 2, roofH + 16, 16, 2, shade(o.wall, -0.4), g);
+  };
+  const doorX = Math.floor(w / 2) * 16;
+  win(14); win(cw - 26);
+  if (w >= 9) { win(doorX - 26); win(doorX + 30); }
+  // door
+  rect(doorX + 1, h * 16 - 17, 14, 17, '#2a1a10', g);
+  rect(doorX + 2, h * 16 - 16, 12, 16, o.door || '#7a4a24', g);
+  rect(doorX + 2, h * 16 - 16, 12, 2, shade(o.door || '#7a4a24', 0.25), g);
+  rect(doorX + 7, h * 16 - 15, 1, 15, '#3a2210', g);
+  rect(doorX + 10, h * 16 - 8, 2, 2, '#f0d060', g);
+  // roof
+  for (let y = 0; y < roofH; y++) {
+    const inset = Math.max(0, Math.floor((roofH - y) / 3) - 4);
+    const col = (y % 6 < 1) ? shade(o.roof, -0.3) : (y % 6 < 2 ? shade(o.roof, 0.18) : o.roof);
+    rect(inset, y, cw - inset * 2, 1, col, g);
+    if (y % 6 >= 2) for (let x = inset + ((y / 6 | 0) % 2) * 4; x < cw - inset; x += 8) rect(x, y, 1, 1, shade(o.roof, -0.2), g);
+  }
+  rect(0, roofH - 2, cw, 2, shade(o.roof, -0.45), g);
+  rect(0, 0, cw, 1, shade(o.roof, -0.45), g);
+  // chimney
+  if (o.chimney) { rect(cw - 30, 0, 8, 10, '#8a6a5a', g); rect(cw - 31, 0, 10, 2, '#5a4a3a', g); }
+  // sign
+  if (o.sign) {
+    const sw = tw(o.sign) + 10, sx = Math.round(cw / 2 - sw / 2), sy = roofH - 16;
+    rect(sx - 1, sy - 1, sw + 2, 13, '#1a1010', g); rect(sx, sy, sw, 11, o.signCol || '#8a5a2a', g);
+    rect(sx, sy, sw, 1, shade(o.signCol || '#8a5a2a', 0.3), g);
+    text(o.sign, sx + 5, sy + 2, '#fff8e0', '#2a1a10', g);
+  }
+  if (o.icon) o.icon(g, 8, roofH - 30);
+  return c;
+}
+const houseCache = {};
+function makeHouse(level, theme) {
+  const k = level + '_' + theme; if (houseCache[k]) return houseCache[k];
+  const th = THEMES[theme];
+  let c;
+  if (level === 0) {
+    c = mkCanvas(96, 64); const g = c.getContext('2d');
+    // grass hut
+    rect(14, 30, 68, 34, '#a07848', g);
+    for (let x = 16; x < 82; x += 4) rect(x, 30, 1, 34, '#7a5830', g);
+    for (let y = 0; y < 34; y++) {
+      const ins = Math.max(0, 34 - y) * 0.9;
+      rect(6 + ins, y, 84 - ins * 2, 1, y % 4 === 0 ? '#a08a3a' : '#d8be60', g);
+    }
+    rect(4, 32, 88, 2, '#7a6a2a', g);
+    rect(41, 46, 14, 18, '#2a1a10', g); rect(42, 47, 12, 17, '#5a3a1a', g);
+    rect(22, 40, 10, 8, '#2a1a10', g); rect(23, 41, 8, 6, '#ffe08a', g);
+    rect(64, 40, 10, 8, '#2a1a10', g); rect(65, 41, 8, 6, '#ffe08a', g);
+  } else {
+    const roofs = [null, '#c84a3a', '#3a78c8', '#8a4ac8'], walls = [null, '#f4ecd8', '#f8e8c0', '#e8f0ff'];
+    c = makeBuilding(6, 4, { roof: roofs[level], wall: walls[level], chimney: level === 1, door: level === 3 ? '#c8a030' : '#7a4a24' });
+    const g = c.getContext('2d');
+    if (level >= 2) { rect(0, 30, 4, 34, shade(walls[level], -0.2), g); rect(92, 30, 4, 34, shade(walls[level], -0.2), g); }
+    if (level === 3) { // palace: gold trims + towers
+      for (const tx of [0, 84]) {
+        rect(tx, 2, 12, 30, '#d8d0f0', g); rect(tx, 2, 12, 2, '#f0c040', g);
+        for (let i = 0; i < 12; i += 4) rect(tx + i, 0, 2, 2, '#f0c040', g);
+        rect(tx + 4, 10, 4, 6, '#6040a0', g);
+      }
+      rect(44, 0, 8, 6, '#f0c040', g); rect(47, -1, 2, 2, '#ff60a0', g);
+    }
+  }
+  return (houseCache[k] = c);
+}
+
+// ============ Fish sprites ============
+const fishCache = {};
+function genFish(sp, L, Ht, pal) {
+  const tail = Math.max(3, Math.round(L * 0.22)), bodyL = L - tail;
+  const top = 2, rows = Ht + 4;
+  const g = Array.from({ length: rows }, () => Array(L).fill('.'));
+  const cx = bodyL / 2, cy = top + Ht / 2, rx = bodyL / 2, ry = Ht / 2;
+  let topRow = rows, botRow = 0;
+  for (let y = 0; y < rows; y++) for (let x = 0; x < bodyL; x++) {
+    const nx = (x + 0.5 - cx) / rx, ny = (y + 0.5 - cy) / ry;
+    // slightly pointed head for long fish
+    if (nx * nx + ny * ny > 1) continue;
+    topRow = Math.min(topRow, y); botRow = Math.max(botRow, y);
+    let ch = y + 0.5 > cy + ry * 0.3 ? 'L' : 'B';
+    const hv = hash2(x * 7 + L, y * 13);
+    switch (sp.pat) {
+      case 'stripes': if (x % 4 === 2 && x > 2 && x < bodyL - 1 && ch === 'B') ch = 'D'; break;
+      case 'spots': if (hv % 5 === 0 && ch === 'B') ch = 'D'; break;
+      case 'scales': if ((x + y) % 3 === 0 && x % 2 === 0 && ch === 'B') ch = 'D'; break;
+      case 'rainbow': if (Math.abs(y + 0.5 - cy) < 1) ch = 'R'; else if (hv % 7 === 0 && ch === 'B') ch = 'D'; break;
+      case 'koi': if (hash2(x >> 2, y >> 2) % 3 === 0) ch = 'W'; break;
+      case 'koi2': if (hash2(x >> 2, (y >> 2) + 9) % 3 === 0) ch = 'D'; break;
+      case 'shine': if (hv % 7 === 0) ch = 'W'; break;
+      case 'plates': if (y === Math.round(cy - ry * 0.45) && x % 3 === 0) ch = 'W'; break;
+      case 'blotch': if (hash2(x >> 1, (y >> 1) + 3) % 4 === 0 && ch === 'B') ch = 'D'; break;
+      case 'stars': if (hv % 9 === 0) ch = 'Y'; break;
+      case 'eyespot': if (Math.abs(x - (bodyL - 4)) <= 1 && Math.abs(y + 0.5 - cy) <= 1) ch = (x === bodyL - 4 && Math.round(cy - 0.5) === y) ? 'Y' : 'E'; break;
+    }
+    g[y][x] = ch;
+  }
+  for (let x = bodyL - 1; x < L; x++) {
+    const k = (x - (bodyL - 1)) / tail, spread = 0.8 + k * ry * 1.25;
+    for (let y = 0; y < rows; y++) {
+      const dy = Math.abs(y + 0.5 - cy);
+      if (dy <= spread && !(k > 0.65 && dy < spread * 0.35) && g[y][x] === '.') g[y][x] = 'F';
+    }
+  }
+  const f0 = Math.round(cx - rx * 0.45), f1 = Math.round(cx + rx * 0.35);
+  for (let x = f0; x <= f1; x++) {
+    if (topRow - 1 >= 0) g[topRow - 1][x] = 'F';
+    if (topRow - 2 >= 0 && x < (f0 + f1) / 2) g[topRow - 2][x] = 'F';
+  }
+  for (let x = Math.round(cx); x <= Math.round(cx) + 1; x++) if (botRow + 1 < rows) g[botRow + 1][x] = 'F';
+  const ex = Math.max(1, Math.round(cx - rx * 0.62)), ey = Math.round(cy - ry * 0.3);
+  if (g[ey] && g[ey][ex] !== '.') g[ey][ex] = 'E';
+  if (sp.whisk && rows > ey + 3) { g[ey + 2][0] = 'D'; if (g[ey + 3]) g[ey + 3][0] = 'D'; }
+  if (sp.lure) { g[0][1] = 'Q'; g[1][2] = 'D'; }
+  return makeSprite(g.map(r => r.join('')), pal);
+}
+function fishPal(sp) {
+  return { B: sp.col, L: sp.belly, D: shade(sp.col, -0.35), F: sp.fin, E: '#101018', W: '#ffffff', R: '#e86a90', Y: '#f8f080', Q: '#80ffe0' };
+}
+const BOOT_ROWS = ['.....BBBBB..', '.....BBBBB..', '.....BBBBB..', '.....BBDBB..', '.....BBBBB..', '..BBBBBBBB..', 'BBBBBBBBBB..', 'LLLLLLLLLL..'];
+function fishSprite(id, flip = false) {
+  const key = id + (flip ? 'R' : 'L');
+  if (fishCache[key]) return fishCache[key];
+  let c;
+  if (flip) c = flipH(fishSprite(id));
+  else if (id === 'boot') c = makeSprite(BOOT_ROWS.map(r => r.split('').reverse().join('')), { B: '#7a5030', D: '#4a2a18', L: '#3a2a20' });
+  else { const sp = FISH[id]; c = genFish(sp, sp.len, sp.ht, fishPal(sp)); }
+  return (fishCache[key] = c);
+}
+function miniFish(id, flip = false) {
+  const key = 'm' + id + (flip ? 'R' : 'L');
+  if (fishCache[key]) return fishCache[key];
+  let c;
+  if (flip) c = flipH(miniFish(id));
+  else if (id === 'boot') c = makeSprite(['..BB', '..BB', 'BBBB'], { B: '#7a5030' });
+  else {
+    const sp = FISH[id];
+    c = genFish(Object.assign({}, sp, { pat: sp.pat === 'koi' || sp.pat === 'shine' ? sp.pat : 'none', whisk: false, lure: false }),
+      clamp(Math.round(sp.len * 0.45), 7, 13), clamp(Math.round(sp.ht * 0.5), 4, 6), fishPal(sp));
+  }
+  return (fishCache[key] = c);
+}
+
+// ============ Objects art ============
+function drawTank(type, sx, sy, fish, seed = 0) {
+  // 32x32 footprint
+  const water = '#3c8ad8', waterD = '#2a6ab8';
+  // stand
+  rect(sx + 2, sy + 24, 28, 8, '#5a3a20'); rect(sx + 2, sy + 24, 28, 1, '#8a5a30'); rect(sx + 4, sy + 26, 10, 4, '#4a2a18'); rect(sx + 18, sy + 26, 10, 4, '#4a2a18');
+  let gx, gy, gw, gh;
+  if (type === 'bowl') {
+    pellipse(sx + 16, sy + 15, 11, 9, '#cfeaff'); pellipse(sx + 16, sy + 16, 10, 8, water); rect(sx + 7, sy + 8, 18, 3, '#cfeaff');
+    rect(sx + 9, sy + 6, 14, 2, '#e8f8ff'); rect(sx + 10, sy + 21, 12, 2, '#e8d49a');
+    gx = sx + 8; gy = sy + 11; gw = 16; gh = 10;
+  } else {
+    const frame = type === 'grand' ? '#c89a30' : type === 'dome' ? '#80c0e0' : type === 'reef' ? '#506878' : '#3a4a5a';
+    if (type === 'dome') { pellipse(sx + 16, sy + 10, 14, 9, '#cfeaff'); pellipse(sx + 16, sy + 10, 13, 8, water); }
+    rect(sx + 1, sy + (type === 'dome' ? 9 : 4), 30, type === 'dome' ? 16 : 21, frame);
+    rect(sx + 2, sy + (type === 'dome' ? 10 : 5), 28, type === 'dome' ? 14 : 19, water);
+    rect(sx + 2, sy + 5, 28, 2, type === 'dome' ? water : '#6aa8ec');
+    rect(sx + 2, sy + 21, 28, 3, '#e8d49a'); rect(sx + 2, sy + 21, 28, 1, '#c8b070');
+    if (type === 'reef' || type === 'grand' || type === 'dome') {
+      rect(sx + 5, sy + 15, 2, 6, '#f06080'); rect(sx + 4, sy + 16, 1, 2, '#f06080'); rect(sx + 7, sy + 17, 1, 2, '#f06080');
+      rect(sx + 24, sy + 14, 2, 7, '#f0a040'); rect(sx + 26, sy + 16, 1, 2, '#f0a040');
+    }
+    rect(sx + 12, sy + 13, 1, 8, '#40a050'); rect(sx + 13, sy + 15, 1, 6, '#50c060');
+    if (type === 'grand') { rect(sx, sy + 3, 32, 2, '#f0d060'); rect(sx + 14, sy + 1, 4, 2, '#f0d060'); }
+    gx = sx + 3; gy = sy + 7; gw = 26; gh = 13;
+  }
+  fish.forEach((f, i) => {
+    const sp = 0.012 + (i % 3) * 0.004, ph = T * sp + i * 1.7 + seed;
+    const img = miniFish(f.id), fx = gx + (Math.sin(ph) + 1) / 2 * (gw - img.width + 2) - 1;
+    const fy = gy + ((i * 5 + seed * 3) % Math.max(1, gh - img.height + 2)) + Math.round(Math.sin(ph * 2.3));
+    ctx.drawImage(Math.cos(ph) > 0 ? miniFish(f.id, true) : img, Math.round(fx), Math.round(fy));
+  });
+  // glass shine + bubbles
+  rect(gx + 1, gy, 1, 4, 'rgba(255,255,255,0.6)');
+  const b = (T / 2 + seed * 13) % 16; rect(gx + gw - 4, gy + gh - b, 1, 1, '#cfeaff');
+}
+function drawDecor(id, sx, sy) {
+  switch (id) {
+    case 'coral':
+      pellipse(sx + 16, sy + 26, 14, 4, '#e8d49a');
+      [[8, '#f06080'], [14, '#f0a040'], [20, '#a060e0'], [25, '#f06080']].forEach(([x, c], i) => {
+        const hgt = 12 + (i % 2) * 6; rect(sx + x, sy + 26 - hgt, 2, hgt, c); rect(sx + x - 2, sy + 26 - hgt + 3, 2, 2, c); rect(sx + x + 2, sy + 26 - hgt + 6, 2, 2, c);
+      });
+      break;
+    case 'statue':
+      rect(sx + 6, sy + 22, 20, 8, '#8a8698'); rect(sx + 6, sy + 22, 20, 2, '#b8b4c8');
+      pellipse(sx + 15, sy + 12, 8, 5, '#a8a4b8'); rect(sx + 22, sy + 6, 3, 12, '#a8a4b8'); rect(sx + 24, sy + 4, 3, 4, '#a8a4b8');
+      rect(sx + 10, sy + 10, 2, 2, '#4a4858'); rect(sx + 14, sy + 17, 2, 5, '#a8a4b8');
+      break;
+    case 'fountain':
+      pellipse(sx + 16, sy + 22, 14, 7, '#9894a8'); pellipse(sx + 16, sy + 21, 12, 5, '#4a90e0');
+      rect(sx + 14, sy + 8, 4, 14, '#b8b4c8'); pellipse(sx + 16, sy + 8, 5, 2, '#b8b4c8');
+      for (let i = 0; i < 6; i++) { const t = (T / 3 + i * 5) % 30; rect(sx + 16 + (i % 2 ? 1 : -1) * t / 3, sy + 4 + Math.abs(t - 12) / 2, 1, 1, '#cfeaff'); }
+      break;
+    case 'lighthouse':
+      rect(sx + 10, sy - 12, 12, 42, '#f4f4f4');
+      for (let y = -6; y < 30; y += 12) rect(sx + 10, sy + y, 12, 6, '#e04848');
+      rect(sx + 8, sy - 16, 16, 4, '#303040'); rect(sx + 11, sy - 22, 10, 6, (T >> 4) % 2 ? '#fff8a0' : '#c0a040'); rect(sx + 9, sy - 24, 14, 2, '#303040');
+      rect(sx + 14, sy + 22, 4, 8, '#5a3a20');
+      break;
+    case 'castle':
+      rect(sx + 2, sy + 10, 28, 20, '#a0e8f8'); rect(sx + 2, sy + 10, 28, 2, '#e0f8ff');
+      for (const tx of [0, 12, 24]) { rect(sx + tx, sy - 6 + (tx === 12 ? -6 : 0), 8, 18 + (tx === 12 ? 6 : 0), '#7ad0f0'); rect(sx + tx + 2, sy - 10 + (tx === 12 ? -6 : 0), 4, 4, '#c0f4ff'); }
+      rect(sx + 13, sy + 20, 6, 10, '#3a6a9a');
+      if ((T >> 3) % 3 === 0) rect(sx + 4, sy + 2, 1, 1, '#fff');
+      break;
+    case 'arch':
+      for (let a = 0; a <= 12; a++) { const ang = Math.PI * a / 12; rect(sx + 16 - Math.cos(ang) * 12 - 2, sy + 26 - Math.sin(ang) * 20, 5, 5, a % 2 ? '#f8c8d8' : '#f0a8b8'); }
+      break;
+  }
+}
+function drawPortal(sx, sy, w = 32) {
+  const cx = sx + w / 2, cy = sy + 9;
+  pellipse(cx, cy + 1, w / 2 - 1, 6, '#2a2050');
+  for (let i = 0; i < 4; i++) {
+    const r = ((T / 3 + i * 4) % 16) / 16;
+    pring(cx, cy, (w / 2 - 2) * r, 5 * r, ['#80f0ff', '#c080ff', '#ffffff', '#60a0ff'][i]);
+  }
+  for (let i = 0; i < 3; i++) { const t = (T + i * 20) % 60; rect(cx - 8 + i * 8, cy - t / 4, 1, 2, '#c0f8ff'); }
+}
+function makeWheelCanvas(R, segs) {
+  const S = R * 2 + 4, c = mkCanvas(S, S), g = c.getContext('2d');
+  const n = segs.length;
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const dx = x + 0.5 - S / 2, dy = y + 0.5 - S / 2, r = Math.sqrt(dx * dx + dy * dy);
+    if (r > R) continue;
+    let col;
+    if (r > R - 3) col = r > R - 1 ? '#3a2408' : '#f0c040';
+    else if (r < R * 0.16) col = r < R * 0.16 - 2 ? '#f0c040' : '#3a2408';
+    else {
+      let a = Math.atan2(dy, dx); if (a < 0) a += Math.PI * 2;
+      const f = a / (Math.PI * 2) * n, i = Math.floor(f), fr = f - i;
+      col = (fr < 0.02 || fr > 0.98) ? '#f8f0d0' : segs[i].col;
+    }
+    g.fillStyle = col; g.fillRect(x, y, 1, 1);
+  }
+  return c;
+}
+function drawLamp(sx, sy) {
+  rect(sx + 7, sy + 2, 2, 14, '#2a2a3a'); rect(sx + 5, sy + 14, 6, 2, '#2a2a3a');
+  rect(sx + 4, sy - 6, 8, 8, '#2a2a3a'); rect(sx + 5, sy - 5, 6, 6, (T >> 5) % 8 ? '#ffe890' : '#fff4c0');
+  rect(sx + 3, sy - 7, 10, 2, '#2a2a3a');
+}
+function drawSign(sx, sy) {
+  rect(sx + 7, sy + 8, 2, 8, '#5a3a20');
+  rect(sx + 2, sy + 1, 12, 9, '#2a1a10'); rect(sx + 3, sy + 2, 10, 7, '#b88a50');
+  rect(sx + 5, sy + 4, 6, 1, '#6a4a28'); rect(sx + 5, sy + 6, 5, 1, '#6a4a28');
+}
+function drawPillar(sx, sy) {
+  rect(sx + 3, sy - 12, 10, 28, '#9894a8'); rect(sx + 3, sy - 12, 10, 2, '#c8c4d8'); rect(sx + 1, sy - 14, 14, 3, '#b8b4c8');
+  rect(sx + 3, sy + 12, 10, 4, '#6a6878'); rect(sx + 5, sy - 6, 2, 16, '#b0acc0');
+}
+function drawFlag(sx, sy, col) {
+  rect(sx + 7, sy - 16, 2, 32, '#d0d0d8'); rect(sx + 6, sy - 18, 4, 2, '#f0c040');
+  const wv = Math.floor(T / 10) % 2;
+  rect(sx + 9, sy - 15 + wv, 12, 8, col); rect(sx + 9, sy - 15 + wv, 12, 1, shade(col, 0.3)); rect(sx + 19, sy - 13 + wv, 2, 4, shade(col, -0.25));
+  rect(sx + 13, sy - 13 + wv, 3, 3, '#fff');
+}
+function drawPlot(sx, sy) {
+  rect(sx + 2, sy + 4, 28, 26, '#8a6a48'); rect(sx + 3, sy + 5, 26, 24, '#a8865c');
+  for (let i = 0; i < 5; i++) rect(sx + 5 + i * 5, sy + 8 + (i % 2) * 8, 2, 1, '#8a6a48');
+  rect(sx + 15, sy + 12, 2, 8, '#f0e8c0'); rect(sx + 12, sy + 15, 8, 2, '#f0e8c0');
+}
+
+</script>
+<script>
+// ---- js/ui.js ----
+'use strict';
+// ============ UI stack ============
+const ui = [];
+function pushUI(u) { ui.push(u); return u; }
+function popUI(u) { const i = u ? ui.lastIndexOf(u) : ui.length - 1; if (i >= 0) ui.splice(i, 1); }
+const toasts = [];
+function toast(msg, col = '#fff') { toasts.push({ msg, t: 150, col }); if (toasts.length > 3) toasts.shift(); }
+function drawToasts() {
+  toasts.forEach((t, i) => {
+    t.t--;
+    const w = tw(t.msg) + 16, x = W / 2 - w / 2, y = 6 + i * 20;
+    drawWin(x, y, w, 18, 'dark'); textC(t.msg, W / 2, y + 6, t.col);
+  });
+  for (let i = toasts.length - 1; i >= 0; i--) if (toasts[i].t <= 0) toasts.splice(i, 1);
+}
+
+// ============ Menu ============
+class Menu {
+  constructor(o) {
+    Object.assign(this, { x: 8, y: 8, w: 120, items: [], sel: 0, top: 0, rows: 8, lh: 12, title: null, onCancel: null, onMove: null, style: 'blue', active: true }, o);
+    if (this.sel >= this.items.length) this.sel = Math.max(0, this.items.length - 1);
+    this.skip(1); this.fixScroll();
+  }
+  get h() { return Math.min(this.rows, this.items.length) * this.lh + 12 + (this.title ? 12 : 0) - (this.lh - 10); }
+  cur() { return this.items[this.sel]; }
+  skip(d) { const n = this.items.length; let k = 0; while (n && this.items[this.sel].sep && k++ < n) this.sel = (this.sel + d + n) % n; }
+  fixScroll() { if (this.sel < this.top) this.top = this.sel; if (this.sel >= this.top + this.rows) this.top = this.sel - this.rows + 1; if (this.top > 0 && this.items[this.top - 1] && this.items[this.top - 1].sep && this.sel - this.top + 1 < this.rows) this.top--; }
+  update() {
+    const n = this.items.length;
+    if (n) {
+      let d = 0;
+      if (inp.rep('down')) d = 1; else if (inp.rep('up')) d = -1;
+      if (d) { this.sel = (this.sel + d + n) % n; this.skip(d); this.fixScroll(); sfx('blip'); this.onMove && this.onMove(this.cur(), this.sel); }
+      if (inp.pressed.a) {
+        const it = this.cur();
+        if (it.disabled) { sfx('err'); if (it.why) toast(it.why, '#ffb0b0'); }
+        else if (it.action) { sfx('ok'); it.action(it, this.sel); }
+        return;
+      }
+    }
+    if ((inp.pressed.b || inp.pressed.menu) && this.onCancel) { sfx('cancel'); this.onCancel(); }
+  }
+  draw(isTop = true) {
+    const { x, y, w } = this, h = this.h;
+    drawWin(x, y, w, h, this.style);
+    let ty = y + 7;
+    if (this.title) { text(this.title, x + 8, ty, '#ffe890'); ty += 12; }
+    for (let i = this.top; i < Math.min(this.items.length, this.top + this.rows); i++) {
+      const it = this.items[i];
+      if (it.sep) {
+        rect(x + 8, ty + 3, w - 16, 1, '#8090d0');
+        const lw = tw(it.label) + 6; rect(x + w / 2 - lw / 2, ty, lw, 8, mix('#4868c8', '#141c60', clamp((ty - y) / h, 0, 1)));
+        textC(it.label, x + w / 2, ty, '#a8b8f0');
+      } else {
+        const c = it.disabled ? '#8890b0' : (it.color || '#fff');
+        text(it.label, x + 16, ty, c);
+        if (it.right != null) textR(it.right, x + w - 8, ty, it.rc || (it.disabled ? '#8890b0' : '#d8e0ff'));
+        if (isTop && this.active) { const k = i; hit(x, ty - Math.floor((this.lh - 7) / 2), w, this.lh, () => { this.sel = k; this.onMove && this.onMove(this.cur(), k); tapA(); }); }
+        if (i === this.sel && this.active && isTop) drawCursor(x + 6, ty);
+        else if (i === this.sel && this.active) rect(x + 7, ty + 3, 3, 2, '#c0c8e0');
+      }
+      ty += this.lh;
+    }
+    if (this.top > 0) { text('^', x + w - 12, y + 2, '#ffe890'); if (isTop) hit(x + w - 24, y - 6, 28, 16, () => this.scroll(-1)); }
+    if (this.top + this.rows < this.items.length) { text('|', x + w - 12, y + h - 9, '#ffe890'); if (isTop) hit(x + w - 24, y + h - 12, 28, 16, () => this.scroll(1)); }
+  }
+  scroll(d) {
+    const n = this.items.length;
+    this.top = clamp(this.top + d * Math.max(1, this.rows - 1), 0, Math.max(0, n - this.rows));
+    this.sel = clamp(this.sel, this.top, Math.min(n - 1, this.top + this.rows - 1));
+    this.skip(d >= 0 ? 1 : -1); sfx('blip'); this.onMove && this.onMove(this.cur(), this.sel);
+  }
+}
+// generic wrapper so a bare Menu can be pushed on the stack
+class MenuUI {
+  constructor(o, drawExtra) { this.menu = new Menu(o); this.extra = drawExtra; }
+  update() { this.menu.update(); }
+  draw() { this.menu.draw(ui[ui.length - 1] === this); if (this.extra) this.extra(this.menu); }
+}
+
+// ============ Dialog ============
+class Dialog {
+  constructor(msgs, cb, speaker) {
+    this.pages = [];
+    for (const m of msgs) { const ls = wrap(m, 47); for (let i = 0; i < ls.length; i += 3) this.pages.push(ls.slice(i, i + 3)); }
+    this.pi = 0; this.ch = 0; this.cb = cb; this.speaker = speaker; this.tapAnywhere = true;
+  }
+  get total() { return this.pages[this.pi].join('').length; }
+  update() {
+    if (this.ch < this.total) {
+      this.ch += 1.5;
+      if (inp.pressed.a || inp.pressed.b) this.ch = this.total;
+    } else if (inp.pressed.a || inp.pressed.b) {
+      this.pi++; this.ch = 0; sfx('blip');
+      if (this.pi >= this.pages.length) { popUI(this); if (this.cb) this.cb(); }
+    }
+  }
+  draw() { drawDialogBox(this.pages[Math.min(this.pi, this.pages.length - 1)], this.ch, this.speaker, this.ch >= this.total); }
+}
+function drawDialogBox(lines, ch, speaker, done) {
+  const x = 6, y = 172, w = 308, h = 62;
+  if (speaker) { drawWin(x + 4, y - 15, tw(speaker) + 16, 18); text(speaker, x + 12, y - 10, '#ffe890'); }
+  drawWin(x, y, w, h);
+  let left = ch;
+  lines.forEach((l, i) => {
+    const s = l.slice(0, Math.max(0, Math.floor(left))); left -= l.length;
+    text(s, x + 10, y + 10 + i * 14);
+  });
+  if (done && (T >> 4) % 2) { rect(x + w - 16, y + h - 12, 7, 2, '#fff'); rect(x + w - 15, y + h - 10, 5, 1, '#fff'); rect(x + w - 14, y + h - 9, 3, 1, '#fff'); }
+}
+function closeNameInput() {
+  textHandler = null; nameInput.oninput = nameInput.onkeydown = null;
+  nameInput.blur(); nameInput.style.display = 'none';
+}
+// a small labelled button that can be tapped
+function btn(x, y, w, h, label, fn, col = '#fff') {
+  drawWin(x, y, w, h, 'dark'); textC(label, x + w / 2, y + Math.round(h / 2) - 4, col);
+  hit(x, y, w, h, fn);
+}
+function say(msgs, cb, speaker) { return pushUI(new Dialog(Array.isArray(msgs) ? msgs : [msgs], cb, speaker)); }
+
+class Ask {
+  constructor(q, opts, cb, speaker) {
+    this.lines = wrap(q, 47).slice(0, 3); this.ch = 0; this.speaker = speaker; this.cb = cb;
+    const w = Math.max(...opts.map(o => tw(o))) + 30;
+    this.menu = new Menu({
+      x: 314 - w, y: 0, w, lh: 12, rows: 6,
+      items: opts.map((o, i) => ({ label: o, action: () => { popUI(this); cb && cb(i); } })),
+      onCancel: () => { popUI(this); cb && cb(opts.length - 1); },
+    });
+    this.menu.y = 170 - this.menu.h;
+  }
+  get total() { return this.lines.join('').length; }
+  get tapAnywhere() { return this.ch < this.total; }
+  update() {
+    if (this.ch < this.total) { this.ch += 2; if (inp.pressed.a) this.ch = this.total; return; }
+    this.menu.update();
+  }
+  draw() { drawDialogBox(this.lines, this.ch, this.speaker, false); if (this.ch >= this.total) this.menu.draw(ui[ui.length - 1] === this); }
+}
+function ask(q, opts, cb, speaker) { return pushUI(new Ask(q, opts, cb, speaker)); }
+
+// ============ Name entry ============
+class NameEntry {
+  constructor(title, def, max, cb) {
+    this.title = title; this.name = def; this.max = max; this.cb = cb;
+    this.grid = ['ABCDEFGHIJKLM', 'NOPQRSTUVWXYZ', 'abcdefghijklm', 'nopqrstuvwxyz', "0123456789-'!"];
+    this.r = 0; this.c = 0;
+    nameInput.value = def; nameInput.maxLength = max; nameInput.style.display = 'block';
+    nameInput.oninput = () => {
+      const v = [...nameInput.value].filter(ch => charIndex[ch] !== undefined).join('').slice(0, max);
+      if (v !== nameInput.value) nameInput.value = v;
+      this.name = v;
+    };
+    nameInput.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); this.done(); } };
+    if (document.body.classList.contains('touch')) { try { nameInput.focus(); } catch (e) {} }
+    textHandler = e => {
+      if (e.key === 'Enter') { this.done(); return true; }
+      if (e.key === 'Backspace') { this.name = this.name.slice(0, -1); sfx('cancel'); return true; }
+      if (e.key.length === 1 && (charIndex[e.key] !== undefined) && !e.ctrlKey && !e.metaKey) {
+        if (this.name.length < this.max) { this.name += e.key; sfx('blip'); } return true;
+      }
+      return false;
+    };
+  }
+  done() {
+    const n = this.name.trim();
+    if (!n.length) { sfx('err'); toast('Please enter a name!'); return; }
+    sfx('ok'); closeNameInput(); popUI(this); this.cb(n);
+  }
+  update() {
+    if (document.activeElement !== nameInput && nameInput.value !== this.name) nameInput.value = this.name;
+    const rows = this.grid.length + 1;
+    if (inp.rep('down')) { this.r = (this.r + 1) % rows; sfx('blip'); }
+    if (inp.rep('up')) { this.r = (this.r - 1 + rows) % rows; sfx('blip'); }
+    const cols = this.r < this.grid.length ? 13 : 3;
+    if (this.r === this.grid.length) this.c = Math.min(this.c, 2);
+    if (inp.rep('right')) { this.c = (this.c + 1) % cols; sfx('blip'); }
+    if (inp.rep('left')) { this.c = (this.c - 1 + cols) % cols; sfx('blip'); }
+    if (this.r === this.grid.length) this.c = Math.min(this.c, 2);
+    if (inp.pressed.a) {
+      if (this.r < this.grid.length) { if (this.name.length < this.max) { this.name += this.grid[this.r][this.c]; sfx('blip'); } else sfx('err'); }
+      else if (this.c === 0) { if (this.name.length < this.max) this.name += ' '; }
+      else if (this.c === 1) { this.name = this.name.slice(0, -1); sfx('cancel'); }
+      else this.done();
+    }
+    if (inp.pressed.b) { this.name = this.name.slice(0, -1); sfx('cancel'); }
+  }
+  draw() {
+    drawWin(30, 24, 260, 196);
+    textC(this.title, 160, 34, '#ffe890');
+    rect(70, 50, 180, 18, '#0c1238');
+    // lay the real text box over the name field so tapping it opens the phone keyboard
+    const cr = cv.getBoundingClientRect(), sx = cr.width / W, sy = cr.height / H;
+    Object.assign(nameInput.style, { left: cr.left + 70 * sx + 'px', top: cr.top + 50 * sy + 'px', width: 180 * sx + 'px', height: 18 * sy + 'px' });
+    if (document.activeElement === nameInput) { rect(70, 50, 180, 1, '#ffe890'); rect(70, 67, 180, 1, '#ffe890'); }
+    const s = this.name + ((T >> 4) % 2 && this.name.length < this.max ? '_' : ' ');
+    textC(s, 160, 56);
+    for (let i = 0; i < this.max; i++) rect(160 - this.max * 3 + i * 6, 65, 5, 1, '#6a78c0');
+    this.grid.forEach((row, r) => {
+      for (let c = 0; c < row.length; c++) {
+        const x = 52 + c * 17, y = 82 + r * 18;
+        text(row[c], x, y, r === this.r && c === this.c ? '#ffe890' : '#fff');
+        { const rr = r, cc = c; hit(x - 6, y - 5, 17, 18, () => { this.r = rr; this.c = cc; tapA(); }); }
+        if (r === this.r && c === this.c) drawCursor(x - 9, y);
+      }
+    });
+    ['SPACE', 'DEL', 'DONE'].forEach((l, i) => {
+      const x = 62 + i * 76, y = 178;
+      text(l, x, y, this.r === this.grid.length && this.c === i ? '#ffe890' : '#c8d0f0');
+      hit(x - 12, y - 6, 60, 20, () => { this.r = this.grid.length; this.c = i; tapA(); });
+      if (this.r === this.grid.length && this.c === i) drawCursor(x - 9, y);
+    });
+    textC(document.body.classList.contains('touch') ? 'Tap the box above to use your keyboard' : 'Type on keyboard or pick letters. Enter = done', 160, 202, '#8898d0', null);
+  }
+}
+
+// ============ Main menu ============
+function soundLabel() { return soundOn ? (musicOn ? 'Sound:All' : 'Sound:SFX') : 'Sound:Off'; }
+function cycleSound() {
+  if (soundOn && musicOn) musicOn = false; else if (soundOn) soundOn = false; else { soundOn = true; musicOn = true; }
+  try { localStorage.setItem('aquariumWorldSound', JSON.stringify([soundOn, musicOn])); } catch (e) {}
+}
+function doSave(i = curSlot) {
+  if (scene && scene.saveLoc) scene.saveLoc();
+  if (saveGame(i)) { sfx('coin'); toast('Saved to Slot ' + (i + 1) + '!', '#b0ffb0'); } else { sfx('err'); toast('Save failed!', '#ffb0b0'); }
+}
+function saveStatusLine() {
+  if (saveStatus === 'blocked') return 'Saving is blocked here: use Backup!';
+  return saveStatus === 'cloud' ? 'Saves are kept in your claude.ai account'
+    : saveStatus === 'checking' ? 'Connecting to your saves...' : 'Saves are kept in this browser only';
+}
+// ============ Save files (backup / move between devices) ============
+const fileInput = document.getElementById('fileInput'), exportBtn = document.getElementById('exportBtn');
+function exportSlot(i) {
+  const s = slots[i];
+  if (!s) { sfx('err'); toast('Slot ' + (i + 1) + ' is empty.', '#ffb0b0'); return; }
+  const json = JSON.stringify({ game: 'aquarium-world', version: 1, exportedAt: Date.now(), save: s });
+  const name = 'aquarium-world-slot' + (i + 1) + '-' + String(s.player.name).replace(/[^A-Za-z0-9_-]/g, '') + '.json';
+  if (window.claude && typeof window.claude.use === 'function') { // inside claude.ai: downloads go through the viewer
+    claude.use('downloads').then(dl => {
+      if (!dl) { toast('Saving files is not available here.', '#ffb0b0'); return; }
+      dl.save({ filename: name, data: json }).then(() => toast('Save file ready!', '#b0ffb0'), () => toast('Save file cancelled.'));
+    });
+    return;
+  }
+  const file = new File([json], name, { type: 'application/json' });
+  const touch = document.body.classList.contains('touch');
+  if (touch && navigator.canShare && navigator.canShare({ files: [file] })) { // phones: share sheet -> "Save to Files"
+    navigator.share({ files: [file], title: 'Aquarium World save' }).then(() => toast('Save file shared!', '#b0ffb0'), () => {});
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(file); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  toast('Save file downloaded!', '#b0ffb0');
+}
+function importIntoSlot(i, file, done) {
+  const r = new FileReader();
+  r.onload = () => {
+    let s = null;
+    try { const d = JSON.parse(r.result); s = d && d.save ? d.save : d; } catch (e) {}
+    if (!s || !s.player || !s.world || !s.player.name) { sfx('err'); toast("That file isn't an Aquarium World save.", '#ffb0b0'); return; }
+    const put = () => {
+      s.savedAt = Date.now(); slots[i] = s;
+      const json = JSON.stringify(s); lsSet(slotKey(i), json); cloudWrite(i, json);
+      sfx('coin'); toast(s.player.name + ' loaded into Slot ' + (i + 1) + '!', '#b0ffb0'); done && done();
+    };
+    const m = slotSummary(slots[i]);
+    if (m) ask('Replace ' + m.name + ' (Lv ' + m.level + ') in Slot ' + (i + 1) + ' with ' + s.player.name + ' (Lv ' + s.player.level + ')?', ['Replace', 'Cancel'], k => { if (k === 0) put(); });
+    else put();
+  };
+  r.readAsText(file);
+}
+class BackupUI {
+  constructor(onDone) {
+    this.onDone = onDone; this.slot = Math.max(0, latestSlot()); this.build(this.slot);
+    exportBtn.onclick = () => { sfx('ok'); exportSlot(this.slot); };
+    fileInput.onchange = () => { const f = fileInput.files && fileInput.files[0]; fileInput.value = ''; if (f) importIntoSlot(this.slot, f, () => { this.build(this.menu.sel); this.onDone && this.onDone(); }); };
+  }
+  close() { exportBtn.onclick = fileInput.onchange = null; popUI(this); this.onDone && this.onDone(); }
+  build(sel) {
+    const items = slots.map((s, i) => {
+      const m = slotSummary(s);
+      return { label: (this.slot === i ? '> ' : '  ') + 'Slot ' + (i + 1) + '  ' + (m ? m.name + ' Lv' + m.level : '- empty -'), right: m ? 'Day ' + m.day : '', action: () => { this.slot = i; this.build(i); } };
+    });
+    items.push({ label: 'Save slot ' + (this.slot + 1) + ' to a file', color: '#a8ffa8', action: () => exportSlot(this.slot) });
+    items.push({ label: 'Load a file into slot ' + (this.slot + 1), color: '#a8ffa8', action: () => fileInput.click() });
+    items.push({ label: 'Back', action: () => this.close() });
+    this.menu = new Menu({ x: 30, y: 24, w: 260, rows: 6, lh: 15, title: 'Backup saves', items, sel: Math.min(sel, items.length - 1), onCancel: () => this.close() });
+  }
+  update() { this.menu.update(); }
+  draw() {
+    ctx.fillStyle = 'rgba(0,0,20,0.6)'; ctx.fillRect(0, 0, W, H);
+    const top = ui[ui.length - 1] === this;
+    this.menu.draw(top);
+    if (top) { // the two file rows are real buttons underneath, so taps open the picker / share sheet
+      const rowY = k => this.menu.y + 7 + 12 + (k - this.menu.top) * this.menu.lh - 4;
+      overlayAt(exportBtn, this.menu.x, rowY(3), this.menu.w, this.menu.lh);
+      overlayAt(fileInput, this.menu.x, rowY(4), this.menu.w, this.menu.lh);
+    }
+    const y = this.menu.y + this.menu.h + 6;
+    drawWin(30, y, 260, 64);
+    wrap('Save a slot to a file to keep a backup or move it to another device. Load the file there to continue playing.', 41)
+      .forEach((l, i) => text(l, 40, y + 9 + i * 12, '#c8d0f0'));
+  }
+}
+
+// pick a save slot. mode: 'load' | 'new' | 'save'
+class SlotUI {
+  constructor(mode, cb) {
+    this.mode = mode; this.cb = cb;
+    const empty = slots.findIndex(x => !x);
+    this.build(mode === 'load' ? Math.max(0, latestSlot()) : mode === 'new' ? Math.max(0, empty) : curSlot);
+    this.prevHook = onSlotsChanged;
+    onSlotsChanged = () => { this.prevHook(); this.build(this.menu.sel); };
+  }
+  close() { onSlotsChanged = this.prevHook; popUI(this); }
+  build(sel) {
+    const title = { load: 'Load which slot?', new: 'Start in which slot?', save: 'Save to which slot?' }[this.mode];
+    const items = slots.map((s, i) => {
+      const m = slotSummary(s);
+      return {
+        label: 'Slot ' + (i + 1) + '  ' + (m ? m.name + ' Lv' + m.level : '- empty -'),
+        right: m ? 'Day ' + m.day : '', color: m ? '#fff' : '#a8b0d0',
+        disabled: this.mode === 'load' && !m, why: 'This slot is empty.',
+        action: () => {
+          const go = () => { this.close(); this.cb(i); };
+          if (this.mode !== 'load' && m && !(this.mode === 'save' && i === curSlot))
+            ask('Slot ' + (i + 1) + ' has ' + m.name + ' (Lv ' + m.level + '). Replace it?', ['Replace', 'Cancel'], k => { if (k === 0) go(); });
+          else go();
+        },
+      };
+    });
+    items.push({ label: 'Back', action: () => this.close() });
+    this.menu = new Menu({ x: 30, y: 30, w: 260, rows: 4, lh: 16, title, items, sel: Math.min(sel, items.length - 1), onCancel: () => this.close() });
+  }
+  update() { this.menu.update(); }
+  draw() {
+    ctx.fillStyle = 'rgba(0,0,20,0.55)'; ctx.fillRect(0, 0, W, H);
+    this.menu.draw(ui[ui.length - 1] === this);
+    const i = this.menu.sel, m = i < SLOT_COUNT ? slotSummary(slots[i]) : null;
+    const y = this.menu.y + this.menu.h + 6;
+    drawWin(30, y, 260, 74);
+    if (m) {
+      text(m.name + '   Lv ' + m.level + '   Day ' + m.day, 40, y + 10, '#ffe890');
+      text('$ ' + fmt(m.ac) + ' AC   Fish caught ' + m.caught, 40, y + 24);
+      text('At: ' + m.where, 40, y + 38, '#80e0ff');
+      if (m.when) text('Saved ' + m.when + (i === curSlot && G ? '  (current)' : ''), 40, y + 52, '#a8b8f0');
+    } else if (i < SLOT_COUNT) textC(this.mode === 'load' ? 'Nothing saved here yet.' : 'A fresh slot for a new adventure.', 160, y + 30, '#a8b0d0');
+    textC(saveStatusLine(), 160, y + 82, saveStatus === 'cloud' ? '#a8ffa8' : saveStatus === 'blocked' ? '#ff9090' : '#c8d0f0', '#101028');
+  }
+}
+class MainMenu {
+  constructor() {
+    const where = scene.id;
+    const it = [
+      { label: 'Items', action: () => pushUI(new ItemsUI()) },
+      { label: 'Equip', action: () => pushUI(new EquipUI()) },
+      { label: 'Cooler', action: () => pushUI(new CoolerUI()) },
+      { label: 'Fish Log', action: () => pushUI(new LogUI()) },
+      { label: 'Save', action: () => pushUI(new SlotUI('save', i => doSave(i))) },
+      { label: where === 'home' ? 'To City' : 'Go Home', action: () => { popUI(this); if (where === 'fishing') G.day++; warpTo(where === 'home' ? 'city' : 'home'); } },
+      { label: soundLabel(), action: i => { cycleSound(); i.label = soundLabel(); } },
+      { label: 'Title', action: () => ask('Return to the title screen? Unsaved progress will be lost.', ['Yes', 'No'], k => { if (k === 0) { ui.length = 0; fadeTo(() => setScene(TitleScene)); } }) },
+      { label: 'Close', action: () => popUI(this) },
+    ];
+    this.menu = new Menu({ x: 226, y: 8, w: 88, lh: 15, rows: 12, items: it, onCancel: () => popUI(this) });
+  }
+  update() { this.menu.update(); }
+  draw() {
+    drawStatusPanel(6, 8, 216, 224);
+    this.menu.draw(ui[ui.length - 1] === this);
+    drawWin(226, 164, 88, 68);
+    text('DAY', 234, 172, '#a8b8f0'); textR(G.day, 306, 172);
+    text('$', 234, 186, '#ffd040'); textR(fmt(G.player.ac), 306, 186, '#ffe890');
+    text('FISH', 234, 200, '#a8b8f0'); textR(G.cooler.length + '/' + MAX_COOLER, 306, 200);
+    text(scene.id === 'home' ? 'HOME' : scene.id === 'city' ? 'CITY' : 'LAKES', 234, 214, '#80e0ff');
+  }
+}
+function drawStatusPanel(x, y, w, h) {
+  const p = G.player, st = stats();
+  drawWin(x, y, w, h);
+  rect(x + 8, y + 8, 60, 60, '#0c1238');
+  const spr = playerSprites().down[WALKSEQ[(T >> 4) % 4]];
+  ctx.drawImage(spr, x + 11, y + 10, spr.width * 3, spr.height * 3);
+  text(p.name, x + 76, y + 10, '#ffe890');
+  text('Lv ' + p.level, x + 76, y + 24);
+  const need = xpNeed(p.level);
+  text('XP', x + 76, y + 38, '#a8b8f0'); bar(x + 94, y + 39, 80, 5, p.level >= MAX_LEVEL ? 1 : p.xp / need, '#60e0a0');
+  textR(p.level >= MAX_LEVEL ? 'MAX' : p.xp + '/' + need, x + w - 8, y + 48, '#c8d0f0');
+  text('$ ' + fmt(p.ac) + ' AC', x + 76, y + 58, '#ffe890');
+  let yy = y + 80;
+  const line = (a, b, c = '#fff') => { text(a, x + 10, yy, '#a8b8f0'); text(b, x + 64, yy, c); yy += 12; };
+  line('Rod', RODS[p.rod].name);
+  line('Bait', p.bait && p.baits[p.bait] > 0 ? BAITS[p.bait].name + ' x' + p.baits[p.bait] : 'None');
+  for (const [s, n] of SLOTS) line(n, p.equip[s] ? GEAR[p.equip[s]].name : '-', p.equip[s] ? '#fff' : '#8890b0');
+  yy += 4;
+  const sx = [['POWER', st.power + RODS[p.rod].power], ['FOCUS', st.focus], ['STAMINA', st.stamina], ['LUCK', st.luck]];
+  sx.forEach(([n, v], i) => { const cx = x + 10 + (i % 2) * 104, cy = yy + Math.floor(i / 2) * 12; text(n, cx, cy, '#a8b8f0'); textR(v, cx + 92, cy); });
+  yy += 30;
+  const found = Object.keys(G.log).length, all = Object.keys(FISH).length;
+  text('Species ' + found + '/' + all, x + 10, yy, '#c8d0f0'); textR('Caught ' + G.stats.caught, x + w - 10, yy, '#c8d0f0');
+  yy += 12;
+  text('World: ' + G.world.name, x + 10, yy, '#80e0ff');
+}
+
+class ItemsUI {
+  constructor() { this.build(0); }
+  build(sel) {
+    const p = G.player, it = [{ label: 'RODS', sep: true }];
+    for (const id of p.rods) it.push({ label: RODS[id].name, right: p.rod === id ? 'E' : '', rc: '#80ff80', id, kind: 'rod', action: () => { p.rod = id; toast(RODS[id].name + ' ready!'); this.build(this.menu.sel); } });
+    it.push({ label: 'BAIT', sep: true });
+    const baits = Object.keys(BAITS).filter(b => p.baits[b] > 0);
+    for (const id of baits) it.push({ label: BAITS[id].name, right: (p.bait === id ? 'E ' : '') + 'x' + p.baits[id], id, kind: 'bait', action: () => { p.bait = id; toast(BAITS[id].name + ' selected!'); this.build(this.menu.sel); } });
+    if (!baits.length) it.push({ label: '(no bait)', disabled: true });
+    this.menu = new Menu({ x: 8, y: 8, w: 200, rows: 13, items: it, sel, onCancel: () => popUI(this), title: 'ITEMS' });
+  }
+  update() { this.menu.update(); }
+  draw() {
+    this.menu.draw(ui[ui.length - 1] === this);
+    const c = this.menu.cur(); drawWin(212, 8, 102, 140);
+    if (c && c.id) {
+      const d = c.kind === 'rod' ? RODS[c.id] : BAITS[c.id];
+      wrap(d.desc, 15).forEach((l, i) => text(l, 220, 18 + i * 11));
+      if (c.kind === 'rod') { text('POWER ' + d.power, 220, 110, '#a8ffa8'); text('BAR   +' + d.zone, 220, 122, '#a8ffa8'); }
+      else { text('BITE x' + (1 / d.bite).toFixed(1), 220, 110, '#a8ffa8'); text('RARE +' + (d.rare * 100).toFixed(1) + '%', 220, 122, '#a8ffa8'); }
+    }
+    text('A: set default', 216, 154, '#8898d0');
+  }
+}
+
+class EquipUI {
+  constructor() { this.build(0); }
+  build(sel) {
+    const p = G.player;
+    this.menu = new Menu({
+      x: 8, y: 8, w: 200, rows: 4, lh: 14, title: 'EQUIP', sel, onCancel: () => popUI(this),
+      items: SLOTS.map(([s, n]) => ({ label: n, right: p.equip[s] ? GEAR[p.equip[s]].name : '-', action: () => this.choose(s) })),
+    });
+  }
+  choose(slot) {
+    const p = G.player, owned = p.gear.filter(g => GEAR[g].slot === slot);
+    if (!owned.length) { toast('No gear for this slot. Visit the Outfitters!', '#ffb0b0'); return; }
+    const items = owned.map(g => ({ label: GEAR[g].name, right: p.equip[slot] === g ? 'E' : '', id: g, action: () => { p.equip[slot] = g; sfx('coin'); popUI(sub); this.build(this.menu.sel); } }));
+    items.push({ label: '(Remove)', action: () => { p.equip[slot] = null; popUI(sub); this.build(this.menu.sel); } });
+    const sub = pushUI(new MenuUI({ x: 40, y: 90, w: 160, rows: 6, items, title: 'Choose', onCancel: () => popUI(sub) }, m => {
+      const c = m.cur(); if (!c.id) return; drawGearInfo(c.id, 212, 90);
+    }));
+  }
+  update() { this.menu.update(); }
+  draw() {
+    this.menu.draw(ui[ui.length - 1] === this);
+    const st = stats(); drawWin(212, 8, 102, 76);
+    [['POWER', st.power], ['FOCUS', st.focus], ['STAMINA', st.stamina], ['LUCK', st.luck]].forEach(([n, v], i) => { text(n, 220, 18 + i * 14, '#a8b8f0'); textR(v, 306, 18 + i * 14); });
+  }
+}
+function gearStatStr(g) {
+  return ['power', 'focus', 'stamina', 'luck'].filter(k => g[k]).map(k => k.slice(0, 3).toUpperCase() + '+' + g[k]);
+}
+function drawGearInfo(id, x, y) {
+  const g = GEAR[id]; drawWin(x, y, 102, 110);
+  wrap(g.desc, 15).forEach((l, i) => text(l, x + 8, y + 8 + i * 11));
+  gearStatStr(g).forEach((s, i) => text(s, x + 8, y + 60 + i * 11, '#a8ffa8'));
+}
+
+class CoolerUI {
+  constructor() {
+    const items = G.cooler.slice().sort((a, b) => b.value - a.value).map(f => ({ label: (f.rare ? '*' : '') + FISH[f.id].name, right: f.size + 'cm', f, color: f.rare ? '#ffe890' : '#fff' }));
+    if (!items.length) items.push({ label: '(empty - go fishing!)', disabled: true });
+    this.menu = new Menu({ x: 8, y: 8, w: 200, rows: 15, items, title: 'COOLER ' + G.cooler.length + '/' + MAX_COOLER, onCancel: () => popUI(this) });
+  }
+  update() { this.menu.update(); }
+  draw() {
+    this.menu.draw(ui[ui.length - 1] === this);
+    const c = this.menu.cur();
+    drawWin(212, 8, 102, 120);
+    if (c && c.f) {
+      const img = fishSprite(c.f.id), s = img.width > 40 ? 2 : 3;
+      ctx.drawImage(img, 263 - img.width * s / 2, 40 - img.height * s / 2, img.width * s, img.height * s);
+      text(c.f.size + ' cm', 220, 76); text('$ ' + sellPrice(c.f) + ' AC', 220, 90, '#ffe890');
+      if (c.f.rare) text('RARE!', 220, 104, '#ff90c0');
+    }
+    const tot = G.cooler.reduce((a, f) => a + sellPrice(f), 0);
+    drawWin(212, 132, 102, 34); text('Total value', 220, 140, '#a8b8f0'); text('$ ' + fmt(tot), 220, 152, '#ffe890');
+  }
+}
+
+class LogUI {
+  constructor() { this.li = 0; this.build(); }
+  build() {
+    const L = LAKES[this.li];
+    const ids = L.fish.concat([L.rare]);
+    const items = ids.map(id => {
+      const e = G.log[id];
+      return { label: e ? FISH[id].name : '??????', right: e ? 'x' + e.n + ' ' + e.best + 'cm' : '', id: e ? id : null, color: FISH[id].rare ? '#ffe890' : '#fff' };
+    });
+    this.menu = new Menu({ x: 8, y: 30, w: 200, rows: 6, lh: 14, items, onCancel: () => popUI(this) });
+  }
+  update() {
+    if (inp.rep('right')) { this.li = (this.li + 1) % LAKES.length; sfx('blip'); this.build(); }
+    if (inp.rep('left')) { this.li = (this.li + LAKES.length - 1) % LAKES.length; sfx('blip'); this.build(); }
+    this.menu.update();
+  }
+  draw() {
+    drawWin(8, 8, 306, 20); textC('< ' + LAKES[this.li].name + ' >', 160, 14, '#ffe890');
+    hit(8, 4, 153, 26, () => { this.li = (this.li + LAKES.length - 1) % LAKES.length; sfx('blip'); this.build(); });
+    hit(161, 4, 153, 26, () => { this.li = (this.li + 1) % LAKES.length; sfx('blip'); this.build(); });
+    this.menu.draw(ui[ui.length - 1] === this);
+    drawWin(212, 30, 102, 100);
+    const c = this.menu.cur();
+    if (c && c.id) {
+      const img = fishSprite(c.id), s = img.width > 40 ? 2 : 3;
+      ctx.drawImage(img, 263 - img.width * s / 2, 64 - img.height * s / 2, img.width * s, img.height * s);
+      text('Base $' + FISH[c.id].val, 220, 98, '#ffe890'); text('Diff ' + '*'.repeat(Math.ceil(FISH[c.id].d / 2)), 220, 110, '#ff9090');
+    } else textC('???', 263, 70, '#8890b0');
+    const found = Object.keys(G.log).filter(k => !FISH[k].junk).length, all = Object.keys(FISH).filter(k => !FISH[k].junk).length;
+    drawWin(8, 136, 306, 22); textC('Species discovered: ' + found + ' / ' + all, 160, 143, '#c8d0f0');
+  }
+}
+
+// ============ Quantity picker ============
+class QtyUI {
+  constructor(name, price, max, cb) { Object.assign(this, { name, price, max, cb, q: 1 }); }
+  update() {
+    let d = 0;
+    if (inp.rep('right')) d = 1; if (inp.rep('left')) d = -1; if (inp.rep('up')) d = 10; if (inp.rep('down')) d = -10;
+    if (d) { this.q = clamp(this.q + d, 1, this.max); sfx('blip'); }
+    if (inp.pressed.a) { popUI(this); this.cb(this.q); }
+    if (inp.pressed.b || inp.pressed.menu) { sfx('cancel'); popUI(this); }
+  }
+  add(d) { this.q = clamp(this.q + d, 1, this.max); sfx('blip'); }
+  draw() {
+    drawWin(56, 60, 208, 104);
+    textC('Buy how many ' + this.name + '?', 160, 70, '#ffe890');
+    btn(64, 86, 34, 18, '-10', () => this.add(-10)); btn(100, 86, 26, 18, '-1', () => this.add(-1));
+    btn(194, 86, 26, 18, '+1', () => this.add(1)); btn(222, 86, 34, 18, '+10', () => this.add(10));
+    textC(String(this.q), 160, 92);
+    textC('Total: $' + fmt(this.q * this.price) + ' AC', 160, 112, '#ffe890');
+    btn(84, 128, 70, 20, 'Buy', () => tapA(), '#a8ffa8'); btn(166, 128, 70, 20, 'Cancel', () => { sfx('cancel'); popUI(this); });
+    textC('L/R: 1   U/D: 10', 160, 152, '#8898d0', null);
+  }
+}
+
+// ============ Shops ============
+function buy(price) {
+  if (G.player.ac < price) { sfx('err'); toast("You can't afford that!", '#ffb0b0'); return false; }
+  G.player.ac -= price; sfx('coin'); return true;
+}
+const SHOPS = {
+  tackle: {
+    name: 'Hook, Line & Sinker', keeper: { type: 'boy', col: { hair: '#d0d0d0', shirt: '#a04030', pants: '#3a3020' } }, keeperName: 'Old Gil',
+    greet: "Ahoy! Rods and bait, the finest in town!", wall: '#6a4a3a', song: 'shop',
+    items(s) {
+      const p = G.player, it = [{ label: 'RODS', sep: true }];
+      for (const id in RODS) {
+        if (id === 'bamboo') continue;
+        const r = RODS[id], own = p.rods.includes(id);
+        it.push({
+          label: r.name, right: own ? 'OWNED' : '$' + fmt(r.price), rc: own ? '#80ff80' : null,
+          info: () => [r.desc, '', 'POWER ' + r.power, 'BAR +' + r.zone],
+          action: () => {
+            if (own) { p.rod = id; s.say('Using your ' + r.name + ' now.'); return; }
+            ask('Buy the ' + r.name + ' for $' + fmt(r.price) + ' AC?', ['Buy', 'No'], k => {
+              if (k === 0 && buy(r.price)) { p.rods.push(id); p.rod = id; s.say('A fine choice! It is ready to use.'); s.rebuild(); }
+            });
+          },
+        });
+      }
+      it.push({ label: 'BAIT', sep: true });
+      for (const id in BAITS) {
+        const b = BAITS[id];
+        it.push({
+          label: b.name, right: '$' + b.price, info: () => [b.desc, '', 'Have: ' + (p.baits[id] || 0), 'BITE x' + (1 / b.bite).toFixed(1), 'RARE +' + (b.rare * 100).toFixed(1) + '%'],
+          action: () => {
+            const max = Math.min(99, Math.floor(p.ac / b.price));
+            if (max < 1) { sfx('err'); toast("You can't afford that!", '#ffb0b0'); return; }
+            pushUI(new QtyUI(b.name, b.price, max, q => {
+              if (buy(q * b.price)) { p.baits[id] = (p.baits[id] || 0) + q; if (!p.bait || !p.baits[p.bait]) p.bait = id; s.say('Here you go, ' + q + ' ' + b.name + '! Tight lines!'); s.rebuild(); }
+            }));
+          },
+        });
+      }
+      return it;
+    },
+  },
+  tanks: {
+    name: 'Tank Emporium', keeper: { type: 'girl', col: { hair: '#40a0e0', shirt: '#f0f0f0', dress: '#3070c0' } }, keeperName: 'Marina',
+    greet: 'Welcome! Make your world sparkle with aquariums!', wall: '#2a5a7a', song: 'shop',
+    items(s) {
+      const w = G.world, it = [{ label: 'AQUARIUMS', sep: true }];
+      for (const id in TANKS) {
+        const t = TANKS[id];
+        it.push({
+          label: t.name, right: '$' + fmt(t.price), tank: id, info: () => [t.desc, '', 'Plots used: ' + w.tanks.length + '/' + MAX_TANKS],
+          action: () => {
+            if (w.tanks.length >= MAX_TANKS) { sfx('err'); s.say('Your world has no free plots left!'); return; }
+            ask('Buy a ' + t.name + ' for $' + fmt(t.price) + ' AC?', ['Buy', 'No'], k => {
+              if (k === 0 && buy(t.price)) { w.tanks.push({ type: id, fish: [] }); s.say('Delivered to your world! Fill it with fish at home.'); s.rebuild(); }
+            });
+          },
+        });
+      }
+      it.push({ label: 'DECOR', sep: true });
+      for (const id in DECOR) {
+        const d = DECOR[id], own = w.decor.includes(id);
+        it.push({
+          label: d.name, right: own ? 'PLACED' : '$' + fmt(d.price), rc: own ? '#80ff80' : null, disabled: own, decor: id, info: () => [d.desc],
+          action: () => ask('Buy the ' + d.name + ' for $' + fmt(d.price) + ' AC?', ['Buy', 'No'], k => {
+            if (k === 0 && buy(d.price)) { w.decor.push(id); s.say('It will look lovely in ' + w.name + '!'); s.rebuild(); }
+          }),
+        });
+      }
+      it.push({ label: 'HOME', sep: true });
+      const nx = w.house + 1;
+      if (nx < HOUSES.length) {
+        const h = HOUSES[nx];
+        it.push({
+          label: h.name, right: '$' + fmt(h.price), info: () => [h.desc, '', 'Current: ' + HOUSES[w.house].name],
+          action: () => ask('Upgrade your home to a ' + h.name + ' for $' + fmt(h.price) + ' AC?', ['Upgrade', 'No'], k => {
+            if (k === 0 && buy(h.price)) { w.house = nx; s.say('Our builders are on it! Your ' + h.name + ' is ready.'); s.rebuild(); }
+          }),
+        });
+      } else it.push({ label: 'Home fully upgraded', disabled: true });
+      return it;
+    },
+  },
+  market: {
+    name: 'Fish Market', keeper: { type: 'boy', col: { hair: '#202020', shirt: '#f0f0f0', pants: '#2a5a8a' } }, keeperName: 'Mr. Scales',
+    greet: "Fresh catch? I'll pay top coin!", wall: '#4a6a5a', song: 'shop',
+    items(s) {
+      const fod = fishOfTheDay(), it = [];
+      const tot = G.cooler.reduce((a, f) => a + sellPrice(f), 0);
+      it.push({
+        label: 'Sell ALL fish', right: '$' + fmt(tot), disabled: !G.cooler.length, why: 'Your cooler is empty.',
+        info: () => ['Sell everything in your cooler.', '', 'Fish of the Day:', FISH[fod].name + ' (x1.5)'],
+        action: () => ask('Sell all ' + G.cooler.length + ' fish for $' + fmt(tot) + ' AC?', ['Sell', 'No'], k => {
+          if (k === 0) { G.player.ac += tot; G.stats.earned += tot; G.cooler = []; sfx('coin'); s.say('Pleasure doing business! $' + fmt(tot) + ' AC for you.'); s.rebuild(); }
+        }),
+      });
+      it.push({ label: 'YOUR COOLER', sep: true });
+      G.cooler.map((f, i) => ({ f, i })).sort((a, b) => sellPrice(b.f) - sellPrice(a.f)).forEach(({ f }) => {
+        const pr = sellPrice(f);
+        it.push({
+          label: (f.rare ? '*' : '') + FISH[f.id].name, right: '$' + fmt(pr), color: f.id === fod ? '#a8ffa8' : f.rare ? '#ffe890' : '#fff', fish: f,
+          info: () => [f.size + ' cm', f.rare ? 'RARE FIND!' : '', f.id === fod ? 'Fish of the Day! x1.5' : ''],
+          action: () => {
+            const i = G.cooler.indexOf(f); if (i < 0) return;
+            G.cooler.splice(i, 1); G.player.ac += pr; G.stats.earned += pr; sfx('coin');
+            s.say(f.rare ? 'Wow, a ' + FISH[f.id].name + '! Here is $' + fmt(pr) + '!' : 'Sold for $' + fmt(pr) + ' AC.'); s.rebuild();
+          },
+        });
+      });
+      if (!G.cooler.length) it.push({ label: '(cooler is empty)', disabled: true });
+      return it;
+    },
+  },
+  outfitter: {
+    name: 'Angler Outfitters', keeper: { type: 'girl', col: { hair: '#e8c040', shirt: '#8a3030', dress: '#4a3a30' } }, keeperName: 'Brenna',
+    greet: 'Gear up, angler! Power, focus and luck await.', wall: '#5a3a5a', song: 'shop',
+    items(s) {
+      const p = G.player, it = [];
+      for (const [slot, sn] of SLOTS) {
+        if (slot === 'charm') continue;
+        it.push({ label: sn.toUpperCase() + (slot === 'head' ? ' (CLOTHES)' : slot === 'body' ? ' (ARMOR)' : ''), sep: true });
+        for (const id in GEAR) {
+          const g = GEAR[id]; if (g.slot !== slot || g.noShop) continue;
+          const own = p.gear.includes(id), eq = p.equip[slot] === id;
+          it.push({
+            label: g.name, right: eq ? 'EQUIP' : own ? 'OWNED' : '$' + fmt(g.price), rc: own ? '#80ff80' : null, gear: id,
+            info: () => [g.desc, ''].concat(gearStatStr(g)).concat(p.equip[slot] && !eq ? ['', 'Now: ' + GEAR[p.equip[slot]].name] : []),
+            action: () => {
+              if (own) { p.equip[slot] = eq ? null : id; s.say(eq ? 'Took off the ' + g.name + '.' : 'Equipped the ' + g.name + '!'); s.rebuild(); return; }
+              ask('Buy the ' + g.name + ' for $' + fmt(g.price) + ' AC?', ['Buy', 'No'], k => {
+                if (k === 0 && buy(g.price)) { p.gear.push(id); p.equip[slot] = id; s.say('Looking sharp! I equipped it for you.'); s.rebuild(); }
+              });
+            },
+          });
+        }
+      }
+      return it;
+    },
+  },
+};
+class ShopUI {
+  constructor(kind, onClose) {
+    this.kind = kind; this.def = SHOPS[kind]; this.onClose = onClose;
+    this.msg = this.def.greet; this.msgT = 0;
+    this.keeper = charSprites(this.def.keeper.type, this.def.keeper.col);
+    playSong('shop'); this.rebuild(0);
+  }
+  say(m) { this.msg = m; this.msgT = 0; }
+  rebuild(sel) {
+    if (sel === undefined) sel = this.menu ? this.menu.sel : 0;
+    const items = this.def.items(this);
+    items.push({ label: 'Leave', action: () => this.close() });
+    this.menu = new Menu({ x: 6, y: 112, w: 196, rows: 9, lh: 12, items, sel: Math.min(sel, items.length - 1), onCancel: () => this.close() });
+  }
+  close() { popUI(this); if (this.onClose) this.onClose(); }
+  update() { this.msgT += 1.5; this.menu.update(); }
+  draw() {
+    drawShopBackdrop(this);
+    drawWin(4, 4, 150, 20); text(this.def.name, 12, 10, '#ffe890');
+    drawWin(222, 4, 94, 20); textR('$ ' + fmt(G.player.ac), 308, 10, '#ffe890');
+    // speech bubble
+    const lines = wrap(this.msg, 21).slice(0, 4);
+    drawWin(180, 28, 136, 14 + lines.length * 11, 'dark');
+    let left = this.msgT;
+    lines.forEach((l, i) => { text(l.slice(0, Math.max(0, left)), 187, 35 + i * 11); left -= l.length; });
+    this.menu.draw(ui[ui.length - 1] === this);
+    drawWin(206, 112, 110, 124);
+    const c = this.menu.cur();
+    if (c && c.info) {
+      let y = 120;
+      if (c.tank) { ctx.save(); ctx.translate(242, y); drawTank(c.tank, 0, 0, []); ctx.restore(); y += 36; }
+      if (c.decor) { ctx.save(); ctx.translate(244, y + 12); drawDecor(c.decor, 0, 0); ctx.restore(); y += 46; }
+      if (c.fish) { const img = fishSprite(c.fish.id); const s2 = img.width > 34 ? 2 : 3; ctx.drawImage(img, 261 - img.width * s2 / 2, y, img.width * s2, img.height * s2); y += img.height * s2 + 4; }
+      for (const raw of c.info()) for (const l of wrap(raw, 16)) { if (y > 226) break; text(l, 214, y, raw.startsWith('POW') || /\+/.test(raw) ? '#a8ffa8' : '#fff'); y += 11; }
+    }
+  }
+}
+function drawShopBackdrop(s) {
+  const wall = s.def.wall;
+  rect(0, 0, W, 112, wall);
+  for (let x = 0; x < W; x += 16) rect(x, 0, 1, 80, shade(wall, -0.15));
+  rect(0, 76, W, 4, shade(wall, -0.35));
+  // floor
+  for (let y = 80; y < 112; y += 6) rect(0, y, W, 6, (y / 6) % 2 ? '#8a6040' : '#7a5236');
+  // shelves
+  for (const sy of [22, 50]) { rect(10, sy + 14, 110, 3, '#4a2e1a'); rect(200, sy + 14, 0, 0, '#000'); }
+  const k = s.kind;
+  for (let i = 0; i < 6; i++) {
+    const x = 16 + i * 17;
+    if (k === 'tackle') { rect(x + 4, 6, 1, 30, ['#c8a050', '#e0e0e8', '#404048', '#a0c8e0', '#f0c040', '#c8a050'][i]); rect(x + 1, 52, 10, 12, '#cfeaff'); rect(x + 2, 56, 8, 8, Object.values(BAITS)[i].color); rect(x, 50, 12, 2, '#6a4a2a'); }
+    if (k === 'tanks') { rect(x, 20, 14, 16, '#cfeaff'); rect(x + 1, 22, 12, 13, '#3c8ad8'); rect(x + 3, 26, 4, 2, ['#f0a020', '#e04848', '#60e0a0'][i % 3]); rect(x + 1, 48, 12, 16, '#a8a4b8'); rect(x + 4, 52, 6, 6, ['#f06080', '#f0a040', '#a060e0'][i % 3]); }
+    if (k === 'market') { const ids = ['bluegill', 'perch', 'trout', 'carp', 'salmon', 'loach']; const img = fishSprite(ids[i]); ctx.drawImage(img, x - 2, 26 - img.height / 2); rect(x - 3, 58, 16, 6, '#e0f0ff'); ctx.drawImage(miniFish(ids[(i + 2) % 6]), x, 52); }
+    if (k === 'outfitter') {
+      rect(x + 1, 18, 12, 4, Object.values(GEAR)[i % 4].color); rect(x - 1, 22, 16, 2, Object.values(GEAR)[i % 4].color);
+      rect(x + 1, 44, 12, 20, Object.values(GEAR)[4 + (i % 4)].color); rect(x - 1, 46, 2, 10, Object.values(GEAR)[4 + (i % 4)].color); rect(x + 13, 46, 2, 10, Object.values(GEAR)[4 + (i % 4)].color);
+    }
+  }
+  // keeper behind counter
+  const spr = s.keeper.down[0];
+  ctx.drawImage(spr, 120, 30, spr.width * 3, spr.height * 3);
+  rect(96, 74, 120, 30, '#6a3e22'); rect(96, 74, 120, 4, '#9a6a3a'); rect(96, 102, 120, 2, '#3a2010');
+  text(s.def.keeperName, 102, 88, '#ffe8c0', '#2a1408');
+  rect(184, 64, 12, 10, '#ffd040'); rect(186, 62, 8, 2, '#ffd040'); // cash box
+}
+
+// ============ Prize Wheel ============
+const WHEEL_SEGS = [
+  { label: '50', col: '#d84040', w: 20, desc: '50 AC', give: () => { G.player.ac += 50; return 'You won 50 AC!'; } },
+  { label: 'WORM', col: '#3068d8', w: 18, desc: '10 Worms', give: () => { G.player.baits.worm = (G.player.baits.worm || 0) + 10; return 'You won 10 Worms!'; } },
+  { label: '300', col: '#38a848', w: 8, desc: '300 AC', give: () => { G.player.ac += 300; return 'You won 300 AC!'; } },
+  { label: 'MISS', col: '#4a4a5a', w: 26, desc: 'Nothing...', give: () => 'Aww, a miss! Better luck next spin.' },
+  { label: 'GLOW', col: '#8848c8', w: 9, desc: '2 Glow Bait', give: () => { G.player.baits.glow = (G.player.baits.glow || 0) + 2; return 'You won 2 Glow Bait!'; } },
+  { label: '100', col: '#e87828', w: 15, desc: '100 AC', give: () => { G.player.ac += 100; return 'You won 100 AC! Your money back.'; } },
+  { label: '1000', col: '#e8b820', w: 2, desc: '1000 AC!!', give: () => { G.player.ac += 1000; return 'JACKPOT!!! You won 1000 AC!'; } },
+  { label: 'CHARM', col: '#28a8a8', w: 2, desc: 'Lucky Charm', give: () => {
+      const p = G.player;
+      if (p.gear.includes('charm')) { p.ac += 500; return 'Lucky Charm! You already own one, so take 500 AC!'; }
+      p.gear.push('charm'); if (!p.equip.charm) p.equip.charm = 'charm'; return 'You won the LUCKY CHARM! (LUCK +3, equipped)';
+    } },
+];
+const SPIN_COST = 100;
+let bigWheel = null, smallWheel = null;
+class WheelUI {
+  constructor(onClose) {
+    if (!bigWheel) bigWheel = makeWheelCanvas(64, WHEEL_SEGS);
+    this.a = -Math.PI / 2; this.state = 'idle'; this.onClose = onClose;
+    this.msg = 'Spin the Prize Wheel for $' + SPIN_COST + ' AC? Press A to spin!';
+  }
+  update() {
+    if (this.state === 'idle') {
+      if (inp.pressed.a) {
+        if (G.player.ac < SPIN_COST) { sfx('err'); this.msg = "You don't have enough AC to spin."; return; }
+        G.player.ac -= SPIN_COST; G.stats.spins++; sfx('coin');
+        const tot = WHEEL_SEGS.reduce((a, s) => a + s.w, 0);
+        let r = Math.random() * tot, idx = 0;
+        while (r >= WHEEL_SEGS[idx].w) { r -= WHEEL_SEGS[idx].w; idx++; }
+        const n = WHEEL_SEGS.length, seg = Math.PI * 2 / n;
+        const want = (idx + 0.5 + rnd(-0.32, 0.32)) * seg;
+        let af = -Math.PI / 2 - want;
+        while (af < this.a + Math.PI * 2 * 6) af += Math.PI * 2;
+        this.spin = { a0: this.a, af, t: 0, dur: 220, idx, last: 0 };
+        this.state = 'spin'; this.msg = 'Round and round it goes...';
+      }
+      if (inp.pressed.b || inp.pressed.menu) { sfx('cancel'); popUI(this); this.onClose && this.onClose(); }
+    } else if (this.state === 'spin') {
+      const s = this.spin; s.t++;
+      const k = s.t / s.dur, e = 1 - Math.pow(1 - k, 3);
+      this.a = s.a0 + (s.af - s.a0) * e;
+      const segN = Math.floor(this.a / (Math.PI / 4));
+      if (segN !== s.last) { s.last = segN; sfx('tick'); }
+      if (s.t >= s.dur) {
+        this.state = 'result';
+        const seg = WHEEL_SEGS[s.idx];
+        this.msg = seg.give(); this.win = s.idx;
+        sfx(seg.label === 'MISS' ? 'fail' : seg.label === '1000' || seg.label === 'CHARM' ? 'rare' : 'catch');
+      }
+    } else if (inp.pressed.a || inp.pressed.b) { this.state = 'idle'; this.win = null; this.msg = 'Spin again for $' + SPIN_COST + ' AC?'; }
+  }
+  draw() {
+    ctx.fillStyle = 'rgba(0,0,20,0.6)'; ctx.fillRect(0, 0, W, H);
+    drawWin(6, 6, 196, 188, 'gold');
+    textC('PRIZE WHEEL', 104, 13, '#ffe890');
+    const cx = 104, cy = 106;
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(this.a); ctx.drawImage(bigWheel, -bigWheel.width / 2, -bigWheel.height / 2); ctx.restore();
+    WHEEL_SEGS.forEach((s, i) => {
+      const a = this.a + (i + 0.5) / WHEEL_SEGS.length * Math.PI * 2;
+      textC(s.label, cx + Math.cos(a) * 40, cy + Math.sin(a) * 40 - 3, '#fff', '#101028');
+    });
+    // pointer
+    for (let i = 0; i < 7; i++) rect(cx - 6 + i, cy - 72 + i, 13 - i * 2, 1, i === 0 ? '#101028' : '#ff4040');
+    rect(cx - 7, cy - 73, 15, 1, '#101028');
+    drawWin(206, 6, 108, 188);
+    text('PRIZES', 216, 14, '#ffe890');
+    WHEEL_SEGS.forEach((s, i) => {
+      rect(214, 30 + i * 14, 6, 6, s.col);
+      text(s.desc, 224, 29 + i * 14, this.win === i && (T >> 3) % 2 ? '#ffe890' : '#fff');
+    });
+    text('Cost $' + SPIN_COST, 216, 132, '#ffb0b0');
+    text('You  $' + fmt(G.player.ac), 216, 145, '#ffe890');
+    hit(6, 20, 196, 174, () => tapA());
+    btn(212, 160, 46, 20, 'Spin', () => tapA(), '#a8ffa8');
+    btn(262, 160, 46, 20, 'Leave', () => { inp.pressed.b = true; });
+    drawDialogBox(wrap(this.msg, 47).slice(0, 3), 999, null, this.state !== 'spin');
+  }
+}
+
+</script>
+<script>
+// ---- js/field.js ----
+'use strict';
+// ============ Overhead field (city / home) ============
+const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+function makeEntity(tx, ty, dir, sprites) {
+  return { tx, ty, ox: tx, oy: ty, x: tx * TS, y: ty * TS, dir, moving: false, walkT: 0, sprites };
+}
+function stepEntity(e, speed) {
+  if (!e.moving) return false;
+  const gx = e.tx * TS, gy = e.ty * TS;
+  e.x += clamp(gx - e.x, -speed, speed); e.y += clamp(gy - e.y, -speed, speed);
+  e.walkT += speed / 2;
+  if (e.x === gx && e.y === gy) { e.moving = false; e.ox = e.tx; e.oy = e.ty; return true; }
+  return false;
+}
+function entSprite(e) {
+  const f = e.moving || e.walkHold > 0 ? WALKSEQ[Math.floor(e.walkT / 4) % 4] : 0;
+  return e.sprites[e.dir][f];
+}
+
+class Field {
+  constructor(id, w, h, theme) {
+    Object.assign(this, { id, w, h, theme, tiles: new Array(w * h).fill(TL.GRASS), objs: [], npcs: [], triggers: {}, song: 'town' });
+  }
+  tile(x, y) { return x < 0 || y < 0 || x >= this.w || y >= this.h ? TL.TREE : this.tiles[y * this.w + x]; }
+  set(x, y, t) { if (x >= 0 && y >= 0 && x < this.w && y < this.h) this.tiles[y * this.w + x] = t; }
+  fill(x0, y0, x1, y1, t) { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) this.set(x, y, t); }
+  objAt(x, y) { return this.objs.find(o => x >= o.x && x < o.x + o.w && y >= o.y && y < o.y + o.h); }
+  solidAt(x, y, self) {
+    if (x < 0 || y < 0 || x >= this.w || y >= this.h) return true;
+    if (SOLID_TILES.has(this.tile(x, y))) return true;
+    for (const o of this.objs) if (o.solid && x >= o.x && x < o.x + o.w && y >= o.y && y < o.y + o.h && !(o.door && o.door[0] === x && o.door[1] === y)) return true;
+    const ents = this.npcs.concat(this.player ? [this.player] : []);
+    for (const n of ents) if (n !== self && ((n.tx === x && n.ty === y) || (n.ox === x && n.oy === y))) return true;
+    return false;
+  }
+  place(tx, ty, dir) { this.player = makeEntity(tx, ty, dir, playerSprites()); }
+  refreshPlayer() { if (this.player) this.player.sprites = playerSprites(); }
+  saveLoc() { const p = this.player; G.loc = { scene: this.id, x: p.tx, y: p.ty, dir: p.dir }; }
+  update() {
+    const p = this.player;
+    if (p.moving) {
+      if (stepEntity(p, inp.held.b ? 4 : 2)) {
+        const tr = this.triggers[p.tx + ',' + p.ty];
+        if (tr) { tr(); return; }
+      } else return;
+    }
+    let d = null;
+    for (const k of ['up', 'down', 'left', 'right']) if (inp.held[k]) { d = k; break; }
+    if (d) {
+      p.dir = d;
+      const [dx, dy] = DIRS[d], nx = p.tx + dx, ny = p.ty + dy;
+      if (!this.solidAt(nx, ny, p)) { p.ox = p.tx; p.oy = p.ty; p.tx = nx; p.ty = ny; p.moving = true; stepEntity(p, inp.held.b ? 4 : 2); }
+      else { p.walkHold = 0; if (inp.pressed[d]) sfx('bump'); }
+    }
+    if (inp.pressed.a) this.interact();
+    if (inp.pressed.menu) { sfx('ok'); pushUI(new MainMenu()); }
+  }
+  tickNPCs() {
+    for (const n of this.npcs) {
+      if (n.moving) { stepEntity(n, 1); continue; }
+      if (--n.wait > 0) continue;
+      n.wait = irnd(60, 200);
+      if (n.still) continue;
+      const d = pick(Object.keys(DIRS)), [dx, dy] = DIRS[d], nx = n.tx + dx, ny = n.ty + dy;
+      n.dir = d;
+      if (Math.abs(nx - n.hx) <= n.r && Math.abs(ny - n.hy) <= n.r && !this.solidAt(nx, ny, n) && !this.triggers[nx + ',' + ny]) {
+        n.ox = n.tx; n.oy = n.ty; n.tx = nx; n.ty = ny; n.moving = true;
+      }
+    }
+  }
+  interact() {
+    const p = this.player, [dx, dy] = DIRS[p.dir], fx = p.tx + dx, fy = p.ty + dy;
+    const n = this.npcs.find(n => n.tx === fx && n.ty === fy);
+    if (n) {
+      n.dir = { up: 'down', down: 'up', left: 'right', right: 'left' }[p.dir];
+      const lines = typeof n.lines === 'function' ? n.lines() : n.lines;
+      say(Array.isArray(lines) ? [pick(lines)] : lines, null, n.name);
+      return;
+    }
+    const o = this.objAt(fx, fy);
+    if (o && o.interact) o.interact();
+  }
+  addNPC(name, tx, ty, type, col, lines, r = 2, hat) {
+    if (SOLID_TILES.has(this.tile(tx, ty))) this.set(tx, ty, TL.GRASS);
+    const n = makeEntity(tx, ty, 'down', charSprites(type, col, hat));
+    Object.assign(n, { name, lines, hx: tx, hy: ty, r, wait: irnd(10, 120), still: r === 0 });
+    this.npcs.push(n); return n;
+  }
+  draw() {
+    const p = this.player, mw = this.w * TS, mh = this.h * TS;
+    const camX = mw <= W ? (mw - W) / 2 : clamp(Math.round(p.x + 8 - W / 2), 0, mw - W);
+    const camY = mh <= H ? (mh - H) / 2 : clamp(Math.round(p.y + 8 - H / 2), 0, mh - H);
+    rect(0, 0, W, H, '#101820');
+    const ts = tileset(this.theme);
+    const x0 = Math.floor(camX / TS), y0 = Math.floor(camY / TS);
+    for (let y = y0; y <= y0 + H / TS + 1; y++) for (let x = x0; x <= x0 + W / TS + 1; x++) {
+      if (x < 0 || y < 0 || x >= this.w || y >= this.h) continue;
+      drawTile(this, ts, x, y, x * TS - camX, y * TS - camY);
+    }
+    const list = [];
+    for (const o of this.objs) list.push({ y: (o.y + o.h) * TS + (o.z || 0), d: () => o.draw(o.x * TS - camX, o.y * TS - camY) });
+    for (const e of this.npcs.concat([p])) list.push({ y: e.y + 16.5, d: () => { const s = entSprite(e); ctx.drawImage(s, Math.round(e.x - camX) - 1, Math.round(e.y - camY) - 3); } });
+    list.sort((a, b) => a.y - b.y).forEach(o => o.d());
+    if (this.overlay) this.overlay(camX, camY);
+    // HUD
+    if (!ui.length && !this.noHud) {
+      drawWin(4, 4, 92, 30, 'dark');
+      text('$', 10, 10, '#ffd040'); text(fmt(G.player.ac) + ' AC', 20, 10, '#ffe890');
+      text('Lv ' + G.player.level, 10, 21, '#c8d0f0'); textR('Day ' + G.day, 90, 21, '#c8d0f0');
+      if (this.label) { drawWin(W - tw(this.label) - 20, 4, tw(this.label) + 16, 18, 'dark'); text(this.label, W - tw(this.label) - 12, 9, '#80e0ff'); }
+      text('ESC: Menu', W - 58, H - 10, 'rgba(255,255,255,0.55)', null);
+    }
+  }
+}
+
+// ---------------- City ----------------
+let cityField = null;
+function buildCity() {
+  const f = new Field('city', 32, 24, CITY_THEME);
+  f.label = 'Aquarium World';
+  f.song = 'town';
+  // borders
+  for (let x = 0; x < f.w; x++) { f.set(x, 0, TL.TREE); f.set(x, f.h - 1, TL.TREE); }
+  for (let y = 0; y < f.h; y++) { f.set(0, y, TL.TREE); f.set(f.w - 1, y, TL.TREE); }
+  // roads
+  f.fill(15, 1, 16, 23, TL.PATH);
+  f.fill(1, 11, 30, 12, TL.PATH);
+  f.fill(12, 8, 19, 15, TL.PLAZA);
+  f.fill(6, 8, 6, 10, TL.PATH); f.fill(25, 8, 25, 10, TL.PATH);
+  f.fill(6, 20, 25, 21, TL.PATH); f.fill(6, 20, 6, 21, TL.PATH);
+  f.fill(11, 3, 13, 5, TL.WATER); f.fill(18, 3, 20, 5, TL.WATER);
+  f.set(13, 5, TL.GRASS); f.set(18, 5, TL.GRASS);
+  // shops
+  const shops = [
+    ['tackle', 3, 3, { roof: '#c04838', wall: '#e8d8b8', sign: 'BAIT & TACKLE', signCol: '#7a3a20' }],
+    ['tanks', 22, 3, { roof: '#3a7ac8', wall: '#e0eef8', sign: 'TANKS', signCol: '#204a8a' }],
+    ['market', 3, 15, { roof: '#3a9a6a', wall: '#f0e8d0', sign: 'FISH MARKET', signCol: '#205a3a' }],
+    ['outfitter', 22, 15, { roof: '#8a4ab0', wall: '#e8dcc8', sign: 'OUTFITTERS', signCol: '#4a2a6a' }],
+  ];
+  for (const [kind, x, y, o] of shops) {
+    const img = makeBuilding(7, 5, Object.assign({ chimney: kind === 'tackle' || kind === 'market' }, o));
+    const door = [x + 3, y + 4];
+    f.objs.push({ x, y, w: 7, h: 5, solid: true, door, draw: (sx, sy) => ctx.drawImage(img, sx, sy) });
+    f.triggers[door[0] + ',' + door[1]] = () => enterShop(kind, door);
+  }
+  // prize wheel
+  if (!smallWheel) smallWheel = makeWheelCanvas(13, WHEEL_SEGS);
+  f.objs.push({
+    x: 15, y: 11, w: 2, h: 1, solid: true, z: -1,
+    draw: (sx, sy) => {
+      rect(sx + 4, sy + 10, 24, 6, '#5a3a20'); rect(sx + 4, sy + 10, 24, 1, '#8a5a30');
+      rect(sx + 14, sy - 4, 4, 14, '#7a5a30');
+      ctx.save(); ctx.translate(sx + 16, sy - 8); ctx.rotate(T / 60); ctx.drawImage(smallWheel, -smallWheel.width / 2, -smallWheel.height / 2); ctx.restore();
+      rect(sx + 14, sy - 26, 5, 4, '#ff4040');
+    },
+    interact: () => pushUI(new WheelUI()),
+  });
+  f.objs.push({ x: 15, y: 10, w: 2, h: 1, solid: true, draw: () => {}, interact: () => pushUI(new WheelUI()) });
+  // portal home
+  f.objs.push({ x: 15, y: 1, w: 2, h: 1, solid: false, z: -40, draw: (sx, sy) => drawPortal(sx, sy + 1) });
+  f.triggers['15,1'] = f.triggers['16,1'] = () => ask('Travel through the portal back to ' + G.world.name + '?', ['Go home', 'Stay'], k => { if (k === 0) warpTo('home'); });
+  // gate
+  f.set(14, 23, TL.GRASS); f.set(17, 23, TL.GRASS);
+  f.objs.push({ x: 14, y: 23, w: 1, h: 1, solid: true, draw: (sx, sy) => drawPillar(sx, sy) });
+  f.objs.push({ x: 17, y: 23, w: 1, h: 1, solid: true, draw: (sx, sy) => drawPillar(sx, sy) });
+  f.triggers['15,23'] = f.triggers['16,23'] = () => fadeTo(() => setScene(LakeMapScene));
+  // lamps & signs
+  for (const [x, y] of [[12, 8], [19, 8], [12, 15], [19, 15]]) f.objs.push({ x, y, w: 1, h: 1, solid: true, draw: (sx, sy) => drawLamp(sx, sy) });
+  const sign = (x, y, msg) => f.objs.push({ x, y, w: 1, h: 1, solid: true, draw: (sx, sy) => drawSign(sx, sy), interact: () => say(msg) });
+  sign(14, 2, 'HOME PORTAL - Step in to return to your own world.');
+  sign(14, 22, 'SOUTH GATE - The lakes lie beyond. Willow Pond, Crystal Lake, Misty Marsh and Moonfall Lake.');
+  sign(17, 13, 'PRIZE WHEEL - $100 AC per spin. Jackpot: 1000 AC!');
+  // flowers + trees (seeded)
+  const r = seeded(42);
+  const near = (x, y, d) => {
+    for (let yy = y - d; yy <= y + d; yy++) for (let xx = x - d; xx <= x + d; xx++) {
+      const t = f.tile(xx, yy); if (t === TL.PATH || t === TL.PLAZA || t === TL.WATER) return true;
+      if (f.objAt(xx, yy)) return true;
+    }
+    return false;
+  };
+  for (let y = 1; y < f.h - 1; y++) for (let x = 1; x < f.w - 1; x++) {
+    if (f.tile(x, y) !== TL.GRASS || f.objAt(x, y)) continue;
+    const v = r();
+    if (!near(x, y, 1) && v < 0.3) f.set(x, y, v < 0.08 ? TL.BUSH : TL.TREE);
+    else if (v > 0.86) f.set(x, y, TL.FLOWER);
+  }
+  // NPCs
+  f.addNPC('Mayor Finn', 13, 13, 'boy', { hair: '#e0e0e0', shirt: '#7a3a8a', pants: '#3a2a4a' }, [
+    'The Prize Wheel in our plaza has made many a lucky angler rich!',
+    'Aquarium World thrives thanks to anglers like you. Keep fishing!',
+    'Sell your catch at the Fish Market, then spend it on gear. That is the angler life!'], 2);
+  f.addNPC('Pip', 8, 12, 'boy', { hair: '#f0a020', shirt: '#40a040' }, [
+    'When a fish bites, hold the button to lift the green bar. Keep the fish inside it!',
+    'If the fish leaves the green bar, the catch meter drains. Do not let it hit zero!',
+    'Bigger rods give you a bigger green bar. Way easier!'], 3);
+  f.addNPC('Coral', 22, 12, 'girl', { hair: '#f070a0', shirt: '#f0f0f0', dress: '#40a0d0' }, [
+    'The Fish Market pays 50% extra for the Fish of the Day!',
+    'Better bait attracts bigger and rarer fish. Golden Lures are legendary.',
+    'Have you put fish in your aquariums yet? Visitors pay to see them every day!'], 3);
+  f.addNPC('Old Salt', 27, 10, 'boy', { hair: '#a0a0a0', shirt: '#3a5a8a', pants: '#2a2a3a' }, [
+    'Rare fish show up more for lucky anglers. Hats and charms help with that.',
+    'Cast far into deep water and you might hook something special...',
+    'In my day we caught Marsh Leviathans with a bamboo stick! ...Well, almost.'], 2, { type: 'cap', color: '#28366a' });
+  f.addNPC('Guard Rolf', 17, 22, 'boy', { hair: '#3a2a1a', shirt: '#8a8a9a', pants: '#3a3a4a' }, [
+    'Through this gate lie the four lakes. Willow Pond is best for beginners.',
+    'Moonfall Lake is no place for rookies. Train up before you go!',
+    'Stay safe out there, angler.'], 0);
+  f.addNPC('Nina', 9, 21, 'girl', { hair: '#5a3a2a', shirt: '#e8d040', dress: '#c06030' }, [
+    'Your level matters! Higher level anglers react faster and reel stronger.',
+    'Outfitters sells armor that makes the catch meter drain slower.',
+    'I saw someone catch a Golden Koi at Willow Pond once. It shimmered like the sun!'], 3);
+  f.addNPC('Tad', 17, 18, 'boy', { hair: '#202020', shirt: '#e04040' }, [
+    'You can save anytime from the menu. Press ESC!',
+    'The portal at the north end of town goes straight to your own world.',
+    'A Fiberglass Rod is a cheap and great first upgrade!'], 2);
+  return f;
+}
+function enterShop(kind, door) {
+  sfx('door');
+  const f = scene;
+  autosave();
+  pushUI(new ShopUI(kind, () => {
+    sfx('door');
+    f.player.tx = f.player.ox = door[0]; f.player.ty = f.player.oy = door[1] + 1;
+    f.player.x = door[0] * TS; f.player.y = (door[1] + 1) * TS; f.player.dir = 'down'; f.player.moving = false;
+    playSong('town');
+    autosave();
+  }));
+}
+
+// ---------------- Home world ----------------
+const TANK_PLOTS = [[2, 5], [5, 5], [13, 5], [16, 5], [2, 9], [5, 9], [13, 9], [16, 9]];
+const DECOR_SPOTS = [[1, 1], [4, 1], [14, 1], [17, 1], [2, 12], [16, 12]];
+function buildHome() {
+  const w = G.world, th = THEMES[w.theme];
+  const f = new Field('home', 20, 15, th);
+  f.label = w.name; f.song = 'home';
+  for (let x = 0; x < f.w; x++) { f.set(x, 0, TL.TREE); f.set(x, f.h - 1, TL.TREE); }
+  for (let y = 0; y < f.h; y++) { f.set(0, y, TL.TREE); f.set(f.w - 1, y, TL.TREE); }
+  f.fill(10, 5, 10, 13, TL.PATH); f.fill(2, 8, 17, 8, TL.PATH);
+  const r = seeded(7 + w.theme);
+  for (let y = 1; y < f.h - 1; y++) for (let x = 1; x < f.w - 1; x++) if (f.tile(x, y) === TL.GRASS && r() < 0.12) f.set(x, y, TL.FLOWER);
+  // house
+  const himg = makeHouse(w.house, w.theme);
+  f.objs.push({ x: 7, y: 1, w: 6, h: 4, solid: true, door: [10, 4], draw: (sx, sy) => ctx.drawImage(himg, sx, sy) });
+  f.triggers['10,4'] = () => houseMenu();
+  // portal
+  f.objs.push({ x: 10, y: 13, w: 1, h: 1, solid: false, z: -40, draw: (sx, sy) => drawPortal(sx - 8, sy + 1) });
+  f.triggers['10,13'] = () => ask('Travel through the portal to Aquarium World city?', ['Go', 'Stay'], k => { if (k === 0) warpTo('city'); });
+  // flag & sign
+  const flagCol = FLAG_COLORS[w.flag][1];
+  f.objs.push({ x: 13, y: 3, w: 1, h: 1, solid: true, draw: (sx, sy) => drawFlag(sx, sy, flagCol) });
+  f.objs.push({ x: 11, y: 6, w: 1, h: 1, solid: true, draw: (sx, sy) => drawSign(sx, sy), interact: () => worldInfo() });
+  // tank plots
+  TANK_PLOTS.forEach(([x, y], i) => {
+    const t = w.tanks[i];
+    f.objs.push({
+      x, y, w: 2, h: 2, solid: true,
+      draw: (sx, sy) => t ? drawTank(t.type, sx, sy, t.fish, i) : drawPlot(sx, sy),
+      interact: () => t ? pushUI(new TankUI(i)) : say('An empty plot. Buy aquariums at the Tank Emporium in the city and they will appear here!'),
+    });
+  });
+  // decor
+  for (const id of w.decor) {
+    const [x, y] = DECOR_SPOTS[DECOR[id].spot];
+    f.objs.push({ x, y, w: 2, h: 2, solid: true, draw: (sx, sy) => drawDecor(id, sx, sy), interact: () => say('Your ' + DECOR[id].name + '. Visitors love it!') });
+  }
+  // visitors
+  const inc = dailyIncome();
+  const nVis = Math.min(6, Math.floor(inc / 20));
+  const spots = [[4, 7], [15, 7], [8, 10], [12, 11], [3, 11], [17, 11]];
+  const vlines = () => {
+    const fish = w.tanks.flatMap(t => t.fish);
+    const best = fish.sort((a, b) => b.value - a.value)[0];
+    return [
+      best ? 'Wow, look at that ' + FISH[best.id].name + '! Worth the ticket!' : 'Nice place you have here!',
+      'What a lovely world. I will tell my friends about ' + w.name + '!',
+      w.tanks.length ? 'I could watch these aquariums all day.' : 'Where are the aquariums?',
+      'Ticket price is fair, I say!'];
+  };
+  for (let i = 0; i < nVis; i++) {
+    const [x, y] = spots[i];
+    const girl = i % 2 === 1;
+    f.addNPC('Visitor', x, y, girl ? 'girl' : 'boy', { hair: pick(['#2a1a10', '#e0b040', '#b04030', '#4a4a4a', '#f0f0f0']), shirt: pick(['#e04848', '#40a0e0', '#60c060', '#e0a020', '#a060d0']), dress: pick(['#3070c0', '#c04070', '#40a060']) }, vlines, 2);
+  }
+  return f;
+}
+function houseMenu() {
+  const f = HomeScene.field;
+  const out = () => { const p = f.player; p.tx = p.ox = 10; p.ty = p.oy = 5; p.x = 160; p.y = 80; p.dir = 'down'; };
+  sfx('door');
+  pushUI(new MenuUI({
+    x: 100, y: 60, w: 130, lh: 14, rows: 6, title: HOUSES[G.world.house].name,
+    items: [
+      { label: 'Rest & Save', action: () => { popUI(); out(); G.loc = { scene: 'home', x: 10, y: 5, dir: 'down' }; saveGame(); sfx('level'); say('You rest a while... You feel refreshed! (Saved to Slot ' + (curSlot + 1) + ')'); } },
+      { label: 'World info', action: () => { popUI(); out(); worldInfo(); } },
+      { label: 'Rename world', action: () => { popUI(); out(); pushUI(new NameEntry('Rename your world', G.world.name, 12, n => { G.world.name = n; rebuildHome(); toast('World renamed to ' + n); })); } },
+      { label: 'Change theme', action: () => { popUI(); out(); themePicker(() => rebuildHome()); } },
+      { label: 'Change flag', action: () => { popUI(); out(); flagPicker(() => rebuildHome()); } },
+      { label: 'Leave', action: () => { popUI(); out(); } },
+    ],
+    onCancel: () => { popUI(); out(); },
+  }));
+}
+function rebuildHome() {
+  const p = HomeScene.field.player; const f = buildHome(); f.player = p; f.refreshPlayer(); HomeScene.field = f;
+}
+function themePicker(done, preview) {
+  const orig = G.world.theme;
+  const m = pushUI(new MenuUI({
+    x: 180, y: 40, w: 130, lh: 14, rows: 4, title: 'World theme', sel: orig,
+    items: THEMES.map((t, i) => ({ label: t.name, action: () => { G.world.theme = i; popUI(m); done(); } })),
+    onMove: (it, i) => { G.world.theme = i; preview ? preview() : rebuildHome(); },
+    onCancel: () => { G.world.theme = orig; popUI(m); preview ? preview() : rebuildHome(); done(true); },
+  }));
+}
+function flagPicker(done, preview) {
+  const orig = G.world.flag;
+  const m = pushUI(new MenuUI({
+    x: 180, y: 40, w: 130, lh: 14, rows: 6, title: 'Flag color', sel: orig,
+    items: FLAG_COLORS.map(([n, c], i) => ({ label: n, color: c, action: () => { G.world.flag = i; popUI(m); done(); } })),
+    onMove: (it, i) => { G.world.flag = i; preview ? preview() : rebuildHome(); },
+    onCancel: () => { G.world.flag = orig; popUI(m); preview ? preview() : rebuildHome(); done(true); },
+  }));
+}
+function worldInfo() {
+  const w = G.world, fish = w.tanks.reduce((a, t) => a + t.fish.length, 0);
+  say([w.name + ' - ' + THEMES[w.theme].name + '. Home: ' + HOUSES[w.house].name + '. Aquariums: ' + w.tanks.length + '/' + MAX_TANKS + ', fish on display: ' + fish + '. Decorations: ' + w.decor.length + '/' + Object.keys(DECOR).length + '.',
+    'Visitors pay about $' + dailyIncome() + ' AC per day. Each fishing trip is one day. Display valuable fish in big tanks to earn more!']);
+}
+class TankUI {
+  constructor(i) { this.i = i; this.build(0); }
+  get tank() { return G.world.tanks[this.i]; }
+  build(sel) {
+    const t = this.tank, def = TANKS[t.type];
+    const items = t.fish.map((f, k) => ({
+      label: (f.rare ? '*' : '') + FISH[f.id].name, right: f.size + 'cm', color: f.rare ? '#ffe890' : '#fff',
+      action: () => ask('Move the ' + FISH[f.id].name + ' back to your cooler?', ['Yes', 'No'], a => {
+        if (a !== 0) return;
+        if (G.cooler.length >= MAX_COOLER) { toast('Your cooler is full!', '#ffb0b0'); return; }
+        t.fish.splice(k, 1); G.cooler.push(f); sfx('splash'); this.build(this.menu.sel);
+      }),
+    }));
+    if (t.fish.length < def.cap) items.push({ label: '+ Add a fish', color: '#a8ffa8', action: () => this.add() });
+    items.push({ label: 'Done', action: () => popUI(this) });
+    this.menu = new Menu({ x: 8, y: 112, w: 180, rows: 9, items, sel: Math.min(sel, items.length - 1), title: def.name + ' ' + t.fish.length + '/' + def.cap, onCancel: () => popUI(this) });
+  }
+  add() {
+    if (!G.cooler.length) { say('Your cooler is empty. Go catch some fish first!'); return; }
+    const t = this.tank;
+    const list = G.cooler.slice().sort((a, b) => b.value - a.value);
+    const m = pushUI(new MenuUI({
+      x: 120, y: 30, w: 190, rows: 12, title: 'Pick a fish',
+      items: list.map(f => ({
+        label: (f.rare ? '*' : '') + FISH[f.id].name, right: '$' + f.value, color: f.rare ? '#ffe890' : '#fff',
+        action: () => { G.cooler.splice(G.cooler.indexOf(f), 1); t.fish.push(f); sfx('splash'); popUI(m); this.build(this.menu.sel); toast(FISH[f.id].name + ' added!', '#b0ffb0'); },
+      })),
+      onCancel: () => popUI(m),
+    }));
+  }
+  update() { this.menu.update(); }
+  draw() {
+    drawWin(8, 8, 180, 100, 'dark');
+    ctx.save(); ctx.translate(50, 10); ctx.scale(3, 3); drawTank(this.tank.type, 0, 0, this.tank.fish, this.i); ctx.restore();
+    this.menu.draw(ui[ui.length - 1] === this);
+    drawWin(192, 8, 122, 100);
+    text('Daily visitors', 200, 16, '#a8b8f0'); text('$' + Math.round(tankIncome(this.tank)) + ' AC/day', 200, 28, '#ffe890');
+    text('Bonus x' + TANKS[this.tank.type].mult, 200, 44);
+    wrap('Fish on display earn ticket money every day but cannot be sold.', 19).forEach((l, i) => text(l, 200, 60 + i * 10, '#c8d0f0'));
+  }
+}
+
+// ---------------- Scenes ----------------
+const CityScene = {
+  id: 'city',
+  enter(x = 15, y = 3, dir = 'down') {
+    if (!cityField) cityField = buildCity();
+    cityField.place(x, y, dir); this.field = cityField; playSong('town');
+    G.loc = { scene: 'city', x, y, dir };
+    if (!G.flags.intro) {
+      G.flags.intro = true; G.player.ac += 1000; // granted now so an autosave can't lose it
+      setTimeout(() => cityIntro(), 0);
+    }
+  },
+  update() { this.field.update(); },
+  tick() { this.field.tickNPCs(); },
+  draw() { this.field.draw(); },
+  saveLoc() { this.field.saveLoc(); },
+  get player() { return this.field.player; },
+};
+function cityIntro() {
+  const n = G.player.name;
+  say(['Welcome to Aquarium World, ' + n + '! I am Mayor Finn.',
+    'Every new angler receives a gift from the city: 1,000 Aquarium Credits (AC)! Spend them wisely.'], () => {
+    sfx('coin'); toast('+1,000 AC!', '#ffe890');
+    say(['There are four shops in town: Bait & Tackle (rods and bait), the Tank Emporium (aquariums for your world), the Fish Market (sell your catch) and the Outfitters (clothes, armor and weapons).',
+      'The Prize Wheel in the plaza costs 100 AC a spin. The South Gate leads to the lakes. The portal up north takes you home.',
+      'Press ESC (or MENU) anytime to save, check items or warp home. Good luck, angler!'], null, 'Mayor Finn');
+  }, 'Mayor Finn');
+}
+const HomeScene = {
+  id: 'home',
+  enter(x = 10, y = 12, dir = 'up') {
+    this.field = buildHome(); this.field.place(x, y, dir); playSong('home');
+    G.loc = { scene: 'home', x, y, dir };
+    const days = Math.min(7, G.day - G.lastCollect), inc = dailyIncome();
+    if (days > 0 && inc > 0) {
+      G.lastCollect = G.day;
+      const amt = inc * days;
+      G.player.ac += amt; G.stats.earned += amt; // paid now so the arrival autosave includes it
+      setTimeout(() => say('Welcome home! While you were away, visitors came to see your world. You earned $' + fmt(amt) + ' AC in ticket sales! (' + days + ' day' + (days > 1 ? 's' : '') + ')', () => sfx('coin')), 0);
+    } else if (days > 0) G.lastCollect = G.day;
+  },
+  update() { this.field.update(); },
+  tick() { this.field.tickNPCs(); },
+  draw() { this.field.draw(); },
+  saveLoc() { this.field.saveLoc(); },
+};
+function warpTo(where) {
+  sfx('warp');
+  fadeTo(() => {
+    if (where === 'home') setScene(HomeScene, 10, 12, 'up');
+    else setScene(CityScene, 15, 2, 'down');
+  }, 0.04);
+}
+
+</script>
+<script>
+// ---- js/fishing.js ----
+'use strict';
+// ============ Lake map ============
+let mapBg = null;
+function makeMapBg() {
+  const c = mkCanvas(W, H), g = c.getContext('2d');
+  rect(0, 0, W, H, '#5aa848', g);
+  const r = seeded(11);
+  for (let i = 0; i < 900; i++) rect(Math.floor(r() * W), Math.floor(r() * H), 1, 2, r() < 0.5 ? '#4a9038' : '#78c060', g);
+  // north mountains + dark moon area
+  for (let x = 0; x < W; x++) {
+    const h = 20 + Math.sin(x * 0.05) * 8 + Math.sin(x * 0.13 + 1) * 5;
+    rect(x, 0, 1, h, '#6a7088', g); rect(x, 0, 1, Math.max(0, h - 14), '#e8ecf8', g);
+  }
+  // marsh tint
+  pellipse(78, 66, 60, 34, '#6a8a50', g);
+  // moonfall dark glade
+  pellipse(244, 58, 62, 34, '#3a3a6a', g);
+  for (let i = 0; i < 30; i++) rect(190 + Math.floor(r() * 110), 30 + Math.floor(r() * 56), 1, 1, '#f0f0ff', g);
+  // paths
+  const city = [160, 210];
+  for (const L of LAKES) {
+    const n = 40;
+    for (let i = 0; i <= n; i++) {
+      const t = i / n, mx = (city[0] + L.mx) / 2 + (L.my < 100 ? (L.mx < 160 ? 30 : -30) : 0);
+      const x = (1 - t) * (1 - t) * city[0] + 2 * (1 - t) * t * mx + t * t * L.mx;
+      const y = (1 - t) * (1 - t) * city[1] + 2 * (1 - t) * t * ((city[1] + L.my) / 2) + t * t * L.my;
+      rect(Math.round(x) - 1, Math.round(y) - 1, 3, 3, '#c8a870', g);
+    }
+  }
+  // trees
+  for (let i = 0; i < 70; i++) {
+    const x = Math.floor(r() * W), y = 30 + Math.floor(r() * 150);
+    let ok = true;
+    for (const L of LAKES) if (Math.hypot(x - L.mx, (y - L.my) * 1.4) < 46) ok = false;
+    if (Math.hypot(x - 160, y - 200) < 30) ok = false;
+    if (!ok) continue;
+    rect(x, y + 3, 2, 3, '#6a4424', g); pellipse(x + 1, y, 4, 4, '#2c6a34', g); pellipse(x, y - 1, 2, 2, '#4c9c44', g);
+  }
+  // city icon
+  rect(140, 198, 40, 24, '#c8b4a0', g);
+  const roofs = ['#c04838', '#3a7ac8', '#3a9a6a', '#8a4ab0'];
+  for (let i = 0; i < 4; i++) { rect(142 + i * 10, 194, 8, 6, roofs[i], g); rect(143 + i * 10, 200, 6, 6, '#e8dcc8', g); }
+  rect(156, 208, 8, 14, '#5a3a20', g);
+  return c;
+}
+const LakeMapScene = {
+  id: 'lakemap', sel: 0,
+  enter() { playSong('map'); if (!mapBg) mapBg = makeMapBg(); G.loc = { scene: 'city', x: 15, y: 22, dir: 'up' }; },
+  saveLoc() { G.loc = { scene: 'city', x: 15, y: 22, dir: 'up' }; },
+  update() {
+    const n = LAKES.length;
+    if (inp.rep('right') || inp.rep('down')) { this.sel = (this.sel + 1) % n; sfx('blip'); }
+    if (inp.rep('left') || inp.rep('up')) { this.sel = (this.sel + n - 1) % n; sfx('blip'); }
+    if (inp.pressed.a) { sfx('ok'); const li = this.sel; pushUI(new GearSelect(() => fadeTo(() => setScene(FishingScene, li)))); }
+    if (inp.pressed.b) { sfx('cancel'); fadeTo(() => setScene(CityScene, 15, 22, 'up')); }
+    if (inp.pressed.menu) { sfx('ok'); pushUI(new MainMenu()); }
+  },
+  tick() {},
+  draw() {
+    ctx.drawImage(mapBg, 0, 0);
+    LAKES.forEach((L, i) => {
+      pellipse(L.mx, L.my, 34, 20, '#e0cc90');
+      pellipse(L.mx, L.my, 31, 17, L.water);
+      for (let k = 0; k < 4; k++) rect(L.mx - 20 + ((T / 4 + k * 13) % 36), L.my - 8 + k * 5, 5, 1, shade(L.water, 0.35));
+      if (L.id === 'willow') for (const dx of [-36, 34]) { rect(L.mx + dx, L.my - 4, 2, 8, '#6a4424'); pellipse(L.mx + dx + 1, L.my - 8, 6, 5, '#5a9a3a'); for (let j = -5; j <= 5; j += 2) rect(L.mx + dx + j, L.my - 6, 1, 8, '#4a8a30'); }
+      if (L.id === 'marsh') for (let j = 0; j < 12; j++) rect(L.mx - 30 + j * 5, L.my + 12 + (j % 3), 1, 6, '#3a5a2a');
+      if (L.id === 'moonfall') pellipse(L.mx + 6, L.my - 2, 4, 3, '#e8e0ff');
+      if (L.id === 'crystal') for (let j = 0; j < 3; j++) { rect(L.mx - 12 + j * 10, L.my - 4 + j * 3, 2, 2, '#ffffff'); }
+      const sel = i === this.sel;
+      hit(L.mx - 40, L.my - 38, 80, 64, () => { if (this.sel === i) tapA(); else { this.sel = i; sfx('blip'); } });
+      const lab = L.name; const lw = tw(lab) + 8;
+      drawWin(L.mx - lw / 2 - 2, L.my - 36, lw + 4, 15, sel ? 'gold' : 'dark');
+      textC(lab, L.mx, L.my - 32, sel ? '#ffe890' : '#c8d0f0');
+      if (G.player.level < L.lv) textC('Lv' + L.lv + '+', L.mx, L.my + 22, '#ffb0b0');
+    });
+    const L = LAKES[this.sel];
+    const spr = playerSprites().down[WALKSEQ[(T >> 3) % 4]];
+    ctx.drawImage(spr, L.mx - 9, L.my + 6 - Math.abs(Math.sin(T / 8)) * 2);
+    // info
+    drawWin(4, 184, 312, 52);
+    text(L.name, 12, 192, '#ffe890'); textR('Recommended Lv ' + L.lv, 308, 192, G.player.level >= L.lv ? '#a8ffa8' : '#ffb0b0');
+    text(L.desc, 12, 204, '#c8d0f0');
+    const ids = L.fish.concat([L.rare]);
+    ids.forEach((id, k) => {
+      const x = 12 + k * 60, known = !!G.log[id];
+      if (known) ctx.drawImage(miniFish(id), x, 216); else text('?', x + 3, 218, '#8890b0');
+      text(known ? FISH[id].name.split(' ').pop().slice(0, 7) : (FISH[id].rare ? 'RARE' : '???'), x + 16, 218, known ? '#fff' : FISH[id].rare ? '#ffb0e0' : '#8890b0');
+    });
+    text('Tap a lake twice (or A) to fish here', 8, 4, '#ffffff', '#101028');
+    btn(262, 0, 56, 16, 'City', () => { inp.pressed.b = true; });
+  },
+};
+
+// ============ Gear select ============
+class GearSelect {
+  constructor(onStart, title = 'Choose your gear') {
+    const p = G.player;
+    this.onStart = onStart; this.title = title; this.row = 0;
+    this.rods = p.rods.slice();
+    this.baits = Object.keys(BAITS).filter(b => p.baits[b] > 0).concat([null]);
+    this.ri = Math.max(0, this.rods.indexOf(p.rod));
+    this.bi = Math.max(0, this.baits.indexOf(p.bait && p.baits[p.bait] > 0 ? p.bait : null));
+  }
+  update() {
+    if (inp.rep('down')) { this.row = (this.row + 1) % 4; sfx('blip'); }
+    if (inp.rep('up')) { this.row = (this.row + 3) % 4; sfx('blip'); }
+    const d = inp.rep('right') ? 1 : inp.rep('left') ? -1 : 0;
+    if (d && this.row === 0) { this.ri = (this.ri + d + this.rods.length) % this.rods.length; sfx('blip'); }
+    if (d && this.row === 1) { this.bi = (this.bi + d + this.baits.length) % this.baits.length; sfx('blip'); }
+    if (inp.pressed.a) {
+      if (this.row === 2) { sfx('ok'); const p = G.player; p.rod = this.rods[this.ri]; p.bait = this.baits[this.bi]; popUI(this); this.onStart(); }
+      else if (this.row === 3) { sfx('cancel'); popUI(this); }
+      else this.row++;
+    }
+    if (inp.pressed.b || inp.pressed.menu) { sfx('cancel'); popUI(this); }
+  }
+  draw() {
+    const x = 30, y = 36, p = G.player, st = stats();
+    drawWin(x, y, 260, 150);
+    textC(this.title, 160, y + 8, '#ffe890');
+    const rod = RODS[this.rods[this.ri]], bid = this.baits[this.bi], bait = bid ? BAITS[bid] : NO_BAIT;
+    const rows = [['Rod', '< ' + rod.name + ' >'], ['Bait', '< ' + bait.name + (bid ? ' x' + p.baits[bid] : '') + ' >'], ['Start fishing!', ''], ['Cancel', '']];
+    rows.forEach(([a, b], i) => {
+      const yy = y + 26 + i * 16;
+      text(a, x + 22, yy, i === 2 ? '#a8ffa8' : '#fff'); if (b) text(b, x + 70, yy, '#ffe890');
+      if (i === this.row) drawCursor(x + 10, yy);
+      if (i < 2) {
+        hit(x, yy - 4, 130, 16, () => { this.row = i; inp.pressed.left = true; });
+        hit(x + 130, yy - 4, 130, 16, () => { this.row = i; inp.pressed.right = true; });
+      } else hit(x, yy - 4, 260, 16, () => { this.row = i; tapA(); });
+    });
+    rect(x + 10, y + 92, 240, 1, '#8090d0');
+    text('POWER ' + (rod.power + st.power), x + 14, y + 100, '#a8ffa8'); text('BAR +' + rod.zone, x + 100, y + 100, '#a8ffa8');
+    text('BITE x' + (1 / bait.bite).toFixed(1), x + 14, y + 112, '#a8ffa8'); text('RARE +' + Math.max(0, bait.rare * 100).toFixed(1) + '%', x + 100, y + 112, '#a8ffa8');
+    text(wrap(this.row === 1 ? bait.desc : rod.desc, 40)[0], x + 14, y + 126, '#c8d0f0');
+    text('Tap < > or L/R to change', x + 14, y + 138, '#8898d0');
+  }
+}
+
+// ============ Lake backdrops ============
+const LAKE_ART = {
+  willow: { sky: ['#78c0f0', '#d0f0ff'], far: '#5a9a6a', near: '#3e7e42', water: ['#5ab0b0', '#226a74'], hi: '#a0e0e0', dock: '#9a6a3a' },
+  crystal: { sky: ['#3a8ae8', '#d8f0ff'], far: '#8a98b8', near: '#2a5a3a', water: ['#60b0f0', '#1a4aa0'], hi: '#c0e8ff', dock: '#a87a4a' },
+  marsh: { sky: ['#7a8a74', '#c8d0b8'], far: '#5a6a50', near: '#34442a', water: ['#6a8a50', '#2a3a20'], hi: '#a0b888', dock: '#6a5a3a' },
+  moonfall: { sky: ['#0a0628', '#40307a'], far: '#2a2058', near: '#181238', water: ['#4a3aa0', '#120c40'], hi: '#a090ff', dock: '#5a4a6a' },
+};
+const backdrops = {};
+function lakeBackdrop(L) {
+  if (backdrops[L.id]) return backdrops[L.id];
+  const a = LAKE_ART[L.id], c = mkCanvas(W, H), g = c.getContext('2d'), r = seeded(L.id.length * 97);
+  for (let y = 0; y < 104; y += 4) rect(0, y, W, 4, mix(a.sky[0], a.sky[1], y / 104), g);
+  if (L.id === 'moonfall') {
+    for (let i = 0; i < 80; i++) rect(Math.floor(r() * W), Math.floor(r() * 90), 1, 1, r() < 0.3 ? '#fff8c0' : '#c0c8ff', g);
+    pellipse(250, 34, 16, 16, '#f0ecff', g); pellipse(244, 30, 4, 3, '#d0c8f0', g); pellipse(256, 40, 3, 2, '#d0c8f0', g);
+  } else if (L.id === 'marsh') {
+    pellipse(70, 34, 12, 12, '#e8ecd8', g);
+  } else pellipse(64, 30, 12, 12, '#fff4b0', g);
+  // far mountains
+  for (let x = 0; x < W; x++) {
+    const hh = L.id === 'crystal' ? 36 + Math.abs(((x * 0.7) % 60) - 30) * 1.2 + Math.sin(x * 0.1) * 4 : 20 + Math.sin(x * 0.035) * 9 + Math.sin(x * 0.11) * 4;
+    rect(x, 104 - hh, 1, hh, a.far, g);
+    if (L.id === 'crystal') rect(x, 104 - hh, 1, Math.max(0, hh - 46), '#ffffff', g);
+  }
+  // tree line
+  for (let x = -4; x < W + 8; x += 7) {
+    const hh = 8 + Math.floor(r() * 8);
+    if (L.id === 'crystal') { for (let k = 0; k < hh; k++) rect(x + 3 - Math.floor(k / 3), 104 - hh + k, 1 + Math.floor(k / 3) * 2, 1, a.near, g); }
+    else pellipse(x + 3, 104 - hh / 2, 5, hh / 2, a.near, g);
+  }
+  rect(0, 100, W, 4, a.near, g);
+  // water
+  for (let y = 104; y < H; y += 3) rect(0, y, W, 3, mix(a.water[0], a.water[1], Math.pow((y - 104) / 136, 0.7)), g);
+  for (let i = 0; i < 40; i++) rect(Math.floor(r() * W), 105 + Math.floor(r() * 12), 6 + Math.floor(r() * 10), 1, shade(a.water[0], 0.15), g);
+  if (L.id === 'willow') for (const wx of [190, 290]) {
+    rect(wx, 74, 3, 28, '#5a3a20', g); pellipse(wx + 1, 74, 16, 9, '#4a8a3a', g);
+    for (let j = -15; j <= 16; j += 2) rect(wx + j, 74, 1, 14 + Math.abs(j) % 7, '#3a7a2a', g);
+  }
+  if (L.id === 'marsh') for (let i = 0; i < 40; i++) { const x = 150 + Math.floor(r() * 170), hh = 10 + Math.floor(r() * 18); rect(x, 240 - hh, 1, hh, '#2a3a1a', g); rect(x, 240 - hh, 2, 4, '#6a4a2a', g); }
+  // dock
+  rect(0, 118, 78, 10, a.dock, g);
+  for (let x = 0; x < 78; x += 9) rect(x, 118, 1, 10, shade(a.dock, -0.35), g);
+  rect(0, 118, 78, 1, shade(a.dock, 0.3), g); rect(0, 128, 78, 2, shade(a.dock, -0.5), g);
+  for (const px of [6, 40, 72]) rect(px, 130, 4, 40, shade(a.dock, -0.4), g);
+  return (backdrops[L.id] = c);
+}
+
+// ============ Fishing ============
+function pickFish(L, bait, dist) {
+  const st = stats(), p = G.player;
+  let rc = 0.02 + st.luck * 0.006 + bait.rare + dist * 0.02 + p.level * 0.001;
+  if (bait.tier < 0) rc *= 0.3;
+  if (Math.random() < rc) return L.rare;
+  const opts = L.fish.map(id => {
+    const sp = FISH[id];
+    let w = sp.w * Math.pow(1 + 0.22 * Math.max(0, bait.tier), sp.d / 3) * (1 + dist * (sp.d / 10));
+    if (bait.tier < 0 && sp.d > 2) w *= 0.4;
+    return [id, w];
+  });
+  opts.push(['boot', bait.tier < 0 ? 12 : 6 / (1 + bait.tier)]);
+  let tot = opts.reduce((a, o) => a + o[1], 0), r = Math.random() * tot;
+  for (const [id, w] of opts) { if ((r -= w) < 0) return id; }
+  return opts[0][0];
+}
+function makeFish(id, dist) {
+  const sp = FISH[id], st = stats();
+  const t = clamp(Math.pow(Math.random(), clamp(1.25 - st.luck * 0.03 - dist * 0.3, 0.5, 2)), 0, 1);
+  const size = Math.round((sp.min + (sp.max - sp.min) * t) * 10) / 10;
+  return { id, size, value: Math.max(1, Math.round(sp.val * (0.75 + 0.6 * t))), rare: !!sp.rare, t };
+}
+const BAR_H = 150;
+const FishingScene = {
+  id: 'fishing',
+  enter(li) {
+    this.L = LAKES[li]; this.art = LAKE_ART[this.L.id]; this.bd = lakeBackdrop(this.L);
+    this.state = 'ready'; this.bob = null; this.rip = []; this.parts = [];
+    this.shadows = Array.from({ length: 6 }, () => ({ x: rnd(100, 320), y: rnd(132, 230), vx: rnd(-0.4, 0.4), s: rnd(0.7, 1.3) }));
+    this.trip = 0; playSong('fish');
+    if (G.player.level + 2 < this.L.lv) setTimeout(() => toast('These fish look tough for your level...', '#ffb0b0'), 400);
+  },
+  saveLoc() { G.loc = { scene: 'city', x: 15, y: 22, dir: 'up' }; },
+  tip() {
+    if (this.state === 'reel') { const b = this.bob; return { x: 92 + (b.x - 92) * 0.08, y: 74 + Math.sin(T * 0.6) * 2 }; }
+    if (this.state === 'charge') return { x: 50 + (1 - this.pow) * 4, y: 64 + this.pow * 6 };
+    return { x: 94, y: 66 };
+  },
+  say(m, t = 90) { this.state = 'msg'; this.msg = m; this.mt = t; },
+  update() {
+    const p = G.player;
+    switch (this.state) {
+      case 'ready':
+        if (inp.pressed.a) { this.state = 'charge'; this.pow = 0; this.pdir = 1; sfx('blip'); }
+        else if (inp.pressed.b || inp.pressed.menu) this.pause();
+        break;
+      case 'charge':
+        this.pow += this.pdir * 0.022;
+        if (this.pow >= 1) { this.pow = 1; this.pdir = -1; } if (this.pow <= 0) { this.pow = 0; this.pdir = 1; }
+        if (inp.pressed.a) this.cast();
+        else if (inp.pressed.b) { this.state = 'ready'; sfx('cancel'); }
+        break;
+      case 'cast': {
+        this.ct++;
+        const k = Math.min(1, this.ct / 28), t0 = this.castFrom, t1 = this.target;
+        this.bob = { x: t0.x + (t1.x - t0.x) * k, y: t0.y + (t1.y - t0.y) * k - Math.sin(k * Math.PI) * 50 };
+        if (k >= 1) {
+          this.state = 'wait'; this.wt = 0; this.nib = 0; this.bob = { x: t1.x, y: t1.y };
+          this.ripple(t1.x, t1.y, 3); sfx('splash');
+          const lakeSlow = 1 + LAKES.indexOf(this.L) * 0.08;
+          this.biteAt = Math.round(rnd(80, 280) * this.bait.bite * lakeSlow);
+          const nn = irnd(0, 1 + LAKES.indexOf(this.L)); this.nibs = [];
+          for (let i = 0; i < nn; i++) this.nibs.push(irnd(30, Math.max(31, this.biteAt - 30)));
+          this.nibs.sort((a, b) => a - b);
+        }
+        break;
+      }
+      case 'wait':
+        this.wt++;
+        if (this.nib > 0) this.nib--;
+        if (this.nibs.length && this.wt >= this.nibs[0]) { this.nibs.shift(); this.nib = 16; sfx('nibble'); this.ripple(this.bob.x, this.bob.y, 1); }
+        if (inp.pressed.a) {
+          if (this.nib > 0) { sfx('fail'); this.say('Too early! The nibble was a trick - you spooked the fish.'); }
+          else { sfx('cancel'); this.say('You reeled in your line.', 40); }
+          break;
+        }
+        if (this.wt >= this.biteAt) {
+          this.fishId = pickFish(this.L, this.bait, this.dist);
+          const st = stats(), d = FISH[this.fishId].d;
+          this.state = 'bite'; this.bt = 0;
+          // Willow Pond and Crystal Lake: 4-5 s to react. Harder lakes: about 3-3.5 s.
+          this.win = LAKES.indexOf(this.L) <= 1
+            ? Math.round(clamp(240 + p.level * 3 + st.focus * 4, 240, 300))
+            : Math.round(clamp(24 + p.level * 0.8 + st.focus * 2 - d * 0.9, 14, 60) + 150);
+          sfx('bite'); this.ripple(this.bob.x, this.bob.y, 2);
+        }
+        break;
+      case 'bite':
+        this.bt++;
+        if (inp.pressed.a) this.startReel();
+        else if (this.bt > this.win) { sfx('fail'); this.say('Too slow... the fish stole your bait!'); }
+        break;
+      case 'reel': this.reel(); break;
+      case 'msg':
+        if (--this.mt <= 0 || (inp.pressed.a && this.mt < 70)) { this.state = 'ready'; this.bob = null; }
+        break;
+    }
+  },
+  tick() {
+    for (const s of this.shadows) { s.x += s.vx; if (s.x < 90 || s.x > 330) s.vx *= -1; if (Math.random() < 0.005) s.vx = rnd(-0.4, 0.4); }
+    for (const r of this.rip) r.t++;
+    this.rip = this.rip.filter(r => r.t < 40);
+    for (const q of this.parts) { q.x += q.vx; q.y += q.vy; q.vy += 0.15; q.t--; }
+    this.parts = this.parts.filter(q => q.t > 0);
+  },
+  ripple(x, y, n) { for (let i = 0; i < n; i++) this.rip.push({ x, y, t: -i * 8 }); for (let i = 0; i < n * 4; i++) this.parts.push({ x, y, vx: rnd(-1, 1), vy: rnd(-2.5, -1), t: 25 }); },
+  cast() {
+    const p = G.player;
+    this.baitId = p.bait && p.baits[p.bait] > 0 ? p.bait : null;
+    this.bait = this.baitId ? BAITS[this.baitId] : NO_BAIT;
+    if (this.baitId) { p.baits[this.baitId]--; }
+    this.dist = this.pow;
+    this.castFrom = this.tip();
+    this.target = { x: 112 + this.pow * 186, y: 214 - this.pow * 84 };
+    this.state = 'cast'; this.ct = 0; sfx('cast');
+  },
+  startReel() {
+    const p = G.player, st = stats(), rod = RODS[p.rod], sp = FISH[this.fishId], d = sp.d;
+    const power = rod.power + st.power;
+    this.r = {
+      zh: clamp(44 + rod.zone + st.focus * 2 + p.level * 0.8, 40, 120), zy: 0, vz: 0,
+      fy: BAR_H * 0.6, fv: 0, tgt: BAR_H * 0.5, tt: 30, prog: 35,
+      spd: Math.max(0.35, 0.45 + d * 0.19 - power * 0.04 - p.level * 0.02),
+      gain: 0.6 + power * 0.03,
+      drain: Math.max(0.07, 0.11 + d * 0.022 - st.stamina * 0.015),
+      beh: sp.beh, d,
+    };
+    this.r.zy = BAR_H - this.r.zh;
+    this.state = 'reel'; sfx('ok');
+  },
+  reel() {
+    const r = this.r, FH = BAR_H - 8;
+    if (--r.tt <= 0) {
+      switch (r.beh) {
+        case 'sinker': r.tgt = FH * rnd(0.35, 1); r.tt = irnd(40, 100); break;
+        case 'floater': r.tgt = FH * rnd(0, 0.65); r.tt = irnd(40, 100); break;
+        case 'dart': r.tgt = Math.random() < 0.55 ? (r.fy < FH / 2 ? rnd(FH * 0.6, FH) : rnd(0, FH * 0.4)) : rnd(0, FH); r.tt = irnd(25, 75); break;
+        case 'wild': r.tgt = rnd(0, FH); r.tt = irnd(12, 45); break;
+        default: r.tgt = rnd(0, FH); r.tt = irnd(50, 110);
+      }
+      r.tt = Math.round(r.tt / (1 + r.d * 0.05));
+    }
+    const want = clamp((r.tgt - r.fy) * 0.08, -r.spd, r.spd);
+    r.fv += (want - r.fv) * 0.18;
+    r.fy = clamp(r.fy + r.fv + (r.beh === 'wild' || r.beh === 'dart' ? rnd(-0.4, 0.4) * r.d * 0.05 : 0), 0, FH);
+    // each tap gives the bar a hop upward; holding lifts it gently; it sinks slowly otherwise
+    if (inp.pressed.a) r.vz = Math.min(r.vz, 0) - 2.4;
+    else if (inp.held.a) r.vz -= 0.2;
+    r.vz += 0.13; r.vz *= 0.95;
+    r.vz = clamp(r.vz, -4, 2.5); r.zy += r.vz;
+    if (r.zy < 0) { r.zy = 0; r.vz = 0; }
+    if (r.zy > BAR_H - r.zh) { r.zy = BAR_H - r.zh; r.vz = -r.vz * 0.35; if (Math.abs(r.vz) < 0.4) r.vz = 0; }
+    const fc = r.fy + 4;
+    r.inZone = fc >= r.zy && fc <= r.zy + r.zh;
+    r.prog += r.inZone ? r.gain : -r.drain;
+    if (r.inZone && T % 5 === 0) sfx('reel');
+    if (T % 10 === 0) this.ripple(this.bob.x + rnd(-4, 4), this.bob.y, 1);
+    if (r.prog >= 100) this.caught();
+    else if (r.prog <= 0) { sfx('fail'); this.say('The line went slack... it got away!'); }
+  },
+  caught() {
+    const id = this.fishId, sp = FISH[id], f = makeFish(id, this.dist);
+    const xp = sp.junk ? 1 : Math.round((4 + sp.d * 5) * (sp.rare ? 3 : 1) * (0.85 + 0.3 * f.t));
+    delete f.t;
+    const isNew = !G.log[id];
+    const e = G.log[id] || (G.log[id] = { n: 0, best: 0 });
+    e.n++; e.best = Math.max(e.best, f.size);
+    G.stats.caught++; this.trip++;
+    let kept = true;
+    if (G.cooler.length >= MAX_COOLER) kept = false; else G.cooler.push(f);
+    const ups = addXP(xp);
+    sfx(sp.rare ? 'rare' : sp.junk ? 'cancel' : 'catch');
+    if (ups) setTimeout(() => sfx('level'), 700);
+    this.state = 'card'; this.bob = null;
+    pushUI(new CatchCard(f, xp, ups, isNew, kept, () => { this.state = 'ready'; }));
+  },
+  pause() {
+    sfx('ok');
+    const m = pushUI(new MenuUI({
+      x: 100, y: 50, w: 120, lh: 14, rows: 8, title: this.L.name,
+      items: [
+        { label: 'Keep fishing', action: () => popUI(m) },
+        { label: 'Change gear', action: () => { popUI(m); pushUI(new GearSelect(() => toast('Gear changed!'), 'Change gear')); } },
+        { label: 'Status', action: () => pushUI(new MainMenu()) },
+        { label: 'Save game', action: () => pushUI(new SlotUI('save', i => doSave(i))) },
+        { label: 'Leave lake', action: () => { popUI(m); this.leave(() => setScene(LakeMapScene)); } },
+        { label: 'Warp home', action: () => { popUI(m); this.leave(() => setScene(HomeScene, 10, 12, 'up')); sfx('warp'); } },
+      ],
+      onCancel: () => popUI(m),
+    }));
+  },
+  leave(go) {
+    G.day++;
+    fadeTo(go);
+    if (this.trip) setTimeout(() => toast('Day ' + G.day + ' begins. ' + this.trip + ' fish caught last trip!'), 600);
+  },
+  draw() {
+    ctx.drawImage(this.bd, 0, 0);
+    const a = this.art;
+    // shimmer
+    for (let k = 0; k < 26; k++) {
+      const y = 108 + ((k * 37) % 130), sp = 0.15 + (k % 5) * 0.06;
+      const x = ((k * 53 + T * sp) % 360) - 20;
+      rect(x, y, 4 + (k % 4) * 3, 1, a.hi);
+    }
+    if (this.L.id === 'marsh') for (let k = 0; k < 4; k++) { ctx.fillStyle = 'rgba(220,230,210,0.12)'; ctx.fillRect(((T * 0.2 * (k + 1)) % 480) - 160, 92 + k * 26, 160, 10); }
+    if (this.L.id === 'moonfall') for (let k = 0; k < 8; k++) if ((T + k * 13) % 40 < 20) rect(240 + Math.sin(k * 3) * 14, 120 + k * 12, 3, 1, '#f0ecff');
+    // shadows
+    for (const s of this.shadows) { ctx.fillStyle = 'rgba(0,0,30,0.22)'; pellipse(s.x, s.y, 7 * s.s, 2 * s.s, 'rgba(0,0,30,0.22)'); rect(s.x + (s.vx > 0 ? -9 : 7) * s.s, s.y - 1, 2, 3, 'rgba(0,0,30,0.22)'); }
+    // ripples & splash
+    for (const r of this.rip) if (r.t > 0) pring(r.x, r.y + 2, r.t * 0.5 + 2, r.t * 0.18 + 1, `rgba(255,255,255,${0.8 - r.t / 50})`);
+    for (const q of this.parts) rect(q.x, q.y, 1, 1, '#e8f8ff');
+    // player
+    const ps = playerSprites();
+    const fr = this.state === 'reel' ? WALKSEQ[(T >> 2) % 4] : 0;
+    const spr = ps.right[fr];
+    ctx.drawImage(spr, 30, 84, spr.width * 2, spr.height * 2);
+    const tip = this.tip();
+    pline(60, 108, tip.x, tip.y, '#2a1a10', ctx, 2);
+    pline(60, 108, tip.x, tip.y, RODS[G.player.rod].color);
+    // line + bobber
+    if (this.bob) {
+      const b = this.bob; let by = b.y;
+      if (this.state === 'wait') by += Math.sin(T / 12) + (this.nib > 0 ? (this.nib > 8 ? 2 : 1) : 0);
+      if (this.state === 'bite') by += 3;
+      let bx = b.x;
+      if (this.state === 'reel') { bx += rnd(-1.5, 1.5); by += rnd(-1, 2); }
+      const n = 24;
+      for (let i = 0; i <= n; i++) {
+        const t = i / n, sag = this.state === 'cast' ? 0 : Math.sin(t * Math.PI) * (this.state === 'reel' ? 2 : 10);
+        rect(tip.x + (bx - tip.x) * t, tip.y + (by - tip.y) * t + sag, 1, 1, 'rgba(240,240,255,0.8)');
+      }
+      if (this.state === 'bite') {
+        rect(bx - 2, by - 1, 5, 2, '#e83030');
+        const jy = by - 20 - Math.abs(Math.sin(T / 3)) * 3;
+        drawWin(bx - 7, jy - 3, 15, 15, 'gold'); text('!', bx - 2, jy + 1, '#ff5050');
+        bar(bx - 12, jy + 14, 25, 3, 1 - this.bt / this.win, '#ffe060');
+      } else if (this.state === 'reel') {
+        pellipse(bx, by + 3, 6, 2, 'rgba(0,0,30,0.35)');
+      } else {
+        rect(bx - 2, by - 3, 5, 3, '#e83030'); rect(bx - 2, by, 5, 2, '#f8f8f8'); rect(bx, by - 5, 1, 2, '#303030');
+      }
+    }
+    // HUD
+    const p = G.player;
+    drawWin(4, 4, 150, 42, 'dark');
+    text(this.L.name, 12, 10, '#ffe890');
+    const bname = p.bait && p.baits[p.bait] > 0 ? BAITS[p.bait].name + ' x' + p.baits[p.bait] : 'No bait';
+    text(RODS[p.rod].name, 12, 21, '#c8d0f0'); text(bname, 12, 32, p.bait && p.baits[p.bait] > 0 ? '#c8d0f0' : '#ffb0b0');
+    drawWin(244, 4, 72, 30, 'dark');
+    text('Lv ' + p.level, 250, 10); textR(G.cooler.length + '/' + MAX_COOLER, 310, 10, G.cooler.length >= MAX_COOLER ? '#ff8080' : '#c8d0f0');
+    bar(250, 23, 60, 3, p.level >= MAX_LEVEL ? 1 : p.xp / xpNeed(p.level), '#60e0a0');
+    // power meter
+    if (this.state === 'charge') {
+      drawWin(16, 52, 72, 18, 'dark');
+      const pw = this.pow, col = pw > 0.85 ? '#ff6060' : pw > 0.5 ? '#ffd040' : '#60e060';
+      bar(22, 58, 60, 6, pw, col, '#202040');
+      rect(22 + 51, 57, 1, 8, '#fff');
+    }
+    if (this.state === 'reel') this.drawBar();
+    // message
+    let m = '';
+    switch (this.state) {
+      case 'ready': m = 'A: Cast your line     B: Menu'; break;
+      case 'charge': m = 'Press A to cast! Farther = deeper, rarer fish.'; break;
+      case 'cast': m = 'Whoosh!'; break;
+      case 'wait': m = this.nib > 0 ? '...a nibble? Wait for it...' : 'Waiting for a bite...   (A: reel in)'; break;
+      case 'bite': m = '!!! A BITE !!!  Press A NOW!'; break;
+      case 'reel': m = 'TAP A to lift the green bar. Keep the fish inside it!'; break;
+      case 'msg': m = this.msg; break;
+    }
+    if (m && !ui.length) {
+      const ls = wrap(m, 48);
+      drawWin(4, H - 10 - ls.length * 11, 312, 8 + ls.length * 11);
+      ls.forEach((l, i) => text(l, 12, H - 6 - ls.length * 11 + i * 11, this.state === 'bite' ? '#ffe890' : '#fff'));
+    }
+  },
+  drawBar() {
+    const r = this.r, x = 270, y = 34;
+    drawWin(x, y, 42, BAR_H + 14, 'dark');
+    const tx = x + 8, ty = y + 7;
+    rect(tx, ty, 16, BAR_H, '#1a3a6a');
+    for (let i = 0; i < BAR_H; i += 10) rect(tx, ty + i, 16, 1, '#24467a');
+    const zc = r.inZone ? '#50e070' : '#3aa050';
+    rect(tx + 1, ty + r.zy, 14, r.zh, zc); rect(tx + 1, ty + r.zy, 14, 1, '#c0ffc8'); rect(tx + 1, ty + r.zy + r.zh - 1, 14, 1, '#2a7a3a');
+    // fish icon
+    const fy = ty + r.fy, fx = tx + 3 + Math.round(Math.sin(T / 4));
+    const fc = FISH[this.fishId].rare ? ((T >> 2) % 2 ? '#ffe040' : '#ff80c0') : '#ffd060';
+    rect(fx, fy + 2, 7, 4, '#101028'); rect(fx + 1, fy + 2, 5, 4, fc); rect(fx + 7, fy + 1, 2, 6, fc); rect(fx + 2, fy + 3, 1, 1, '#101028');
+    // progress
+    const px = x + 30;
+    rect(px, ty, 5, BAR_H, '#202040');
+    const ph = Math.round(BAR_H * clamp(r.prog, 0, 100) / 100);
+    rect(px, ty + BAR_H - ph, 5, ph, r.prog > 66 ? '#60e060' : r.prog > 33 ? '#f0d040' : '#f05050');
+  },
+};
+
+// ============ Catch card ============
+class CatchCard {
+  constructor(f, xp, ups, isNew, kept, cb) { Object.assign(this, { f, xp, ups, isNew, kept, cb, age: 0, tapAnywhere: true }); }
+  update() { this.age++; if (this.age > 25 && (inp.pressed.a || inp.pressed.b)) { sfx('ok'); popUI(this); this.cb(); } }
+  draw() {
+    const sp = FISH[this.f.id], x = 30, y = 26, w = 260, h = 186;
+    drawWin(x, y, w, h, this.f.rare ? 'gold' : 'blue');
+    const title = sp.junk ? 'You fished up...' : this.f.rare ? '*** RARE CATCH! ***' : 'You caught a fish!';
+    textC(title, 160, y + 8, this.f.rare ? ((T >> 3) % 2 ? '#ffe890' : '#ff90d0') : '#ffe890');
+    // sparkle bg
+    rect(x + 60, y + 22, 140, 64, '#0c1238');
+    for (let i = 0; i < 10; i++) { const a = T / 30 + i * 0.63; if ((T + i * 7) % 30 < 15) rect(160 + Math.cos(a) * 60, y + 54 + Math.sin(a) * 26, 1, 1, '#fff8c0'); }
+    const img = fishSprite(this.f.id), s = Math.min(4, Math.floor(130 / img.width), Math.floor(58 / img.height));
+    const bob = Math.round(Math.sin(this.age / 10) * 2);
+    ctx.drawImage(img, 160 - img.width * s / 2, y + 54 - img.height * s / 2 + bob, img.width * s, img.height * s);
+    textC(sp.name, 160, y + 94, this.f.rare ? '#ffe890' : '#fff');
+    if (this.isNew && !sp.junk) { const nx = 160 + tw(sp.name) / 2 + 6; rect(nx, y + 92, 26, 11, '#e04848'); text('NEW', nx + 4, y + 94, '#fff', null); }
+    text('Size', x + 40, y + 112, '#a8b8f0'); textR(this.f.size + ' cm', x + w - 40, y + 112);
+    text('Value', x + 40, y + 125, '#a8b8f0'); textR('$' + fmt(this.f.value) + ' AC', x + w - 40, y + 125, '#ffe890');
+    text('XP', x + 40, y + 138, '#a8b8f0'); textR('+' + this.xp, x + w - 40, y + 138, '#a8ffa8');
+    if (this.ups) textC('LEVEL UP! You are now Lv ' + G.player.level + '!', 160, y + 154, (T >> 3) % 2 ? '#ffe890' : '#a8ffa8');
+    else if (!this.kept) textC('Cooler full! You let it go...', 160, y + 154, '#ffb0b0');
+    else if (sp.junk) textC(sp.desc, 160, y + 154, '#c8d0f0');
+    if (this.age > 25) textC('Press A or tap', 160, y + 170, '#8898d0');
+  }
+}
+
+</script>
+<script>
+// ---- js/main.js ----
+'use strict';
+// ============ Scene management ============
+let scene = null, fade = null;
+let newSlot = 0;
+const AUTOSAVE_SCENES = ['city', 'home', 'lakemap', 'fishing'];
+function setScene(s, ...args) {
+  scene = s; if (s.enter) s.enter(...args);
+  if (G && AUTOSAVE_SCENES.includes(s.id)) autosave();
+}
+// saves silently and shows a small "Saved" badge in the corner
+let autosaveT = 0;
+function autosave() {
+  if (!G) return;
+  if (scene && scene.saveLoc) scene.saveLoc();
+  if (saveGame()) autosaveT = 110;
+}
+function drawAutosave() {
+  if (autosaveT <= 0) return;
+  autosaveT--;
+  if (autosaveT > 100 || (autosaveT < 30 && (autosaveT >> 2) % 2)) return;
+  drawWin(4, H - 22, 58, 18, 'dark');
+  const r = (T >> 3) % 4; rect(10, H - 16, 6, 6, '#80e0ff'); rect(11 + (r % 2) * 3, H - 15 + (r >> 1) * 3, 1, 1, '#101028');
+  text('Saved', 20, H - 17, '#b0ffb0');
+}
+function fadeTo(fn, sp = 0.07) { if (fade) return; fade = { a: 0, d: 1, fn, sp }; }
+
+// ============ Title ============
+const TitleScene = {
+  id: 'title',
+  enter() {
+    playSong('title');
+    const ids = Object.keys(FISH).filter(k => !FISH[k].junk);
+    this.fish = Array.from({ length: 9 }, (_, i) => ({ id: pick(ids), x: rnd(0, W), y: 120 + i * 12 + rnd(-4, 4), vx: rnd(0.2, 0.7) * (Math.random() < 0.5 ? -1 : 1) }));
+    this.bub = Array.from({ length: 24 }, () => ({ x: rnd(0, W), y: rnd(0, H), s: rnd(0.3, 0.9) }));
+    this.buildMenu();
+    onSlotsChanged = () => { if (scene === TitleScene) this.buildMenu(); };
+  },
+  buildMenu() {
+    const cont = hasSave();
+    const start = i => {
+      if (!loadGame(i)) { toast('Could not load that save!', '#ffb0b0'); return; }
+      const l = G.loc || {};
+      fadeTo(() => l.scene === 'home' ? setScene(HomeScene, l.x, l.y, l.dir) : setScene(CityScene, l.x ?? 15, l.y ?? 3, l.dir || 'down'));
+    };
+    const sel = this.menu ? this.menu.sel : (cont ? 0 : 1);
+    this.menu = new Menu({
+      x: 110, y: 120, w: 100, lh: 14, rows: 5, sel,
+      items: [
+        { label: 'Continue', disabled: !cont, why: 'No saved game yet.', action: () => start(latestSlot()) },
+        { label: 'New Game', action: () => pushUI(new SlotUI('new', i => { newSlot = i; fadeTo(() => setScene(CharSelectScene)); })) },
+        { label: 'Load Game', disabled: !cont, why: 'No saved game yet.', action: () => pushUI(new SlotUI('load', start)) },
+        { label: 'Backup', action: () => pushUI(new BackupUI(() => this.buildMenu())) },
+        { label: soundLabel(), action: it => { cycleSound(); it.label = soundLabel(); } },
+      ],
+    });
+  },
+  update() { this.menu.update(); },
+  tick() {
+    for (const f of this.fish) { f.x += f.vx; if (f.x < -40) f.x = W + 30; if (f.x > W + 40) f.x = -30; }
+    for (const b of this.bub) { b.y -= b.s; b.x += Math.sin((T + b.y) / 20) * 0.2; if (b.y < -4) { b.y = H + 4; b.x = rnd(0, W); } }
+  },
+  draw() {
+    for (let y = 0; y < H; y += 4) rect(0, y, W, 4, mix('#1a6ab8', '#081838', y / H));
+    for (let i = 0; i < 5; i++) { ctx.fillStyle = 'rgba(180,230,255,0.06)'; const x = (i * 80 + T * 0.1) % 400 - 60; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 30, 0); ctx.lineTo(x + 90, H); ctx.lineTo(x + 40, H); ctx.fill(); }
+    for (const f of this.fish) { const img = fishSprite(f.id, f.vx > 0); ctx.drawImage(img, Math.round(f.x), Math.round(f.y + Math.sin((T + f.y * 3) / 25) * 2)); }
+    rect(0, H - 14, W, 14, '#c8b070'); rect(0, H - 14, W, 2, '#e8d49a');
+    for (let x = 6; x < W; x += 22) for (let k = 0; k < 18; k += 2) rect(x + Math.round(Math.sin((T / 20) + k / 4 + x) * 2), H - 14 - k, 2, 2, '#2a8a4a');
+    for (const b of this.bub) pring(b.x, b.y, 1.5, 1.5, 'rgba(220,240,255,0.7)');
+    const bob = Math.round(Math.sin(T / 30) * 3);
+    textBig('AQUARIUM', 160 - 26 * 3 + 6, 34 + bob, 3, '#7ae0ff', '#082040');
+    textBig('WORLD', 160 - 16 * 3 + 4, 70 + bob, 3, '#ffe060', '#3a2008');
+    textC('A pixel fishing adventure', 160, 108, '#c8e8ff');
+    this.menu.draw(!ui.length);
+    textC(saveStatusLine(), 160, 202, saveStatus === 'cloud' ? '#a8ffa8' : saveStatus === 'blocked' ? '#ff9090' : '#c8e8ff', '#081838');
+    textC('Arrows/WASD move - Z/Enter OK - X back - Esc menu', 160, 214, '#8fb0e0', '#081838');
+  },
+};
+
+// ============ Character select ============
+const CharSelectScene = {
+  id: 'charsel',
+  enter() { this.sel = 0; playSong('title'); },
+  update() {
+    if (inp.pressed.left || inp.pressed.right) { this.sel = 1 - this.sel; sfx('blip'); }
+    if (inp.pressed.a) {
+      sfx('ok');
+      const g = this.sel ? 'girl' : 'boy';
+      pushUI(new NameEntry('Name your ' + g, g === 'boy' ? 'Kai' : 'Mia', 10, n => {
+        newGame(g, n); curSlot = newSlot;
+        fadeTo(() => setScene(WorldCreateScene));
+      }));
+    }
+    if (inp.pressed.b) { sfx('cancel'); fadeTo(() => setScene(TitleScene)); }
+  },
+  tick() {},
+  draw() {
+    for (let y = 0; y < H; y += 4) rect(0, y, W, 4, mix('#2a4a9a', '#0a1430', y / H));
+    textBig('CHOOSE YOUR ANGLER', 160 - 18 * 6 - 1, 18, 2, '#ffe890');
+    const opts = [['boy', 'BOY', { hair: '#4a2a18', shirt: '#3070d0', pants: '#2c3458' }], ['girl', 'GIRL', { hair: '#b04060', shirt: '#f4f4f4', dress: '#e04878', ribbon: '#40c0e0', shoes: '#803040' }]];
+    opts.forEach(([t, lab, col], i) => {
+      const cx = 100 + i * 120, sel = this.sel === i;
+      hit(cx - 50, 70, 100, 120, () => { if (this.sel === i) tapA(); else { this.sel = i; sfx('blip'); } });
+      pellipse(cx, 160, 38, 9, sel ? '#f0c040' : '#3a4a7a'); pellipse(cx, 158, 36, 8, sel ? '#ffe890' : '#56679a');
+      if (sel) for (let k = 0; k < 8; k++) { const a = T / 20 + k * 0.785; rect(cx + Math.cos(a) * 44, 110 + Math.sin(a) * 40, 2, 2, '#fff8c0'); }
+      const s = charSprites(t, col), spr = sel ? s.down[WALKSEQ[(T >> 3) % 4]] : s.down[0];
+      ctx.globalAlpha = sel ? 1 : 0.55;
+      ctx.drawImage(spr, cx - 36, 84, spr.width * 4, spr.height * 4);
+      ctx.globalAlpha = 1;
+      textBig(lab, cx - tw(lab), 172, 2, sel ? '#ffe890' : '#8890b0');
+      if (sel) drawCursor(cx - tw(lab) - 14, 177);
+    });
+    textC('Tap a character, then tap again to confirm', 160, 214, '#c8d0f0');
+    btn(4, 4, 40, 16, 'Back', () => { inp.pressed.b = true; });
+  },
+};
+
+// ============ World creation ============
+const WorldCreateScene = {
+  id: 'worldcreate',
+  enter() {
+    playSong('home');
+    this.preview();
+    say(['Every angler in Aquarium World owns a little world of their very own.', "Let's create yours! You can rename and customize it later at your house."], () => this.step1(), 'Guide');
+  },
+  preview() { this.field = buildHome(); this.field.place(10, 8, 'down'); this.field.noHud = true; },
+  step1() { pushUI(new NameEntry('Name your world', G.world.name, 12, n => { G.world.name = n; this.preview(); this.step2(); })); },
+  step2() { say('Choose a theme for ' + G.world.name + '.', () => themePicker(() => this.step3(), () => this.preview()), 'Guide'); },
+  step3() { say('Now pick the color of your world flag.', () => flagPicker(() => this.step4(), () => this.preview()), 'Guide'); },
+  step4() {
+    ask('Create the world "' + G.world.name + '" (' + THEMES[G.world.theme].name + ')?', ['Create!', 'Start over'], k => {
+      if (k !== 0) { this.step1(); return; }
+      sfx('level');
+      say(['Your world ' + G.world.name + ' has been created! It is small now, but you can grow it with aquariums, decorations and a bigger home.',
+        'Now, a shimmering portal whisks you away to the bustling city of Aquarium World...'], () => {
+        sfx('warp');
+        fadeTo(() => setScene(CityScene, 15, 3, 'down'), 0.03);
+      }, 'Guide');
+    }, 'Guide');
+  },
+  update() {},
+  tick() {},
+  draw() {
+    this.field.draw();
+    drawWin(4, 4, 140, 18, 'dark'); text('Creating: ' + G.world.name, 10, 9, '#80e0ff');
+  },
+};
+
+// ============ Main loop ============
+try { const s = JSON.parse(localStorage.getItem('aquariumWorldSound')); if (s) { soundOn = s[0]; musicOn = s[1]; } } catch (e) {}
+function frame() {
+  musicTick();
+  if (fade) {
+    fade.a += fade.d * fade.sp;
+    pendingTap = null;
+    if (fade.d === 1 && fade.a >= 1) { fade.a = 1; ui.length = 0; closeNameInput(); fade.fn(); fade.d = -1; }
+    else if (fade.d === -1 && fade.a <= 0) fade = null;
+  } else {
+    processTap(() => {
+      const top = ui[ui.length - 1];
+      if (top) { if (top.tapAnywhere) tapA(); }
+      else if (scene.id === 'fishing') holdA();
+      else if (scene.field) tapA(); // talk / interact with what you face
+    });
+    if (ui.length) ui[ui.length - 1].update();
+    else scene.update();
+  }
+  if (scene.tick && (!ui.length || scene.id === 'fishing' || scene.id === 'title')) scene.tick();
+  hits.length = 0;
+  scene.draw();
+  ui.forEach((u, i) => { if (i === ui.length - 1) hits.length = 0; u.draw(); }); // only the top window takes taps
+  drawToasts();
+  drawAutosave();
+  overlaysEndFrame();
+  if (fade) { ctx.fillStyle = `rgba(0,0,0,${clamp(fade.a, 0, 1)})`; ctx.fillRect(0, 0, W, H); }
+  inputEndFrame();
+  T++;
+}
+let last = performance.now(), acc = 0;
+function loop(now) {
+  acc += Math.min(100, now - last); last = now;
+  let n = 0;
+  while (acc >= 1000 / 60 && n < 4) { frame(); acc -= 1000 / 60; n++; }
+  requestAnimationFrame(loop);
+}
+initSaves();
+// installed-app support: cache the game for offline play (only on a real web address, not inside claude.ai)
+if ('serviceWorker' in navigator && window.top === window && !window.claude &&
+    (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  const hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadController) toast('Update installed! Reopen the game to play it.', '#b0ffb0');
+  });
+}
+setScene(TitleScene);
+requestAnimationFrame(loop);
+
+</script>
+</body>
+</html>

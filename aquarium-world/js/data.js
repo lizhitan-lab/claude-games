@@ -128,7 +128,8 @@ const SLOT_COUNT = 3;
 let curSlot = 0;
 const slots = new Array(SLOT_COUNT).fill(null);     // parsed save data per slot
 let cloud = null, cloudUid = null;                  // set once the database answers
-let saveStatus = 'local';                           // 'checking' | 'cloud' | 'local'
+let saveStatus = 'local';                           // 'checking' | 'cloud' | 'local' | 'blocked'
+function storageWorks() { try { localStorage.setItem('aw_test', '1'); const ok = localStorage.getItem('aw_test') === '1'; localStorage.removeItem('aw_test'); return ok; } catch (e) { return false; } }
 const slotKey = i => 'aquariumWorld_slot' + (i + 1);
 function lsGet(k) { try { const s = localStorage.getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
 function lsSet(k, json) { try { localStorage.setItem(k, json); return true; } catch (e) { return false; } }
@@ -136,6 +137,7 @@ let onSlotsChanged = () => {};
 function initSaves() {
   // ask the browser not to clear this site's storage when space runs low
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+  if (!storageWorks()) saveStatus = 'blocked'; // e.g. some phones opening a downloaded file
   for (let i = 0; i < SLOT_COUNT; i++) slots[i] = lsGet(slotKey(i));
   const old = lsGet(SAVE_KEY); // single save from earlier versions -> slot 1
   if (old && !slots[0]) { old.savedAt = old.savedAt || 1; slots[0] = old; lsSet(slotKey(0), JSON.stringify(old)); }

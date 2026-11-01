@@ -32,6 +32,12 @@ A pixel-art fishing RPG that runs in the browser. Open `index.html` in any moder
 
 On phones and tablets you can also tap the game screen directly: tap any menu item, tap a character or lake to pick it (tap again to confirm), tap the screen to advance dialog and to cast and reel, and tap the name box to type with the phone keyboard. The d-pad works by sliding your finger between arrows.
 
+### Play from a single downloaded file
+`dist/aquarium-world.html` is the whole game in one file, built with `python3 build-standalone.py`. Copy it to a device and open it in a browser; it needs no internet or server, and each device keeps its own saves.
+- **PC/Mac:** double-click the file (Chrome, Edge, Firefox or Safari). To update, replace the file with the new one; saves stay in the browser.
+- **Android:** open the file from the Files app in Chrome. If the title screen says *Saving is blocked here*, that browser won't save for local files; use **Backup** to keep your progress in a save file.
+- **iPhone/iPad:** Apple doesn't let downloaded web pages run games from the Files app. Use a hosted link instead (below).
+
 ### Install it as an app (independent save on every device)
 The game is hosted on **Cloudflare Pages**, which gives it a fixed web address and republishes it on every push. One-time setup in the Cloudflare dashboard:
 1. **Workers & Pages → Create → Pages → Connect to Git**, then authorize GitHub and pick `claude-games`.
