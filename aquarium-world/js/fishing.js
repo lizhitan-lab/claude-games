@@ -369,7 +369,7 @@ const FishingScene = {
         { label: 'Keep fishing', action: () => popUI(m) },
         { label: 'Change gear', action: () => { popUI(m); pushUI(new GearSelect(() => toast('Gear changed!'), 'Change gear')); } },
         { label: 'Status', action: () => pushUI(new MainMenu()) },
-        { label: 'Save game', action: () => doSave() },
+        { label: 'Save game', action: () => pushUI(new SlotUI('save', i => doSave(i))) },
         { label: 'Leave lake', action: () => { popUI(m); this.leave(() => setScene(LakeMapScene)); } },
         { label: 'Warp home', action: () => { popUI(m); this.leave(() => setScene(HomeScene, 10, 12, 'up')); sfx('warp'); } },
       ],

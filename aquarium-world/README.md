@@ -32,7 +32,10 @@ A pixel-art fishing RPG that runs in the browser. Open `index.html` in any moder
 
 On phones and tablets you can also tap the game screen directly: tap any menu item, tap a character or lake to pick it (tap again to confirm), tap the screen to advance dialog and to cast and reel, and tap the name box to type with the phone keyboard. The d-pad works by sliding your finger between arrows.
 
-The game saves to the browser's localStorage. It saves automatically every time you move between areas (city, home, the lake map, a lake) and when you enter or leave a shop; a small "Saved" badge flashes in the corner. You can also save from the menu at any time, or by resting in your house.
+### Saving
+There are **3 save slots**. From the title screen, *Continue* loads your most recent save, *Load Game* lets you choose a slot, and *New Game* asks which slot to start in, checking first before it replaces a slot that's in use. The game saves automatically every time you move between areas (city, home, the lake map, a lake) and when you enter or leave a shop. A small "Saved" badge flashes in the corner when it does. You can also save to any slot from the menu, or rest in your house.
+
+When the game runs as a claude.ai artifact, each slot is stored in your claude.ai account (the artifact's private per-player database), so saves survive page updates, cleared browser data and switching devices. A copy is also kept in the browser's localStorage, which is all the plain `index.html` file uses. Saves from older versions of the game move into Slot 1 automatically.
 
 ## Code layout
 - `js/engine.js`: canvas, bitmap font, input, audio/chiptune and window drawing

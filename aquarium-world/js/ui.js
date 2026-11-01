@@ -221,9 +221,58 @@ function cycleSound() {
   if (soundOn && musicOn) musicOn = false; else if (soundOn) soundOn = false; else { soundOn = true; musicOn = true; }
   try { localStorage.setItem('aquariumWorldSound', JSON.stringify([soundOn, musicOn])); } catch (e) {}
 }
-function doSave() {
+function doSave(i = curSlot) {
   if (scene && scene.saveLoc) scene.saveLoc();
-  if (saveGame()) { sfx('coin'); toast('Game saved!', '#b0ffb0'); } else { sfx('err'); toast('Save failed!', '#ffb0b0'); }
+  if (saveGame(i)) { sfx('coin'); toast('Saved to Slot ' + (i + 1) + '!', '#b0ffb0'); } else { sfx('err'); toast('Save failed!', '#ffb0b0'); }
+}
+function saveStatusLine() {
+  return saveStatus === 'cloud' ? 'Saves are kept in your claude.ai account'
+    : saveStatus === 'checking' ? 'Connecting to your saves...' : 'Saves are kept in this browser only';
+}
+// pick a save slot. mode: 'load' | 'new' | 'save'
+class SlotUI {
+  constructor(mode, cb) {
+    this.mode = mode; this.cb = cb;
+    const empty = slots.findIndex(x => !x);
+    this.build(mode === 'load' ? Math.max(0, latestSlot()) : mode === 'new' ? Math.max(0, empty) : curSlot);
+    this.prevHook = onSlotsChanged;
+    onSlotsChanged = () => { this.prevHook(); this.build(this.menu.sel); };
+  }
+  close() { onSlotsChanged = this.prevHook; popUI(this); }
+  build(sel) {
+    const title = { load: 'Load which slot?', new: 'Start in which slot?', save: 'Save to which slot?' }[this.mode];
+    const items = slots.map((s, i) => {
+      const m = slotSummary(s);
+      return {
+        label: 'Slot ' + (i + 1) + '  ' + (m ? m.name + ' Lv' + m.level : '- empty -'),
+        right: m ? 'Day ' + m.day : '', color: m ? '#fff' : '#a8b0d0',
+        disabled: this.mode === 'load' && !m, why: 'This slot is empty.',
+        action: () => {
+          const go = () => { this.close(); this.cb(i); };
+          if (this.mode !== 'load' && m && !(this.mode === 'save' && i === curSlot))
+            ask('Slot ' + (i + 1) + ' has ' + m.name + ' (Lv ' + m.level + '). Replace it?', ['Replace', 'Cancel'], k => { if (k === 0) go(); });
+          else go();
+        },
+      };
+    });
+    items.push({ label: 'Back', action: () => this.close() });
+    this.menu = new Menu({ x: 30, y: 30, w: 260, rows: 4, lh: 16, title, items, sel: Math.min(sel, items.length - 1), onCancel: () => this.close() });
+  }
+  update() { this.menu.update(); }
+  draw() {
+    ctx.fillStyle = 'rgba(0,0,20,0.55)'; ctx.fillRect(0, 0, W, H);
+    this.menu.draw(ui[ui.length - 1] === this);
+    const i = this.menu.sel, m = i < SLOT_COUNT ? slotSummary(slots[i]) : null;
+    const y = this.menu.y + this.menu.h + 6;
+    drawWin(30, y, 260, 74);
+    if (m) {
+      text(m.name + '   Lv ' + m.level + '   Day ' + m.day, 40, y + 10, '#ffe890');
+      text('$ ' + fmt(m.ac) + ' AC   Fish caught ' + m.caught, 40, y + 24);
+      text('At: ' + m.where, 40, y + 38, '#80e0ff');
+      if (m.when) text('Saved ' + m.when + (i === curSlot && G ? '  (current)' : ''), 40, y + 52, '#a8b8f0');
+    } else if (i < SLOT_COUNT) textC(this.mode === 'load' ? 'Nothing saved here yet.' : 'A fresh slot for a new adventure.', 160, y + 30, '#a8b0d0');
+    textC(saveStatusLine(), 160, y + 82, saveStatus === 'cloud' ? '#a8ffa8' : '#c8d0f0', '#101028');
+  }
 }
 class MainMenu {
   constructor() {
@@ -233,7 +282,7 @@ class MainMenu {
       { label: 'Equip', action: () => pushUI(new EquipUI()) },
       { label: 'Cooler', action: () => pushUI(new CoolerUI()) },
       { label: 'Fish Log', action: () => pushUI(new LogUI()) },
-      { label: 'Save', action: () => doSave() },
+      { label: 'Save', action: () => pushUI(new SlotUI('save', i => doSave(i))) },
       { label: where === 'home' ? 'To City' : 'Go Home', action: () => { popUI(this); if (where === 'fishing') G.day++; warpTo(where === 'home' ? 'city' : 'home'); } },
       { label: soundLabel(), action: i => { cycleSound(); i.label = soundLabel(); } },
       { label: 'Title', action: () => ask('Return to the title screen? Unsaved progress will be lost.', ['Yes', 'No'], k => { if (k === 0) { ui.length = 0; fadeTo(() => setScene(TitleScene)); } }) },

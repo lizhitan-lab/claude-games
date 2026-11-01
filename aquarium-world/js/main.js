@@ -1,6 +1,7 @@
 'use strict';
 // ============ Scene management ============
 let scene = null, fade = null;
+let newSlot = 0;
 const AUTOSAVE_SCENES = ['city', 'home', 'lakemap', 'fishing'];
 function setScene(s, ...args) {
   scene = s; if (s.enter) s.enter(...args);
@@ -31,19 +32,23 @@ const TitleScene = {
     const ids = Object.keys(FISH).filter(k => !FISH[k].junk);
     this.fish = Array.from({ length: 9 }, (_, i) => ({ id: pick(ids), x: rnd(0, W), y: 120 + i * 12 + rnd(-4, 4), vx: rnd(0.2, 0.7) * (Math.random() < 0.5 ? -1 : 1) }));
     this.bub = Array.from({ length: 24 }, () => ({ x: rnd(0, W), y: rnd(0, H), s: rnd(0.3, 0.9) }));
+    this.buildMenu();
+    onSlotsChanged = () => { if (scene === TitleScene) this.buildMenu(); };
+  },
+  buildMenu() {
     const cont = hasSave();
+    const start = i => {
+      if (!loadGame(i)) { toast('Could not load that save!', '#ffb0b0'); return; }
+      const l = G.loc || {};
+      fadeTo(() => l.scene === 'home' ? setScene(HomeScene, l.x, l.y, l.dir) : setScene(CityScene, l.x ?? 15, l.y ?? 3, l.dir || 'down'));
+    };
+    const sel = this.menu ? this.menu.sel : (cont ? 0 : 1);
     this.menu = new Menu({
-      x: 110, y: 150, w: 100, lh: 14, rows: 3, sel: cont ? 1 : 0,
+      x: 110, y: 130, w: 100, lh: 14, rows: 4, sel,
       items: [
-        { label: 'New Game', action: () => {
-          if (hasSave()) ask('Start a new adventure? Your old save will be replaced the next time you save.', ['New game', 'Cancel'], k => { if (k === 0) fadeTo(() => setScene(CharSelectScene)); });
-          else fadeTo(() => setScene(CharSelectScene));
-        } },
-        { label: 'Continue', disabled: !cont, why: 'No saved game found.', action: () => {
-          if (!loadGame()) { toast('Could not load save!', '#ffb0b0'); return; }
-          const l = G.loc || {};
-          fadeTo(() => l.scene === 'home' ? setScene(HomeScene, l.x, l.y, l.dir) : setScene(CityScene, l.x ?? 15, l.y ?? 3, l.dir || 'down'));
-        } },
+        { label: 'Continue', disabled: !cont, why: 'No saved game yet.', action: () => start(latestSlot()) },
+        { label: 'New Game', action: () => pushUI(new SlotUI('new', i => { newSlot = i; fadeTo(() => setScene(CharSelectScene)); })) },
+        { label: 'Load Game', disabled: !cont, why: 'No saved game yet.', action: () => pushUI(new SlotUI('load', start)) },
         { label: soundLabel(), action: it => { cycleSound(); it.label = soundLabel(); } },
       ],
     });
@@ -65,6 +70,7 @@ const TitleScene = {
     textBig('WORLD', 160 - 16 * 3 + 4, 70 + bob, 3, '#ffe060', '#3a2008');
     textC('A pixel fishing adventure', 160, 108, '#c8e8ff');
     this.menu.draw(!ui.length);
+    textC(saveStatusLine(), 160, 202, saveStatus === 'cloud' ? '#a8ffa8' : '#c8e8ff', '#081838');
     textC('Arrows/WASD move - Z/Enter OK - X back - Esc menu', 160, 214, '#8fb0e0', '#081838');
   },
 };
@@ -79,7 +85,7 @@ const CharSelectScene = {
       sfx('ok');
       const g = this.sel ? 'girl' : 'boy';
       pushUI(new NameEntry('Name your ' + g, g === 'boy' ? 'Kai' : 'Mia', 10, n => {
-        newGame(g, n);
+        newGame(g, n); curSlot = newSlot;
         fadeTo(() => setScene(WorldCreateScene));
       }));
     }
@@ -174,5 +180,6 @@ function loop(now) {
   while (acc >= 1000 / 60 && n < 4) { frame(); acc -= 1000 / 60; n++; }
   requestAnimationFrame(loop);
 }
+initSaves();
 setScene(TitleScene);
 requestAnimationFrame(loop);

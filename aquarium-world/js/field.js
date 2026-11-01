@@ -293,7 +293,7 @@ function houseMenu() {
   pushUI(new MenuUI({
     x: 100, y: 60, w: 130, lh: 14, rows: 6, title: HOUSES[G.world.house].name,
     items: [
-      { label: 'Rest & Save', action: () => { popUI(); out(); G.loc = { scene: 'home', x: 10, y: 5, dir: 'down' }; saveGame(); sfx('level'); say('You rest a while... You feel refreshed! (Game saved)'); } },
+      { label: 'Rest & Save', action: () => { popUI(); out(); G.loc = { scene: 'home', x: 10, y: 5, dir: 'down' }; saveGame(); sfx('level'); say('You rest a while... You feel refreshed! (Saved to Slot ' + (curSlot + 1) + ')'); } },
       { label: 'World info', action: () => { popUI(); out(); worldInfo(); } },
       { label: 'Rename world', action: () => { popUI(); out(); pushUI(new NameEntry('Rename your world', G.world.name, 12, n => { G.world.name = n; rebuildHome(); toast('World renamed to ' + n); })); } },
       { label: 'Change theme', action: () => { popUI(); out(); themePicker(() => rebuildHome()); } },

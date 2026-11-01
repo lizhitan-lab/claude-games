@@ -120,12 +120,91 @@ function newGame(gender, name) {
     loc: { scene: 'city', x: 15, y: 4, dir: 'down' },
   };
 }
-function hasSave() { try { return !!localStorage.getItem(SAVE_KEY); } catch (e) { return false; } }
-function saveGame() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(G)); return true; } catch (e) { return false; }
+// ============ Save slots ============
+// Each slot is kept twice: in the player's private cloud area of the artifact's database
+// (survives page updates, other devices, cleared browsers) and in this browser's storage
+// (works offline / in the plain HTML file). Whichever copy is newer wins.
+const SLOT_COUNT = 3;
+let curSlot = 0;
+const slots = new Array(SLOT_COUNT).fill(null);     // parsed save data per slot
+let cloud = null, cloudUid = null;                  // set once the database answers
+let saveStatus = 'local';                           // 'checking' | 'cloud' | 'local'
+const slotKey = i => 'aquariumWorld_slot' + (i + 1);
+function lsGet(k) { try { const s = localStorage.getItem(k); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+function lsSet(k, json) { try { localStorage.setItem(k, json); return true; } catch (e) { return false; } }
+let onSlotsChanged = () => {};
+function initSaves() {
+  for (let i = 0; i < SLOT_COUNT; i++) slots[i] = lsGet(slotKey(i));
+  const old = lsGet(SAVE_KEY); // single save from earlier versions -> slot 1
+  if (old && !slots[0]) { old.savedAt = old.savedAt || 1; slots[0] = old; lsSet(slotKey(0), JSON.stringify(old)); }
+  if (!(window.claude && typeof window.claude.use === 'function')) return;
+  saveStatus = 'checking';
+  (async () => {
+    const giveUp = new Promise(r => setTimeout(() => r(null), 10000));
+    try {
+      const got = await Promise.race([Promise.all([claude.use('db'), claude.use('user')]), giveUp]);
+      const db = got && got[0], user = got && got[1];
+      const uid = db && user ? await user.id() : null;
+      if (!uid) { saveStatus = 'local'; onSlotsChanged(); return; }
+      const docs = await Promise.all(slots.map((_, i) => db.doc('data/users/' + uid + '/slot' + (i + 1)).get()));
+      cloud = db; cloudUid = uid; saveStatus = 'cloud';
+      docs.forEach((d, i) => {
+        const body = d.exists ? d.data() : null;
+        let remote = null;
+        try { remote = body && typeof body.json === 'string' ? JSON.parse(body.json) : null; } catch (e) {}
+        const local = slots[i];
+        if (remote && (!local || (remote.savedAt || 0) >= (local.savedAt || 0))) { slots[i] = remote; lsSet(slotKey(i), body.json); }
+        else if (local) cloudWrite(i, JSON.stringify(local)); // upload saves made before cloud was available
+      });
+    } catch (e) { saveStatus = cloud ? 'cloud' : 'local'; }
+    onSlotsChanged();
+  })();
 }
-function loadGame() {
-  try { const s = localStorage.getItem(SAVE_KEY); if (!s) return false; G = JSON.parse(s); return true; } catch (e) { return false; }
+const pending = {}, inflight = {};
+function cloudWrite(i, json) {
+  if (!cloud) return;
+  pending[i] = json;
+  if (inflight[i]) return; // the running write picks up the newest copy when it finishes
+  inflight[i] = true;
+  (async () => {
+    while (pending[i]) {
+      const j = pending[i]; pending[i] = null;
+      const ref = cloud.doc('data/users/' + cloudUid + '/slot' + (i + 1));
+      try { await ref.set({ json: j, savedAt: Date.now() }); }
+      catch (e) {
+        if (e && e.code === 'unavailable') { await new Promise(r => setTimeout(r, 800 + Math.random() * 800)); try { await ref.set({ json: j, savedAt: Date.now() }); } catch (e2) {} }
+        else if (e && (e.code === 'invalid_argument' || e.code === 'revoked' || e.code === 'not_granted')) { cloud = null; saveStatus = 'local'; break; }
+      }
+    }
+    inflight[i] = false;
+  })();
+}
+function hasSave() { return slots.some(Boolean); }
+function latestSlot() { let b = -1; slots.forEach((s, i) => { if (s && (b < 0 || (s.savedAt || 0) > (slots[b].savedAt || 0))) b = i; }); return b; }
+function saveGame(i = curSlot) {
+  if (!G) return false;
+  curSlot = i; G.savedAt = Date.now();
+  const json = JSON.stringify(G);
+  slots[i] = JSON.parse(json);
+  const ok = lsSet(slotKey(i), json);
+  cloudWrite(i, json);
+  return ok || !!cloud;
+}
+function loadGame(i = latestSlot()) {
+  if (i < 0 || !slots[i]) return false;
+  G = JSON.parse(JSON.stringify(slots[i])); curSlot = i;
+  G.flags = G.flags || {}; G.stats = G.stats || { caught: 0, earned: 0, spins: 0 }; G.log = G.log || {};
+  return true;
+}
+function slotSummary(s) {
+  if (!s) return null;
+  const where = s.loc && s.loc.scene === 'home' ? (s.world && s.world.name || 'Home') : 'Aquarium World';
+  let when = '';
+  if (s.savedAt > 1) {
+    const d = new Date(s.savedAt), p2 = n => String(n).padStart(2, '0');
+    when = 'JanFebMarAprMayJunJulAugSepOctNovDec'.substr(d.getMonth() * 3, 3) + ' ' + d.getDate() + ', ' + p2(d.getHours()) + ':' + p2(d.getMinutes());
+  }
+  return { name: s.player.name, level: s.player.level, day: s.day, ac: s.player.ac, where, when, caught: (s.stats && s.stats.caught) || 0 };
 }
 function stats() {
   const s = { power: 0, focus: 0, stamina: 0, luck: 0 };
