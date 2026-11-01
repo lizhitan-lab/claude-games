@@ -32,6 +32,18 @@ A pixel-art fishing RPG that runs in the browser. Open `index.html` in any moder
 
 On phones and tablets you can also tap the game screen directly: tap any menu item, tap a character or lake to pick it (tap again to confirm), tap the screen to advance dialog and to cast and reel, and tap the name box to type with the phone keyboard. The d-pad works by sliding your finger between arrows.
 
+### Install it as an app (independent save on every device)
+When the game is hosted at its own web address (GitHub Pages, set up by `.github/workflows/pages.yml`), it works as an installable app:
+- **iPhone/iPad:** open the link in Safari, tap Share, then *Add to Home Screen*.
+- **Android:** open the link in Chrome, then choose *Install app* or *Add to Home screen* from the menu.
+
+The app runs full screen, works offline once it has loaded, and updates itself in the background; reopen it after an update to get the new version. Each device keeps its own saves in its own storage, so devices never affect each other, and updates never touch saves.
+
+On iPhone, an app added to the Home Screen has separate storage from Safari. To bring a game you started in Safari, use **Backup** to save it to a file, then load that file in the Home Screen app.
+
+### Backup (save files)
+**Backup** on the title screen saves any slot to a `.json` file (on phones this opens the share sheet, so you can choose *Save to Files*) and loads a file back into any slot. Use it to keep a safe copy or to move a game to another device.
+
 ### Saving
 There are **3 save slots**. From the title screen, *Continue* loads your most recent save, *Load Game* lets you choose a slot, and *New Game* asks which slot to start in, checking first before it replaces a slot that's in use. The game saves automatically every time you move between areas (city, home, the lake map, a lake) and when you enter or leave a shop. A small "Saved" badge flashes in the corner when it does. You can also save to any slot from the menu, or rest in your house.
 

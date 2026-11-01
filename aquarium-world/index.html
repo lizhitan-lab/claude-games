@@ -2,11 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0c2a6a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Aquarium">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Aquarium World</title>
 <style>
   html,body{margin:0;height:100%;background:#05070f;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
-  #wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  #wrap{position:fixed;inset:0;box-sizing:border-box;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;align-items:center;justify-content:center}
   canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;box-shadow:0 0 0 2px #1a2340,0 0 40px #0a1a40}
   #touch{display:none;width:100%;max-width:520px;height:150px;position:relative;flex:none}
   body.touch #touch{display:block}
@@ -17,6 +25,7 @@
   #dpad .tb{pointer-events:none}
   #nameInput{position:fixed;display:none;z-index:5;box-sizing:border-box;border:0;outline:none;padding:0;margin:0;
       background:transparent;color:transparent;caret-color:transparent;font-size:16px;-webkit-user-select:text;user-select:text}
+  .overlay{position:fixed;display:none;z-index:5;margin:0;padding:0;border:0;opacity:0;cursor:pointer;font-size:16px}
   #help{color:#7f8fbf;font:12px monospace;margin-top:8px;text-align:center}
   body.touch #help{display:none}
 </style>
@@ -38,6 +47,8 @@
   </div>
 </div>
 <input id="nameInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="done" aria-label="Name">
+<input id="fileInput" class="overlay" type="file" accept=".json,application/json,text/plain" aria-label="Load a save file">
+<button id="exportBtn" class="overlay" type="button" aria-label="Save this slot to a file"></button>
 <script src="js/engine.js"></script>
 <script src="js/data.js"></script>
 <script src="js/art.js"></script>

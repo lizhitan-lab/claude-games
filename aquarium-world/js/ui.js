@@ -229,6 +229,82 @@ function saveStatusLine() {
   return saveStatus === 'cloud' ? 'Saves are kept in your claude.ai account'
     : saveStatus === 'checking' ? 'Connecting to your saves...' : 'Saves are kept in this browser only';
 }
+// ============ Save files (backup / move between devices) ============
+const fileInput = document.getElementById('fileInput'), exportBtn = document.getElementById('exportBtn');
+function exportSlot(i) {
+  const s = slots[i];
+  if (!s) { sfx('err'); toast('Slot ' + (i + 1) + ' is empty.', '#ffb0b0'); return; }
+  const json = JSON.stringify({ game: 'aquarium-world', version: 1, exportedAt: Date.now(), save: s });
+  const name = 'aquarium-world-slot' + (i + 1) + '-' + String(s.player.name).replace(/[^A-Za-z0-9_-]/g, '') + '.json';
+  if (window.claude && typeof window.claude.use === 'function') { // inside claude.ai: downloads go through the viewer
+    claude.use('downloads').then(dl => {
+      if (!dl) { toast('Saving files is not available here.', '#ffb0b0'); return; }
+      dl.save({ filename: name, data: json }).then(() => toast('Save file ready!', '#b0ffb0'), () => toast('Save file cancelled.'));
+    });
+    return;
+  }
+  const file = new File([json], name, { type: 'application/json' });
+  const touch = document.body.classList.contains('touch');
+  if (touch && navigator.canShare && navigator.canShare({ files: [file] })) { // phones: share sheet -> "Save to Files"
+    navigator.share({ files: [file], title: 'Aquarium World save' }).then(() => toast('Save file shared!', '#b0ffb0'), () => {});
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(file); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  toast('Save file downloaded!', '#b0ffb0');
+}
+function importIntoSlot(i, file, done) {
+  const r = new FileReader();
+  r.onload = () => {
+    let s = null;
+    try { const d = JSON.parse(r.result); s = d && d.save ? d.save : d; } catch (e) {}
+    if (!s || !s.player || !s.world || !s.player.name) { sfx('err'); toast("That file isn't an Aquarium World save.", '#ffb0b0'); return; }
+    const put = () => {
+      s.savedAt = Date.now(); slots[i] = s;
+      const json = JSON.stringify(s); lsSet(slotKey(i), json); cloudWrite(i, json);
+      sfx('coin'); toast(s.player.name + ' loaded into Slot ' + (i + 1) + '!', '#b0ffb0'); done && done();
+    };
+    const m = slotSummary(slots[i]);
+    if (m) ask('Replace ' + m.name + ' (Lv ' + m.level + ') in Slot ' + (i + 1) + ' with ' + s.player.name + ' (Lv ' + s.player.level + ')?', ['Replace', 'Cancel'], k => { if (k === 0) put(); });
+    else put();
+  };
+  r.readAsText(file);
+}
+class BackupUI {
+  constructor(onDone) {
+    this.onDone = onDone; this.slot = Math.max(0, latestSlot()); this.build(this.slot);
+    exportBtn.onclick = () => { sfx('ok'); exportSlot(this.slot); };
+    fileInput.onchange = () => { const f = fileInput.files && fileInput.files[0]; fileInput.value = ''; if (f) importIntoSlot(this.slot, f, () => { this.build(this.menu.sel); this.onDone && this.onDone(); }); };
+  }
+  close() { exportBtn.onclick = fileInput.onchange = null; popUI(this); this.onDone && this.onDone(); }
+  build(sel) {
+    const items = slots.map((s, i) => {
+      const m = slotSummary(s);
+      return { label: (this.slot === i ? '> ' : '  ') + 'Slot ' + (i + 1) + '  ' + (m ? m.name + ' Lv' + m.level : '- empty -'), right: m ? 'Day ' + m.day : '', action: () => { this.slot = i; this.build(i); } };
+    });
+    items.push({ label: 'Save slot ' + (this.slot + 1) + ' to a file', color: '#a8ffa8', action: () => exportSlot(this.slot) });
+    items.push({ label: 'Load a file into slot ' + (this.slot + 1), color: '#a8ffa8', action: () => fileInput.click() });
+    items.push({ label: 'Back', action: () => this.close() });
+    this.menu = new Menu({ x: 30, y: 24, w: 260, rows: 6, lh: 15, title: 'Backup saves', items, sel: Math.min(sel, items.length - 1), onCancel: () => this.close() });
+  }
+  update() { this.menu.update(); }
+  draw() {
+    ctx.fillStyle = 'rgba(0,0,20,0.6)'; ctx.fillRect(0, 0, W, H);
+    const top = ui[ui.length - 1] === this;
+    this.menu.draw(top);
+    if (top) { // the two file rows are real buttons underneath, so taps open the picker / share sheet
+      const rowY = k => this.menu.y + 7 + 12 + (k - this.menu.top) * this.menu.lh - 4;
+      overlayAt(exportBtn, this.menu.x, rowY(3), this.menu.w, this.menu.lh);
+      overlayAt(fileInput, this.menu.x, rowY(4), this.menu.w, this.menu.lh);
+    }
+    const y = this.menu.y + this.menu.h + 6;
+    drawWin(30, y, 260, 64);
+    wrap('Save a slot to a file to keep a backup or move it to another device. Load the file there to continue playing.', 41)
+      .forEach((l, i) => text(l, 40, y + 9 + i * 12, '#c8d0f0'));
+  }
+}
+
 // pick a save slot. mode: 'load' | 'new' | 'save'
 class SlotUI {
   constructor(mode, cb) {

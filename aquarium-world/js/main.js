@@ -44,11 +44,12 @@ const TitleScene = {
     };
     const sel = this.menu ? this.menu.sel : (cont ? 0 : 1);
     this.menu = new Menu({
-      x: 110, y: 130, w: 100, lh: 14, rows: 4, sel,
+      x: 110, y: 120, w: 100, lh: 14, rows: 5, sel,
       items: [
         { label: 'Continue', disabled: !cont, why: 'No saved game yet.', action: () => start(latestSlot()) },
         { label: 'New Game', action: () => pushUI(new SlotUI('new', i => { newSlot = i; fadeTo(() => setScene(CharSelectScene)); })) },
         { label: 'Load Game', disabled: !cont, why: 'No saved game yet.', action: () => pushUI(new SlotUI('load', start)) },
+        { label: 'Backup', action: () => pushUI(new BackupUI(() => this.buildMenu())) },
         { label: soundLabel(), action: it => { cycleSound(); it.label = soundLabel(); } },
       ],
     });
@@ -169,6 +170,7 @@ function frame() {
   ui.forEach((u, i) => { if (i === ui.length - 1) hits.length = 0; u.draw(); }); // only the top window takes taps
   drawToasts();
   drawAutosave();
+  overlaysEndFrame();
   if (fade) { ctx.fillStyle = `rgba(0,0,0,${clamp(fade.a, 0, 1)})`; ctx.fillRect(0, 0, W, H); }
   inputEndFrame();
   T++;
@@ -181,5 +183,14 @@ function loop(now) {
   requestAnimationFrame(loop);
 }
 initSaves();
+// installed-app support: cache the game for offline play (only on a real web address, not inside claude.ai)
+if ('serviceWorker' in navigator && window.top === window && !window.claude &&
+    (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  const hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadController) toast('Update installed! Reopen the game to play it.', '#b0ffb0');
+  });
+}
 setScene(TitleScene);
 requestAnimationFrame(loop);

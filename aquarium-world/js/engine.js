@@ -232,10 +232,22 @@ function processTap(fallback) {
   }
   if (fallback) fallback(t);
 }
+// Real HTML controls laid over a drawn button, for things browsers only allow from a genuine
+// tap/click (file picker, share sheet). Call overlayAt() each frame while the button is shown.
+const overlayUsed = new Set();
+function overlayAt(el, x, y, w, h) {
+  const cr = cv.getBoundingClientRect(), sx = cr.width / W, sy = cr.height / H;
+  Object.assign(el.style, { display: 'block', left: cr.left + x * sx + 'px', top: cr.top + y * sy + 'px', width: w * sx + 'px', height: h * sy + 'px' });
+  overlayUsed.add(el);
+}
+function overlaysEndFrame() {
+  for (const el of document.querySelectorAll('.overlay')) if (!overlayUsed.has(el)) el.style.display = 'none';
+  overlayUsed.clear();
+}
 function resize() {
   const touch = document.body.classList.contains('touch');
   const availH = innerHeight - (touch ? 160 : 30);
-  const s = Math.min(innerWidth / W, availH / H);
+  const s = Math.min((innerWidth - 32) / W, availH / H);
   const sc = s >= 1 ? Math.floor(s) : s;
   cv.style.width = W * sc + 'px';
   cv.style.height = H * sc + 'px';

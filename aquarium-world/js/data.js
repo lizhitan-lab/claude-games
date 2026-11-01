@@ -134,6 +134,8 @@ function lsGet(k) { try { const s = localStorage.getItem(k); return s ? JSON.par
 function lsSet(k, json) { try { localStorage.setItem(k, json); return true; } catch (e) { return false; } }
 let onSlotsChanged = () => {};
 function initSaves() {
+  // ask the browser not to clear this site's storage when space runs low
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
   for (let i = 0; i < SLOT_COUNT; i++) slots[i] = lsGet(slotKey(i));
   const old = lsGet(SAVE_KEY); // single save from earlier versions -> slot 1
   if (old && !slots[0]) { old.savedAt = old.savedAt || 1; slots[0] = old; lsSet(slotKey(0), JSON.stringify(old)); }
