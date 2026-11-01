@@ -32,7 +32,7 @@ A pixel-art fishing RPG that runs in the browser. Open `index.html` in any moder
 
 On phones and tablets you can also tap the game screen directly: tap any menu item, tap a character or lake to pick it (tap again to confirm), tap the screen to advance dialog and to cast and reel, and tap the name box to type with the phone keyboard. The d-pad works by sliding your finger between arrows.
 
-The game saves to the browser's localStorage. You can save from the menu at any time, or by resting in your house.
+The game saves to the browser's localStorage. It saves automatically every time you move between areas (city, home, the lake map, a lake) and when you enter or leave a shop; a small "Saved" badge flashes in the corner. You can also save from the menu at any time, or by resting in your house.
 
 ## Code layout
 - `js/engine.js`: canvas, bitmap font, input, audio/chiptune and window drawing

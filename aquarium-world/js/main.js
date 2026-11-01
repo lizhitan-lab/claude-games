@@ -1,7 +1,26 @@
 'use strict';
 // ============ Scene management ============
 let scene = null, fade = null;
-function setScene(s, ...args) { scene = s; if (s.enter) s.enter(...args); }
+const AUTOSAVE_SCENES = ['city', 'home', 'lakemap', 'fishing'];
+function setScene(s, ...args) {
+  scene = s; if (s.enter) s.enter(...args);
+  if (G && AUTOSAVE_SCENES.includes(s.id)) autosave();
+}
+// saves silently and shows a small "Saved" badge in the corner
+let autosaveT = 0;
+function autosave() {
+  if (!G) return;
+  if (scene && scene.saveLoc) scene.saveLoc();
+  if (saveGame()) autosaveT = 110;
+}
+function drawAutosave() {
+  if (autosaveT <= 0) return;
+  autosaveT--;
+  if (autosaveT > 100 || (autosaveT < 30 && (autosaveT >> 2) % 2)) return;
+  drawWin(4, H - 22, 58, 18, 'dark');
+  const r = (T >> 3) % 4; rect(10, H - 16, 6, 6, '#80e0ff'); rect(11 + (r % 2) * 3, H - 15 + (r >> 1) * 3, 1, 1, '#101028');
+  text('Saved', 20, H - 17, '#b0ffb0');
+}
 function fadeTo(fn, sp = 0.07) { if (fade) return; fade = { a: 0, d: 1, fn, sp }; }
 
 // ============ Title ============
@@ -143,6 +162,7 @@ function frame() {
   scene.draw();
   ui.forEach((u, i) => { if (i === ui.length - 1) hits.length = 0; u.draw(); }); // only the top window takes taps
   drawToasts();
+  drawAutosave();
   if (fade) { ctx.fillStyle = `rgba(0,0,0,${clamp(fade.a, 0, 1)})`; ctx.fillRect(0, 0, W, H); }
   inputEndFrame();
   T++;

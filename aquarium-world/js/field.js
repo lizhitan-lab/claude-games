@@ -219,11 +219,13 @@ function buildCity() {
 function enterShop(kind, door) {
   sfx('door');
   const f = scene;
+  autosave();
   pushUI(new ShopUI(kind, () => {
     sfx('door');
     f.player.tx = f.player.ox = door[0]; f.player.ty = f.player.oy = door[1] + 1;
     f.player.x = door[0] * TS; f.player.y = (door[1] + 1) * TS; f.player.dir = 'down'; f.player.moving = false;
     playSong('town');
+    autosave();
   }));
 }
 
@@ -377,7 +379,7 @@ const CityScene = {
     cityField.place(x, y, dir); this.field = cityField; playSong('town');
     G.loc = { scene: 'city', x, y, dir };
     if (!G.flags.intro) {
-      G.flags.intro = true;
+      G.flags.intro = true; G.player.ac += 1000; // granted now so an autosave can't lose it
       setTimeout(() => cityIntro(), 0);
     }
   },
@@ -391,7 +393,7 @@ function cityIntro() {
   const n = G.player.name;
   say(['Welcome to Aquarium World, ' + n + '! I am Mayor Finn.',
     'Every new angler receives a gift from the city: 1,000 Aquarium Credits (AC)! Spend them wisely.'], () => {
-    G.player.ac += 1000; sfx('coin'); toast('+1,000 AC!', '#ffe890');
+    sfx('coin'); toast('+1,000 AC!', '#ffe890');
     say(['There are four shops in town: Bait & Tackle (rods and bait), the Tank Emporium (aquariums for your world), the Fish Market (sell your catch) and the Outfitters (clothes, armor and weapons).',
       'The Prize Wheel in the plaza costs 100 AC a spin. The South Gate leads to the lakes. The portal up north takes you home.',
       'Press ESC (or MENU) anytime to save, check items or warp home. Good luck, angler!'], null, 'Mayor Finn');
@@ -406,7 +408,8 @@ const HomeScene = {
     if (days > 0 && inc > 0) {
       G.lastCollect = G.day;
       const amt = inc * days;
-      setTimeout(() => say('Welcome home! While you were away, visitors came to see your world. You earned $' + fmt(amt) + ' AC in ticket sales! (' + days + ' day' + (days > 1 ? 's' : '') + ')', () => { G.player.ac += amt; G.stats.earned += amt; sfx('coin'); }), 0);
+      G.player.ac += amt; G.stats.earned += amt; // paid now so the arrival autosave includes it
+      setTimeout(() => say('Welcome home! While you were away, visitors came to see your world. You earned $' + fmt(amt) + ' AC in ticket sales! (' + days + ' day' + (days > 1 ? 's' : '') + ')', () => sfx('coin')), 0);
     } else if (days > 0) G.lastCollect = G.day;
   },
   update() { this.field.update(); },
