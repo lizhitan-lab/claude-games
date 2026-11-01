@@ -33,7 +33,15 @@ A pixel-art fishing RPG that runs in the browser. Open `index.html` in any moder
 On phones and tablets you can also tap the game screen directly: tap any menu item, tap a character or lake to pick it (tap again to confirm), tap the screen to advance dialog and to cast and reel, and tap the name box to type with the phone keyboard. The d-pad works by sliding your finger between arrows.
 
 ### Install it as an app (independent save on every device)
-When the game is hosted at its own web address (GitHub Pages, set up by `.github/workflows/pages.yml`), it works as an installable app:
+The game is hosted on **Cloudflare Pages**, which gives it a fixed web address and republishes it on every push. One-time setup in the Cloudflare dashboard:
+1. **Workers & Pages → Create → Pages → Connect to Git**, then authorize GitHub and pick `claude-games`.
+2. Set **Production branch** to `main` (or the branch you deploy from).
+3. Leave **Framework preset** at *None*. Set **Build command** to `bash cloudflare-build.sh` and **Build output directory** to `aquarium-world`.
+4. **Save and Deploy.** The game is then live at `https://<project-name>.pages.dev`.
+
+Always share the production `pages.dev` address. Preview deployments of other branches get different addresses, and each address keeps its own saves.
+
+Once hosted, it works as an installable app:
 - **iPhone/iPad:** open the link in Safari, tap Share, then *Add to Home Screen*.
 - **Android:** open the link in Chrome, then choose *Install app* or *Add to Home screen* from the menu.
 

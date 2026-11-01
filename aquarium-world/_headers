@@ -1,0 +1,11 @@
+# Cloudflare Pages response headers: always re-check the app shell so updates arrive promptly.
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
+/js/*
+  Cache-Control: no-cache
