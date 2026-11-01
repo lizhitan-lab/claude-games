@@ -73,6 +73,7 @@ const CharSelectScene = {
     const opts = [['boy', 'BOY', { hair: '#4a2a18', shirt: '#3070d0', pants: '#2c3458' }], ['girl', 'GIRL', { hair: '#b04060', shirt: '#f4f4f4', dress: '#e04878', ribbon: '#40c0e0', shoes: '#803040' }]];
     opts.forEach(([t, lab, col], i) => {
       const cx = 100 + i * 120, sel = this.sel === i;
+      hit(cx - 50, 70, 100, 120, () => { if (this.sel === i) tapA(); else { this.sel = i; sfx('blip'); } });
       pellipse(cx, 160, 38, 9, sel ? '#f0c040' : '#3a4a7a'); pellipse(cx, 158, 36, 8, sel ? '#ffe890' : '#56679a');
       if (sel) for (let k = 0; k < 8; k++) { const a = T / 20 + k * 0.785; rect(cx + Math.cos(a) * 44, 110 + Math.sin(a) * 40, 2, 2, '#fff8c0'); }
       const s = charSprites(t, col), spr = sel ? s.down[WALKSEQ[(T >> 3) % 4]] : s.down[0];
@@ -82,7 +83,8 @@ const CharSelectScene = {
       textBig(lab, cx - tw(lab), 172, 2, sel ? '#ffe890' : '#8890b0');
       if (sel) drawCursor(cx - tw(lab) - 14, 177);
     });
-    textC('LEFT/RIGHT to choose - A to confirm', 160, 214, '#c8d0f0');
+    textC('Tap a character, then tap again to confirm', 160, 214, '#c8d0f0');
+    btn(4, 4, 40, 16, 'Back', () => { inp.pressed.b = true; });
   },
 };
 
@@ -123,13 +125,23 @@ function frame() {
   musicTick();
   if (fade) {
     fade.a += fade.d * fade.sp;
-    if (fade.d === 1 && fade.a >= 1) { fade.a = 1; ui.length = 0; textHandler = null; fade.fn(); fade.d = -1; }
+    pendingTap = null;
+    if (fade.d === 1 && fade.a >= 1) { fade.a = 1; ui.length = 0; closeNameInput(); fade.fn(); fade.d = -1; }
     else if (fade.d === -1 && fade.a <= 0) fade = null;
-  } else if (ui.length) ui[ui.length - 1].update();
-  else scene.update();
+  } else {
+    processTap(() => {
+      const top = ui[ui.length - 1];
+      if (top) { if (top.tapAnywhere) tapA(); }
+      else if (scene.id === 'fishing') holdA();
+      else if (scene.field) tapA(); // talk / interact with what you face
+    });
+    if (ui.length) ui[ui.length - 1].update();
+    else scene.update();
+  }
   if (scene.tick && (!ui.length || scene.id === 'fishing' || scene.id === 'title')) scene.tick();
+  hits.length = 0;
   scene.draw();
-  for (const u of ui) u.draw();
+  ui.forEach((u, i) => { if (i === ui.length - 1) hits.length = 0; u.draw(); }); // only the top window takes taps
   drawToasts();
   if (fade) { ctx.fillStyle = `rgba(0,0,0,${clamp(fade.a, 0, 1)})`; ctx.fillRect(0, 0, W, H); }
   inputEndFrame();

@@ -16,10 +16,10 @@ A pixel-art fishing RPG that runs in the browser. Open `index.html` in any moder
 5. **Your world**: put fish into aquariums. Each fishing trip counts as one day, and visitors pay ticket money every day based on the fish on display, the tank type, your decorations and your home.
 
 ## Fishing
-- **Cast**: press A to start the power meter and press A again to cast. A longer cast reaches deeper water, where fish are bigger and rare fish are more likely.
+- **Cast**: press A (or tap the screen) to start the power meter, then again to cast. A longer cast reaches deeper water, where fish are bigger and rare fish are more likely.
 - **Wait**: don't react to *nibbles*. If you press too early, the fish gets spooked.
-- **Bite**: when **!** appears, press A quickly. Higher level and more focus give you a longer window.
-- **Reel**: hold A to lift the green bar and keep the fish inside it. The catch meter fills while the fish is in the bar and drains while it is outside.
+- **Bite**: when **!** appears, press A. At Willow Pond and Crystal Lake you have 4-5 seconds; at Misty Marsh and Moonfall Lake about 3 seconds. The small bar under the **!** shows the time left.
+- **Reel**: tap A to make the green bar hop up (holding lifts it gently) and keep the fish inside it. The catch meter fills while the fish is in the bar and drains slowly while it is outside.
 - How hard a catch is depends on the fish's difficulty, your level, your rod (power and bar size), your gear stats and your bait. Better bait brings faster bites, bigger fish and more rares.
 
 ## Controls
@@ -29,6 +29,8 @@ A pixel-art fishing RPG that runs in the browser. Open `index.html` in any moder
 | Confirm / interact / reel | Z, Enter, Space | A |
 | Cancel (hold to run) | X, Backspace, Shift | B |
 | Menu (save, items, equip, warp home) | Esc, M, Tab | MENU |
+
+On phones and tablets you can also tap the game screen directly: tap any menu item, tap a character or lake to pick it (tap again to confirm), tap the screen to advance dialog and to cast and reel, and tap the name box to type with the phone keyboard. The d-pad works by sliding your finger between arrows.
 
 The game saves to the browser's localStorage. You can save from the menu at any time, or by resting in your house.
 

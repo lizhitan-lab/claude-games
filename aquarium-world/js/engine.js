@@ -162,8 +162,10 @@ const KEYMAP = {
 let textHandler = null; // set by name-entry UI
 function vpress(k) { if (!inp.held[k]) { inp.pressed[k] = true; inp.holdT[k] = 0; } inp.held[k] = true; }
 function vrelease(k) { inp.held[k] = false; }
+const nameInput = document.getElementById('nameInput');
 addEventListener('keydown', e => {
   audioUnlock();
+  if (document.activeElement === nameInput) return; // the name box handles its own typing
   if (textHandler && textHandler(e)) { e.preventDefault(); return; }
   const k = KEYMAP[e.code];
   if (k) { e.preventDefault(); if (!e.repeat) vpress(k); }
@@ -179,7 +181,26 @@ function inputEndFrame() {
 (() => {
   const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   if (isTouch) document.body.classList.add('touch');
-  document.querySelectorAll('#touch .tb').forEach(el => {
+  // d-pad: one surface, so sliding a finger between arrows changes direction
+  const dp = document.getElementById('dpad'), arrows = {};
+  dp.querySelectorAll('.tb').forEach(el => { arrows[el.dataset.d] = el; });
+  let dpDir = null, dpId = null;
+  const dpSet = d => {
+    if (dpDir === d) return;
+    if (dpDir) { vrelease(dpDir); arrows[dpDir].classList.remove('on'); }
+    dpDir = d;
+    if (d) { vpress(d); arrows[d].classList.add('on'); }
+  };
+  const dpAt = e => {
+    const r = dp.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+    if (Math.hypot(dx, dy) < 10) return null;
+    return Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up');
+  };
+  dp.addEventListener('pointerdown', e => { e.preventDefault(); audioUnlock(); dpId = e.pointerId; try { dp.setPointerCapture(e.pointerId); } catch (_) {} dpSet(dpAt(e)); });
+  dp.addEventListener('pointermove', e => { if (e.pointerId === dpId) dpSet(dpAt(e)); });
+  const dpOff = e => { if (e.pointerId === dpId) { dpId = null; dpSet(null); } };
+  dp.addEventListener('pointerup', dpOff); dp.addEventListener('pointercancel', dpOff);
+  document.querySelectorAll('#touch > .tb').forEach(el => {
     const k = el.dataset.k;
     const on = e => { e.preventDefault(); audioUnlock(); el.classList.add('on'); vpress(k); };
     const off = e => { e.preventDefault(); el.classList.remove('on'); vrelease(k); };
@@ -189,6 +210,28 @@ function inputEndFrame() {
     el.addEventListener('pointerleave', off);
   });
 })();
+// ---- tapping the game screen ----
+// UIs register tap areas while drawing (game coordinates); the next frame's tap is matched against them.
+let hits = [], pendingTap = null, canvasHoldA = false, canvasDown = false;
+function hit(x, y, w, h, fn) { hits.push({ x, y, w, h, fn }); }
+cv.addEventListener('pointerdown', e => {
+  e.preventDefault(); audioUnlock(); canvasDown = true;
+  const r = cv.getBoundingClientRect();
+  pendingTap = { x: (e.clientX - r.left) * W / r.width, y: (e.clientY - r.top) * H / r.height };
+});
+const canvasUp = () => { canvasDown = false; if (canvasHoldA) { canvasHoldA = false; vrelease('a'); } };
+cv.addEventListener('pointerup', canvasUp); cv.addEventListener('pointercancel', canvasUp); cv.addEventListener('pointerleave', canvasUp);
+function tapA() { inp.pressed.a = true; }
+function holdA() { vpress('a'); if (canvasDown) canvasHoldA = true; else vrelease('a'); } // a tap already lifted still counts as one press
+function processTap(fallback) {
+  if (!pendingTap) return;
+  const t = pendingTap; pendingTap = null;
+  for (let i = hits.length - 1; i >= 0; i--) {
+    const h = hits[i];
+    if (t.x >= h.x && t.x < h.x + h.w && t.y >= h.y && t.y < h.y + h.h) { h.fn(t); return; }
+  }
+  if (fallback) fallback(t);
+}
 function resize() {
   const touch = document.body.classList.contains('touch');
   const availH = innerHeight - (touch ? 160 : 30);

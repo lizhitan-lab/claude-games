@@ -67,6 +67,7 @@ const LakeMapScene = {
       if (L.id === 'moonfall') pellipse(L.mx + 6, L.my - 2, 4, 3, '#e8e0ff');
       if (L.id === 'crystal') for (let j = 0; j < 3; j++) { rect(L.mx - 12 + j * 10, L.my - 4 + j * 3, 2, 2, '#ffffff'); }
       const sel = i === this.sel;
+      hit(L.mx - 40, L.my - 38, 80, 64, () => { if (this.sel === i) tapA(); else { this.sel = i; sfx('blip'); } });
       const lab = L.name; const lw = tw(lab) + 8;
       drawWin(L.mx - lw / 2 - 2, L.my - 36, lw + 4, 15, sel ? 'gold' : 'dark');
       textC(lab, L.mx, L.my - 32, sel ? '#ffe890' : '#c8d0f0');
@@ -85,7 +86,8 @@ const LakeMapScene = {
       if (known) ctx.drawImage(miniFish(id), x, 216); else text('?', x + 3, 218, '#8890b0');
       text(known ? FISH[id].name.split(' ').pop().slice(0, 7) : (FISH[id].rare ? 'RARE' : '???'), x + 16, 218, known ? '#fff' : FISH[id].rare ? '#ffb0e0' : '#8890b0');
     });
-    text('A: Fish here   B: Back to city   ESC: Menu', 30, 4, '#ffffff', '#101028');
+    text('Tap a lake twice (or A) to fish here', 8, 4, '#ffffff', '#101028');
+    btn(262, 0, 56, 16, 'City', () => { inp.pressed.b = true; });
   },
 };
 
@@ -122,12 +124,16 @@ class GearSelect {
       const yy = y + 26 + i * 16;
       text(a, x + 22, yy, i === 2 ? '#a8ffa8' : '#fff'); if (b) text(b, x + 70, yy, '#ffe890');
       if (i === this.row) drawCursor(x + 10, yy);
+      if (i < 2) {
+        hit(x, yy - 4, 130, 16, () => { this.row = i; inp.pressed.left = true; });
+        hit(x + 130, yy - 4, 130, 16, () => { this.row = i; inp.pressed.right = true; });
+      } else hit(x, yy - 4, 260, 16, () => { this.row = i; tapA(); });
     });
     rect(x + 10, y + 92, 240, 1, '#8090d0');
     text('POWER ' + (rod.power + st.power), x + 14, y + 100, '#a8ffa8'); text('BAR +' + rod.zone, x + 100, y + 100, '#a8ffa8');
     text('BITE x' + (1 / bait.bite).toFixed(1), x + 14, y + 112, '#a8ffa8'); text('RARE +' + Math.max(0, bait.rare * 100).toFixed(1) + '%', x + 100, y + 112, '#a8ffa8');
     text(wrap(this.row === 1 ? bait.desc : rod.desc, 40)[0], x + 14, y + 126, '#c8d0f0');
-    text('L/R: change', x + 170, y + 138, '#8898d0');
+    text('Tap < > or L/R to change', x + 14, y + 138, '#8898d0');
   }
 }
 
@@ -259,7 +265,10 @@ const FishingScene = {
           this.fishId = pickFish(this.L, this.bait, this.dist);
           const st = stats(), d = FISH[this.fishId].d;
           this.state = 'bite'; this.bt = 0;
-          this.win = Math.round(clamp(24 + p.level * 0.8 + st.focus * 2 - d * 0.9, 14, 60));
+          // Willow Pond and Crystal Lake: 4-5 s to react. Harder lakes: about 3-3.5 s.
+          this.win = LAKES.indexOf(this.L) <= 1
+            ? Math.round(clamp(240 + p.level * 3 + st.focus * 4, 240, 300))
+            : Math.round(clamp(24 + p.level * 0.8 + st.focus * 2 - d * 0.9, 14, 60) + 150);
           sfx('bite'); this.ripple(this.bob.x, this.bob.y, 2);
         }
         break;
@@ -296,11 +305,11 @@ const FishingScene = {
     const p = G.player, st = stats(), rod = RODS[p.rod], sp = FISH[this.fishId], d = sp.d;
     const power = rod.power + st.power;
     this.r = {
-      zh: clamp(26 + rod.zone + st.focus * 2 + p.level * 0.7, 22, 112), zy: 0, vz: 0,
-      fy: BAR_H * 0.6, fv: 0, tgt: BAR_H * 0.5, tt: 20, prog: 28,
-      spd: Math.max(0.55, 0.9 + d * 0.34 - power * 0.06 - p.level * 0.025),
-      gain: 0.4 + power * 0.025,
-      drain: Math.max(0.12, 0.24 + d * 0.04 - st.stamina * 0.025),
+      zh: clamp(44 + rod.zone + st.focus * 2 + p.level * 0.8, 40, 120), zy: 0, vz: 0,
+      fy: BAR_H * 0.6, fv: 0, tgt: BAR_H * 0.5, tt: 30, prog: 35,
+      spd: Math.max(0.35, 0.45 + d * 0.19 - power * 0.04 - p.level * 0.02),
+      gain: 0.6 + power * 0.03,
+      drain: Math.max(0.07, 0.11 + d * 0.022 - st.stamina * 0.015),
       beh: sp.beh, d,
     };
     this.r.zy = BAR_H - this.r.zh;
@@ -320,9 +329,12 @@ const FishingScene = {
     }
     const want = clamp((r.tgt - r.fy) * 0.08, -r.spd, r.spd);
     r.fv += (want - r.fv) * 0.18;
-    r.fy = clamp(r.fy + r.fv + (r.beh === 'wild' || r.beh === 'dart' ? rnd(-0.6, 0.6) * r.d * 0.08 : 0), 0, FH);
-    if (inp.held.a) r.vz -= 0.3; else r.vz += 0.26;
-    r.vz = clamp(r.vz, -4.5, 4.5); r.zy += r.vz;
+    r.fy = clamp(r.fy + r.fv + (r.beh === 'wild' || r.beh === 'dart' ? rnd(-0.4, 0.4) * r.d * 0.05 : 0), 0, FH);
+    // each tap gives the bar a hop upward; holding lifts it gently; it sinks slowly otherwise
+    if (inp.pressed.a) r.vz = Math.min(r.vz, 0) - 2.4;
+    else if (inp.held.a) r.vz -= 0.2;
+    r.vz += 0.13; r.vz *= 0.95;
+    r.vz = clamp(r.vz, -4, 2.5); r.zy += r.vz;
     if (r.zy < 0) { r.zy = 0; r.vz = 0; }
     if (r.zy > BAR_H - r.zh) { r.zy = BAR_H - r.zh; r.vz = -r.vz * 0.35; if (Math.abs(r.vz) < 0.4) r.vz = 0; }
     const fc = r.fy + 4;
@@ -409,6 +421,7 @@ const FishingScene = {
         rect(bx - 2, by - 1, 5, 2, '#e83030');
         const jy = by - 20 - Math.abs(Math.sin(T / 3)) * 3;
         drawWin(bx - 7, jy - 3, 15, 15, 'gold'); text('!', bx - 2, jy + 1, '#ff5050');
+        bar(bx - 12, jy + 14, 25, 3, 1 - this.bt / this.win, '#ffe060');
       } else if (this.state === 'reel') {
         pellipse(bx, by + 3, 6, 2, 'rgba(0,0,30,0.35)');
       } else {
@@ -440,7 +453,7 @@ const FishingScene = {
       case 'cast': m = 'Whoosh!'; break;
       case 'wait': m = this.nib > 0 ? '...a nibble? Wait for it...' : 'Waiting for a bite...   (A: reel in)'; break;
       case 'bite': m = '!!! A BITE !!!  Press A NOW!'; break;
-      case 'reel': m = 'HOLD A to lift the green bar. Keep the fish in it!'; break;
+      case 'reel': m = 'TAP A to lift the green bar. Keep the fish inside it!'; break;
       case 'msg': m = this.msg; break;
     }
     if (m && !ui.length) {
@@ -471,7 +484,7 @@ const FishingScene = {
 
 // ============ Catch card ============
 class CatchCard {
-  constructor(f, xp, ups, isNew, kept, cb) { Object.assign(this, { f, xp, ups, isNew, kept, cb, age: 0 }); }
+  constructor(f, xp, ups, isNew, kept, cb) { Object.assign(this, { f, xp, ups, isNew, kept, cb, age: 0, tapAnywhere: true }); }
   update() { this.age++; if (this.age > 25 && (inp.pressed.a || inp.pressed.b)) { sfx('ok'); popUI(this); this.cb(); } }
   draw() {
     const sp = FISH[this.f.id], x = 30, y = 26, w = 260, h = 186;
@@ -492,6 +505,6 @@ class CatchCard {
     if (this.ups) textC('LEVEL UP! You are now Lv ' + G.player.level + '!', 160, y + 154, (T >> 3) % 2 ? '#ffe890' : '#a8ffa8');
     else if (!this.kept) textC('Cooler full! You let it go...', 160, y + 154, '#ffb0b0');
     else if (sp.junk) textC(sp.desc, 160, y + 154, '#c8d0f0');
-    if (this.age > 25) textC('Press A', 160, y + 170, '#8898d0');
+    if (this.age > 25) textC('Press A or tap', 160, y + 170, '#8898d0');
   }
 }

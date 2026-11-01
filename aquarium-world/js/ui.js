@@ -55,13 +55,20 @@ class Menu {
         const c = it.disabled ? '#8890b0' : (it.color || '#fff');
         text(it.label, x + 16, ty, c);
         if (it.right != null) textR(it.right, x + w - 8, ty, it.rc || (it.disabled ? '#8890b0' : '#d8e0ff'));
+        if (isTop && this.active) { const k = i; hit(x, ty - Math.floor((this.lh - 7) / 2), w, this.lh, () => { this.sel = k; this.onMove && this.onMove(this.cur(), k); tapA(); }); }
         if (i === this.sel && this.active && isTop) drawCursor(x + 6, ty);
         else if (i === this.sel && this.active) rect(x + 7, ty + 3, 3, 2, '#c0c8e0');
       }
       ty += this.lh;
     }
-    if (this.top > 0) text('^', x + w - 12, y + 2, '#ffe890');
-    if (this.top + this.rows < this.items.length) text('|', x + w - 12, y + h - 9, '#ffe890');
+    if (this.top > 0) { text('^', x + w - 12, y + 2, '#ffe890'); if (isTop) hit(x + w - 24, y - 6, 28, 16, () => this.scroll(-1)); }
+    if (this.top + this.rows < this.items.length) { text('|', x + w - 12, y + h - 9, '#ffe890'); if (isTop) hit(x + w - 24, y + h - 12, 28, 16, () => this.scroll(1)); }
+  }
+  scroll(d) {
+    const n = this.items.length;
+    this.top = clamp(this.top + d * Math.max(1, this.rows - 1), 0, Math.max(0, n - this.rows));
+    this.sel = clamp(this.sel, this.top, Math.min(n - 1, this.top + this.rows - 1));
+    this.skip(d >= 0 ? 1 : -1); sfx('blip'); this.onMove && this.onMove(this.cur(), this.sel);
   }
 }
 // generic wrapper so a bare Menu can be pushed on the stack
@@ -76,7 +83,7 @@ class Dialog {
   constructor(msgs, cb, speaker) {
     this.pages = [];
     for (const m of msgs) { const ls = wrap(m, 47); for (let i = 0; i < ls.length; i += 3) this.pages.push(ls.slice(i, i + 3)); }
-    this.pi = 0; this.ch = 0; this.cb = cb; this.speaker = speaker;
+    this.pi = 0; this.ch = 0; this.cb = cb; this.speaker = speaker; this.tapAnywhere = true;
   }
   get total() { return this.pages[this.pi].join('').length; }
   update() {
@@ -101,6 +108,15 @@ function drawDialogBox(lines, ch, speaker, done) {
   });
   if (done && (T >> 4) % 2) { rect(x + w - 16, y + h - 12, 7, 2, '#fff'); rect(x + w - 15, y + h - 10, 5, 1, '#fff'); rect(x + w - 14, y + h - 9, 3, 1, '#fff'); }
 }
+function closeNameInput() {
+  textHandler = null; nameInput.oninput = nameInput.onkeydown = null;
+  nameInput.blur(); nameInput.style.display = 'none';
+}
+// a small labelled button that can be tapped
+function btn(x, y, w, h, label, fn, col = '#fff') {
+  drawWin(x, y, w, h, 'dark'); textC(label, x + w / 2, y + Math.round(h / 2) - 4, col);
+  hit(x, y, w, h, fn);
+}
 function say(msgs, cb, speaker) { return pushUI(new Dialog(Array.isArray(msgs) ? msgs : [msgs], cb, speaker)); }
 
 class Ask {
@@ -115,6 +131,7 @@ class Ask {
     this.menu.y = 170 - this.menu.h;
   }
   get total() { return this.lines.join('').length; }
+  get tapAnywhere() { return this.ch < this.total; }
   update() {
     if (this.ch < this.total) { this.ch += 2; if (inp.pressed.a) this.ch = this.total; return; }
     this.menu.update();
@@ -129,6 +146,14 @@ class NameEntry {
     this.title = title; this.name = def; this.max = max; this.cb = cb;
     this.grid = ['ABCDEFGHIJKLM', 'NOPQRSTUVWXYZ', 'abcdefghijklm', 'nopqrstuvwxyz', "0123456789-'!"];
     this.r = 0; this.c = 0;
+    nameInput.value = def; nameInput.maxLength = max; nameInput.style.display = 'block';
+    nameInput.oninput = () => {
+      const v = [...nameInput.value].filter(ch => charIndex[ch] !== undefined).join('').slice(0, max);
+      if (v !== nameInput.value) nameInput.value = v;
+      this.name = v;
+    };
+    nameInput.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); this.done(); } };
+    if (document.body.classList.contains('touch')) { try { nameInput.focus(); } catch (e) {} }
     textHandler = e => {
       if (e.key === 'Enter') { this.done(); return true; }
       if (e.key === 'Backspace') { this.name = this.name.slice(0, -1); sfx('cancel'); return true; }
@@ -141,9 +166,10 @@ class NameEntry {
   done() {
     const n = this.name.trim();
     if (!n.length) { sfx('err'); toast('Please enter a name!'); return; }
-    sfx('ok'); textHandler = null; popUI(this); this.cb(n);
+    sfx('ok'); closeNameInput(); popUI(this); this.cb(n);
   }
   update() {
+    if (document.activeElement !== nameInput && nameInput.value !== this.name) nameInput.value = this.name;
     const rows = this.grid.length + 1;
     if (inp.rep('down')) { this.r = (this.r + 1) % rows; sfx('blip'); }
     if (inp.rep('up')) { this.r = (this.r - 1 + rows) % rows; sfx('blip'); }
@@ -164,6 +190,10 @@ class NameEntry {
     drawWin(30, 24, 260, 196);
     textC(this.title, 160, 34, '#ffe890');
     rect(70, 50, 180, 18, '#0c1238');
+    // lay the real text box over the name field so tapping it opens the phone keyboard
+    const cr = cv.getBoundingClientRect(), sx = cr.width / W, sy = cr.height / H;
+    Object.assign(nameInput.style, { left: cr.left + 70 * sx + 'px', top: cr.top + 50 * sy + 'px', width: 180 * sx + 'px', height: 18 * sy + 'px' });
+    if (document.activeElement === nameInput) { rect(70, 50, 180, 1, '#ffe890'); rect(70, 67, 180, 1, '#ffe890'); }
     const s = this.name + ((T >> 4) % 2 && this.name.length < this.max ? '_' : ' ');
     textC(s, 160, 56);
     for (let i = 0; i < this.max; i++) rect(160 - this.max * 3 + i * 6, 65, 5, 1, '#6a78c0');
@@ -171,15 +201,17 @@ class NameEntry {
       for (let c = 0; c < row.length; c++) {
         const x = 52 + c * 17, y = 82 + r * 18;
         text(row[c], x, y, r === this.r && c === this.c ? '#ffe890' : '#fff');
+        { const rr = r, cc = c; hit(x - 6, y - 5, 17, 18, () => { this.r = rr; this.c = cc; tapA(); }); }
         if (r === this.r && c === this.c) drawCursor(x - 9, y);
       }
     });
     ['SPACE', 'DEL', 'DONE'].forEach((l, i) => {
       const x = 62 + i * 76, y = 178;
       text(l, x, y, this.r === this.grid.length && this.c === i ? '#ffe890' : '#c8d0f0');
+      hit(x - 12, y - 6, 60, 20, () => { this.r = this.grid.length; this.c = i; tapA(); });
       if (this.r === this.grid.length && this.c === i) drawCursor(x - 9, y);
     });
-    textC('Type on keyboard or pick letters. Enter = done', 160, 202, '#8898d0', null);
+    textC(document.body.classList.contains('touch') ? 'Tap the box above to use your keyboard' : 'Type on keyboard or pick letters. Enter = done', 160, 202, '#8898d0', null);
   }
 }
 
@@ -346,6 +378,8 @@ class LogUI {
   }
   draw() {
     drawWin(8, 8, 306, 20); textC('< ' + LAKES[this.li].name + ' >', 160, 14, '#ffe890');
+    hit(8, 4, 153, 26, () => { this.li = (this.li + LAKES.length - 1) % LAKES.length; sfx('blip'); this.build(); });
+    hit(161, 4, 153, 26, () => { this.li = (this.li + 1) % LAKES.length; sfx('blip'); this.build(); });
     this.menu.draw(ui[ui.length - 1] === this);
     drawWin(212, 30, 102, 100);
     const c = this.menu.cur();
@@ -369,12 +403,16 @@ class QtyUI {
     if (inp.pressed.a) { popUI(this); this.cb(this.q); }
     if (inp.pressed.b || inp.pressed.menu) { sfx('cancel'); popUI(this); }
   }
+  add(d) { this.q = clamp(this.q + d, 1, this.max); sfx('blip'); }
   draw() {
-    drawWin(70, 70, 180, 76);
-    textC('Buy how many ' + this.name + '?', 160, 80, '#ffe890');
-    textC('<  ' + this.q + '  >', 160, 98);
-    textC('Total: $' + fmt(this.q * this.price) + ' AC', 160, 114, '#ffe890');
-    textC('L/R: 1  U/D: 10', 160, 130, '#8898d0');
+    drawWin(56, 60, 208, 104);
+    textC('Buy how many ' + this.name + '?', 160, 70, '#ffe890');
+    btn(64, 86, 34, 18, '-10', () => this.add(-10)); btn(100, 86, 26, 18, '-1', () => this.add(-1));
+    btn(194, 86, 26, 18, '+1', () => this.add(1)); btn(222, 86, 34, 18, '+10', () => this.add(10));
+    textC(String(this.q), 160, 92);
+    textC('Total: $' + fmt(this.q * this.price) + ' AC', 160, 112, '#ffe890');
+    btn(84, 128, 70, 20, 'Buy', () => tapA(), '#a8ffa8'); btn(166, 128, 70, 20, 'Cancel', () => { sfx('cancel'); popUI(this); });
+    textC('L/R: 1   U/D: 10', 160, 152, '#8898d0', null);
   }
 }
 
@@ -655,9 +693,11 @@ class WheelUI {
       rect(214, 30 + i * 14, 6, 6, s.col);
       text(s.desc, 224, 29 + i * 14, this.win === i && (T >> 3) % 2 ? '#ffe890' : '#fff');
     });
-    text('Cost $' + SPIN_COST, 216, 148, '#ffb0b0');
-    text('You  $' + fmt(G.player.ac), 216, 162, '#ffe890');
-    text('B: leave', 216, 178, '#8898d0');
+    text('Cost $' + SPIN_COST, 216, 132, '#ffb0b0');
+    text('You  $' + fmt(G.player.ac), 216, 145, '#ffe890');
+    hit(6, 20, 196, 174, () => tapA());
+    btn(212, 160, 46, 20, 'Spin', () => tapA(), '#a8ffa8');
+    btn(262, 160, 46, 20, 'Leave', () => { inp.pressed.b = true; });
     drawDialogBox(wrap(this.msg, 47).slice(0, 3), 999, null, this.state !== 'spin');
   }
 }
