@@ -64,10 +64,11 @@ There are **3 save slots**. From the title screen, *Continue* loads your most re
 When the game runs as a claude.ai artifact, each slot is stored in your claude.ai account (the artifact's private per-player database), so saves survive page updates, cleared browser data and switching devices. A copy is also kept in the browser's localStorage, which is all the plain `index.html` file uses. Saves from older versions of the game move into Slot 1 automatically.
 
 ## Code layout
-- `js/engine.js`: canvas, bitmap font, input, audio/chiptune and window drawing
+- `js/engine.js`: canvas, bitmap font, input and window drawing
+- `js/audio.js`: 16-bit style synth (instruments, reverb and echo, drums), the arranged songs and sound effects
 - `js/data.js`: rods, bait, gear, tanks, decorations, fish, lakes, save state
-- `js/art.js`: procedural pixel sprites (characters, tiles, buildings, fish, tanks)
+- `js/art.js`: procedural pixel art with 16-bit shading and coloured outlines (characters, tiles, buildings, fish, tanks)
 - `js/ui.js`: menus, dialogs, shops and the prize wheel
 - `js/field.js`: the overhead city and home world, NPCs
-- `js/fishing.js`: the lake map, gear select and the fishing minigame
+- `js/fishing.js`: the lake map, gear select and the fishing minigame (layered lakes with perspective-scrolling water)
 - `js/main.js`: title, character select, world creation and the main loop

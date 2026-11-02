@@ -183,6 +183,34 @@ function text(str, x, y, color = '#fff', shadow = '#101028', g = ctx) {
 const tw = s => String(s).length * 6 - 1;
 function textR(str, xr, y, c, s, g) { text(str, xr - tw(str), y, c, s, g); }
 function textC(str, cx, y, c, s, g) { text(str, Math.round(cx - tw(str) / 2), y, c, s, g); }
+// big title text with a vertical colour gradient, a thick outline and a moving shine
+const logoCache = {};
+function textLogo(str, x, y, scale, top, bottom, outline, shine = -1) {
+  const k = str + top + bottom + outline;
+  let base = logoCache[k];
+  const w = str.length * 6 + 2, h = 9;
+  if (!base) {
+    base = mkCanvas(w, h); const g = base.getContext('2d');
+    for (const [ox, oy] of [[0, 0], [2, 0], [0, 2], [2, 2], [1, 0], [0, 1], [2, 1], [1, 2]]) drawRaw(str, ox, oy, outline, g);
+    const f = mkCanvas(w, h), fg = f.getContext('2d');
+    drawRaw(str, 1, 1, '#ffffff', fg);
+    const grad = mkCanvas(w, h), gg = grad.getContext('2d'); // paint the gradient once, then mask it to the letters
+    for (let yy = 0; yy < h; yy++) { gg.fillStyle = yy <= 1 ? shade(top, 0.5) : mix(top, bottom, (yy - 1) / 6); gg.fillRect(0, yy, w, 1); }
+    fg.globalCompositeOperation = 'source-in'; fg.drawImage(grad, 0, 0);
+    g.drawImage(f, 0, 0);
+    logoCache[k] = base;
+  }
+  const t = mkCanvas(w, h), tg = t.getContext('2d');
+  tg.drawImage(base, 0, 0);
+  if (shine >= 0) { // diagonal glint sweeping across the letters
+    const m = mkCanvas(w, h), mg = m.getContext('2d');
+    const band = mkCanvas(w, h), bg2 = band.getContext('2d'); bg2.fillStyle = 'rgba(255,255,255,0.85)';
+    for (let yy = 0; yy < h; yy++) bg2.fillRect(Math.round(shine - yy), yy, 3, 1);
+    drawRaw(str, 1, 1, '#ffffff', mg); mg.globalCompositeOperation = 'source-in'; mg.drawImage(band, 0, 0);
+    tg.drawImage(m, 0, 0);
+  }
+  ctx.drawImage(t, Math.round(x), Math.round(y), w * scale, h * scale);
+}
 function textBig(str, x, y, scale, color, outline = '#101028', g = ctx) {
   str = String(str);
   const t = mkCanvas(str.length * 6 + 2, 9), tg = t.getContext('2d');
@@ -306,83 +334,6 @@ function resize() {
 }
 addEventListener('resize', resize); resize();
 
-// ============ Audio ============
-let AC = null, soundOn = true, musicOn = true, noiseBuf = null;
-function audioUnlock() {
-  if (!AC) {
-    try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; }
-  }
-  if (AC && AC.state === 'suspended') AC.resume();
-}
-function toneAt(freq, dur, type, vol, t, slide = 0) {
-  if (!AC) return;
-  const o = AC.createOscillator(), g = AC.createGain();
-  o.type = type; o.frequency.setValueAtTime(freq, t);
-  if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(20, freq + slide), t + dur);
-  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.02);
-}
-function tone(freq, dur, type = 'square', vol = 0.06, when = 0, slide = 0) {
-  if (!AC) return; toneAt(freq, dur, type, vol, AC.currentTime + when, slide);
-}
-function noise(dur, vol = 0.12, when = 0) {
-  if (!AC) return;
-  if (!noiseBuf) {
-    noiseBuf = AC.createBuffer(1, AC.sampleRate * 0.5, AC.sampleRate);
-    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-  }
-  const s = AC.createBufferSource(), g = AC.createGain(), f = AC.createBiquadFilter();
-  f.type = 'lowpass'; f.frequency.value = 1200;
-  s.buffer = noiseBuf; const t = AC.currentTime + when;
-  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  s.connect(f); f.connect(g); g.connect(AC.destination); s.start(t); s.stop(t + dur);
-}
-const SFX = {
-  blip: () => tone(880, 0.035, 'square', 0.035),
-  ok: () => { tone(660, 0.05, 'square', 0.05); tone(990, 0.06, 'square', 0.05, 0.05); },
-  cancel: () => tone(520, 0.08, 'square', 0.045, 0, -260),
-  err: () => tone(140, 0.16, 'sawtooth', 0.06),
-  coin: () => { tone(988, 0.06, 'square', 0.05); tone(1319, 0.22, 'square', 0.05, 0.06); },
-  cast: () => tone(260, 0.3, 'triangle', 0.1, 0, 700),
-  splash: () => noise(0.35, 0.18),
-  nibble: () => tone(700, 0.04, 'square', 0.04),
-  bite: () => { tone(1200, 0.06, 'square', 0.07); tone(1500, 0.08, 'square', 0.07, 0.08); },
-  catch: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.16, 'square', 0.06, i * 0.09)),
-  rare: () => [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(f, 0.2, 'square', 0.06, i * 0.08)),
-  fail: () => [392, 330, 262].forEach((f, i) => tone(f, 0.2, 'triangle', 0.1, i * 0.13)),
-  level: () => [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, 0.13, 'square', 0.06, i * 0.08)),
-  tick: () => tone(1600, 0.02, 'square', 0.03),
-  reel: () => tone(180 + Math.random() * 60, 0.025, 'square', 0.02),
-  warp: () => { tone(200, 0.7, 'sine', 0.1, 0, 900); tone(300, 0.7, 'sine', 0.06, 0.1, 900); },
-  door: () => { tone(330, 0.06, 'square', 0.05); tone(247, 0.1, 'square', 0.05, 0.07); },
-  bump: () => tone(90, 0.05, 'square', 0.04),
-};
-function sfx(n) { if (soundOn && AC && SFX[n]) { try { SFX[n](); } catch (e) {} } }
-
-// tiny chiptune sequencer (MIDI notes, 0 = rest)
-const SONGS = {
-  title: { tempo: 0.17, mel: [60, 64, 67, 72, 71, 67, 64, 67, 65, 69, 72, 77, 76, 72, 69, 72, 67, 71, 74, 79, 77, 74, 71, 74, 72, 0, 67, 0, 72, 0, 0, 0], bass: [48, 53, 55, 48] },
-  town: { tempo: 0.15, mel: [72, 0, 76, 79, 77, 76, 74, 0, 72, 74, 76, 72, 74, 0, 67, 0, 72, 0, 76, 79, 81, 79, 77, 76, 74, 76, 77, 74, 72, 0, 0, 0], bass: [48, 48, 53, 55, 48, 57, 55, 48] },
-  home: { tempo: 0.22, mel: [64, 0, 67, 0, 72, 0, 71, 69, 67, 0, 64, 0, 65, 0, 67, 0, 64, 0, 67, 0, 72, 0, 74, 76, 74, 0, 72, 0, 71, 0, 0, 0], bass: [48, 45, 41, 43, 48, 45, 43, 48] },
-  map: { tempo: 0.18, mel: [67, 0, 72, 0, 74, 76, 74, 72, 69, 0, 72, 0, 67, 0, 0, 0, 65, 0, 69, 0, 72, 74, 72, 69, 67, 0, 69, 71, 72, 0, 0, 0], bass: [48, 45, 41, 43] },
-  fish: { tempo: 0.2, mel: [69, 0, 72, 0, 76, 0, 74, 72, 69, 0, 0, 67, 69, 0, 0, 0, 72, 0, 76, 0, 79, 0, 76, 74, 72, 0, 74, 0, 69, 0, 0, 0], bass: [45, 45, 50, 52, 45, 48, 50, 45] },
-  shop: { tempo: 0.16, mel: [76, 74, 72, 74, 76, 76, 76, 0, 74, 74, 74, 0, 76, 79, 79, 0, 76, 74, 72, 74, 76, 76, 76, 76, 74, 74, 76, 74, 72, 0, 0, 0], bass: [48, 43, 48, 43, 48, 43, 43, 48] },
-};
-let curSong = null, songStep = 0, nextNoteT = 0;
-const midi = n => 440 * Math.pow(2, (n - 69) / 12);
-function playSong(name) { if (curSong === name) return; curSong = name; songStep = 0; nextNoteT = 0; }
-function musicTick() {
-  if (!AC || !musicOn || !curSong) return;
-  const s = SONGS[curSong];
-  if (nextNoteT < AC.currentTime) nextNoteT = AC.currentTime + 0.02;
-  while (nextNoteT < AC.currentTime + 0.12) {
-    const i = songStep % s.mel.length, n = s.mel[i];
-    if (n) toneAt(midi(n), s.tempo * 0.9, 'square', 0.018, nextNoteT);
-    if (i % 4 === 0) toneAt(midi(s.bass[(i / 4) % s.bass.length]), s.tempo * 3.5, 'triangle', 0.05, nextNoteT);
-    nextNoteT += s.tempo; songStep++;
-  }
-}
-
 // ============ Windows ============
 function drawWin(x, y, w, h, style = 'blue') {
   x = Math.round(x); y = Math.round(y);
@@ -415,6 +366,286 @@ function drawCursor(x, y) { // pointing hand-ish arrow
 function bar(x, y, w, h, frac, c, bg = '#101028') {
   rect(x, y, w, h, bg); rect(x, y, Math.round(w * clamp(frac, 0, 1)), h, c);
 }
+
+</script>
+<script>
+// ---- js/audio.js ----
+'use strict';
+// ============ 16-bit style audio ============
+// A small sample-style synth in the spirit of SNES sound: soft instruments with envelopes,
+// a stereo reverb plus a feedback "echo" (the SPC700's signature), drums, and songs written
+// as chords + melody, with bass, arpeggios and pads generated from the chords.
+let AC = null, soundOn = true, musicOn = true;
+const AU = {};
+function audioUnlock() {
+  if (!AC) {
+    try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; return; }
+    buildGraph();
+  }
+  if (AC.state === 'suspended') AC.resume();
+}
+function buildGraph() {
+  const comp = AC.createDynamicsCompressor();
+  comp.threshold.value = -16; comp.knee.value = 12; comp.ratio.value = 3; comp.attack.value = 0.004; comp.release.value = 0.2;
+  const master = AC.createGain(); master.gain.value = 0.9;
+  comp.connect(master); master.connect(AC.destination);
+  // reverb: synthetic stereo impulse (decaying noise)
+  const len = Math.floor(AC.sampleRate * 2.2), ir = AC.createBuffer(2, len, AC.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2); }
+  const conv = AC.createConvolver(); conv.buffer = ir;
+  const revOut = AC.createGain(); revOut.gain.value = 0.32; conv.connect(revOut); revOut.connect(comp);
+  // echo: delay with filtered feedback
+  const delay = AC.createDelay(1); delay.delayTime.value = 0.24;
+  const fb = AC.createGain(); fb.gain.value = 0.32;
+  const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2200;
+  delay.connect(lp); lp.connect(fb); fb.connect(delay);
+  const echoOut = AC.createGain(); echoOut.gain.value = 0.5; lp.connect(echoOut); echoOut.connect(comp);
+  const bus = (vol, rev, echo) => {
+    const g = AC.createGain(); g.gain.value = vol; g.connect(comp);
+    const r = AC.createGain(); r.gain.value = rev; g.connect(r); r.connect(conv);
+    const e = AC.createGain(); e.gain.value = echo; g.connect(e); e.connect(delay);
+    return g;
+  };
+  AU.music = bus(0.42, 0.55, 0.22);
+  AU.sfx = bus(0.75, 0.3, 0.08);
+  const nl = AC.sampleRate; AU.noise = AC.createBuffer(1, nl, AC.sampleRate);
+  const nd = AU.noise.getChannelData(0); for (let i = 0; i < nl; i++) nd[i] = Math.random() * 2 - 1;
+}
+const midi = n => 440 * Math.pow(2, (n - 69) / 12);
+
+// ---- building blocks ----
+function osc(type, f, t, end, out, gain = 1, detune = 0) {
+  const o = AC.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); if (detune) o.detune.value = detune;
+  let node = o;
+  if (gain !== 1) { const g = AC.createGain(); g.gain.value = gain; o.connect(g); node = g; }
+  node.connect(out); o.start(t); o.stop(end + 0.05);
+  return o;
+}
+function envGain(out, t, a, peak, hold, rel, sustain = 1) {
+  const g = AC.createGain(); g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(peak, t + a);
+  g.gain.setTargetAtTime(peak * sustain, t + a, Math.max(0.01, hold / 3));
+  g.gain.setTargetAtTime(0.0001, t + a + hold, rel / 4);
+  g.connect(out); return g;
+}
+function filt(type, f, out, q = 0.7) { const b = AC.createBiquadFilter(); b.type = type; b.frequency.value = f; b.Q.value = q; b.connect(out); return b; }
+function noiseSrc(t, dur, out) { const s = AC.createBufferSource(); s.buffer = AU.noise; s.loop = true; s.connect(out); s.start(t, Math.random() * 0.5); s.stop(t + dur + 0.05); return s; }
+function vibrato(o, t, f, depth, rate = 5.5, delay = 0.18) {
+  const l = AC.createOscillator(), g = AC.createGain(); l.frequency.value = rate;
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(f * depth, t + delay + 0.2);
+  l.connect(g); g.connect(o.frequency); l.start(t); l.stop(t + 4);
+}
+
+// ---- instruments: (time, midi note, duration s, velocity 0..1, output) ----
+const INST = {
+  flute(t, n, d, v, out) {
+    const f = midi(n), e = envGain(filt('lowpass', 3200, out), t, 0.05, v * 0.32, d, 0.18, 0.85);
+    const o = osc('triangle', f, t, t + d + 0.3, e); osc('sine', f * 2, t, t + d + 0.3, e, 0.12);
+    vibrato(o, t, f, 0.007);
+    const br = AC.createGain(); br.gain.setValueAtTime(v * 0.02, t); br.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+    br.connect(out); noiseSrc(t, 0.1, filt('bandpass', f * 2, br, 2));
+  },
+  brass(t, n, d, v, out) {
+    const f = midi(n), lp = filt('lowpass', 500, out, 1.5);
+    lp.frequency.setValueAtTime(400, t); lp.frequency.linearRampToValueAtTime(2600, t + 0.06); lp.frequency.setTargetAtTime(1500, t + 0.08, 0.15);
+    const e = envGain(lp, t, 0.04, v * 0.2, d, 0.15, 0.8);
+    const o = osc('sawtooth', f, t, t + d + 0.3, e); osc('sawtooth', f, t, t + d + 0.3, e, 0.6, 9);
+    vibrato(o, t, f, 0.005, 5, 0.25);
+  },
+  strings(t, n, d, v, out) {
+    const f = midi(n), e = envGain(filt('lowpass', 1500, out, 0.5), t, 0.22, v * 0.1, d, 0.5, 0.9);
+    osc('sawtooth', f, t, t + d + 0.6, e, 1, -8); osc('sawtooth', f, t, t + d + 0.6, e, 1, 8); osc('triangle', f / 2, t, t + d + 0.6, e, 0.6);
+  },
+  harp(t, n, d, v, out) {
+    const f = midi(n), dec = Math.max(1.2, d), g = AC.createGain();
+    g.gain.setValueAtTime(v * 0.34, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dec); g.connect(out);
+    osc('sine', f, t, t + dec, g); osc('triangle', f * 2, t, t + dec, g, 0.18); osc('sine', f * 3, t, t + 0.25, g, 0.08);
+  },
+  marimba(t, n, d, v, out) {
+    const f = midi(n), g = AC.createGain();
+    g.gain.setValueAtTime(v * 0.42, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); g.connect(out);
+    osc('sine', f, t, t + 0.5, g);
+    const h = AC.createGain(); h.gain.setValueAtTime(v * 0.18, t); h.gain.exponentialRampToValueAtTime(0.0001, t + 0.06); h.connect(out);
+    osc('sine', f * 4, t, t + 0.08, h);
+  },
+  pluck(t, n, d, v, out) {
+    const f = midi(n), lp = filt('lowpass', 3000, out, 1);
+    lp.frequency.setValueAtTime(3500, t); lp.frequency.exponentialRampToValueAtTime(700, t + 0.25);
+    const g = AC.createGain(); g.gain.setValueAtTime(v * 0.22, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7); g.connect(lp);
+    osc('triangle', f, t, t + 0.7, g); osc('square', f, t, t + 0.7, g, 0.25);
+  },
+  piano(t, n, d, v, out) {
+    const f = midi(n), g = AC.createGain(), dec = Math.max(0.8, d * 1.5);
+    g.gain.setValueAtTime(v * 0.3, t); g.gain.exponentialRampToValueAtTime(v * 0.12, t + 0.15); g.gain.exponentialRampToValueAtTime(0.0001, t + dec);
+    g.connect(filt('lowpass', 2800, out));
+    osc('triangle', f, t, t + dec, g); osc('sine', f * 2, t, t + dec, g, 0.3); osc('square', f, t, t + 0.2, g, 0.06, 4);
+  },
+  bell(t, n, d, v, out) {
+    const f = midi(n), g = AC.createGain();
+    g.gain.setValueAtTime(v * 0.25, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.4); g.connect(out);
+    osc('sine', f, t, t + 1.4, g); osc('sine', f * 2.76, t, t + 0.6, g, 0.35); osc('sine', f * 5.4, t, t + 0.25, g, 0.15);
+  },
+  bass(t, n, d, v, out) {
+    const f = midi(n), lp = filt('lowpass', 900, out, 2);
+    lp.frequency.setValueAtTime(1100, t); lp.frequency.exponentialRampToValueAtTime(380, t + 0.25);
+    const e = envGain(lp, t, 0.008, v * 0.5, Math.min(d, 0.5), 0.08, 0.55);
+    osc('triangle', f, t, t + d + 0.2, e); osc('sawtooth', f, t, t + d + 0.2, e, 0.35);
+  },
+  kick(t, v, out) {
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.14);
+    g.gain.setValueAtTime(v * 0.9, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.3);
+  },
+  snare(t, v, out) {
+    const g = AC.createGain(); g.gain.setValueAtTime(v * 0.5, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18); g.connect(out);
+    noiseSrc(t, 0.2, filt('bandpass', 2200, g, 0.8));
+    const tg = AC.createGain(); tg.gain.setValueAtTime(v * 0.3, t); tg.gain.exponentialRampToValueAtTime(0.0001, t + 0.08); tg.connect(out);
+    osc('triangle', 190, t, t + 0.1, tg);
+  },
+  hat(t, v, out, open) {
+    const g = AC.createGain(), len = open ? 0.25 : 0.045;
+    g.gain.setValueAtTime(v * 0.22, t); g.gain.exponentialRampToValueAtTime(0.0001, t + len); g.connect(out);
+    noiseSrc(t, len + 0.02, filt('highpass', 7500, g));
+  },
+};
+
+// ---- songs ----
+const NOTE = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+function parseNote(s) { // "C#5" -> midi
+  const m = /^([A-G])([#b]?)(\d)$/.exec(s); if (!m) return null;
+  return 12 * (+m[3] + 1) + NOTE[m[1]] + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0);
+}
+function chordTones(sym) { // "F#m7" -> [root, third, fifth(, seventh)] as pitch classes
+  const m = /^([A-G])([#b]?)(.*)$/.exec(sym); let r = NOTE[m[1]] + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0);
+  const q = m[3];
+  const iv = q === 'm' ? [0, 3, 7] : q === 'm7' ? [0, 3, 7, 10] : q === '7' ? [0, 4, 7, 10] : q === 'maj7' ? [0, 4, 7, 11]
+    : q === 'sus4' ? [0, 5, 7] : q === 'dim' ? [0, 3, 6] : [0, 4, 7];
+  return iv.map(i => r + i);
+}
+const SONG_DEFS = {
+  title: { bpm: 92, lead: 'flute', lead2: 'harp', pad: 'strings', arp: 'harp', arpStyle: 'up8', bass: 'bass', bassStyle: 'long', drums: ['k.......s.......', '....h.......h...'],
+    chords: ['C', 'Am', 'F', 'G', 'C', 'Em', 'F G', 'C'],
+    mel: 'E5:4 G5:4 C6:6 B5:2 | A5:8 E5:4 C5:4 | F5:4 A5:4 C6:4 A5:4 | G5:6 F5:2 E5:4 D5:4 | E5:4 G5:4 C6:6 D6:2 | E6:6 D6:2 B5:8 | C6:4 A5:4 B5:4 D6:4 | C6:12 -:4' },
+  town: { bpm: 118, swing: 0.12, lead: 'marimba', lead2: 'flute', arp: 'pluck', arpStyle: 'off', bass: 'bass', bassStyle: 'pump', drums: ['k...s..kk...s...', 'h.h.h.h.h.h.h.hh'],
+    chords: ['F', 'Dm', 'Bb', 'C', 'F', 'Dm', 'Gm C', 'F'],
+    mel: 'C5:2 F5:2 A5:2 F5:2 C6:4 A5:4 | D5:2 F5:2 A5:2 D6:2 C6:4 A5:4 | Bb5:4 A5:2 G5:2 F5:4 D5:4 | E5:2 G5:2 C6:4 Bb5:4 G5:4 | A5:2 C6:2 A5:2 F5:2 C6:4 F6:4 | E6:2 D6:2 C6:2 A5:2 D6:8 | Bb5:4 G5:4 E5:4 G5:4 | F5:12 -:4' },
+  home: { bpm: 78, lead: 'harp', pad: 'strings', arp: 'harp', arpStyle: 'broken', bass: 'bass', bassStyle: 'long', drums: null,
+    chords: ['G', 'Em', 'C', 'D', 'G', 'Bm', 'C D', 'G'],
+    mel: 'B4:4 D5:4 G5:8 | E5:4 G5:4 B5:8 | C6:6 B5:2 A5:4 G5:4 | F#5:8 A5:4 D5:4 | G5:4 B5:4 D6:8 | F#5:4 D5:4 B4:8 | E5:4 G5:4 F#5:4 A5:4 | G5:16' },
+  map: { bpm: 132, lead: 'brass', lead2: 'flute', pad: 'strings', arp: 'pluck', arpStyle: 'up8', bass: 'bass', bassStyle: 'drive', drums: ['k..ks...k..ks.ss', 'h.h.h.h.h.h.h.h.'],
+    chords: ['D', 'Bm', 'G', 'A', 'D', 'F#m', 'G A', 'D'],
+    mel: 'D5:3 A4:1 D5:2 F#5:2 A5:6 F#5:2 | B5:4 A5:2 F#5:2 D5:8 | G5:3 B5:1 D6:4 B5:4 G5:4 | A5:6 G5:2 F#5:4 E5:4 | D5:3 A4:1 D5:2 F#5:2 A5:6 D6:2 | C#6:4 A5:4 F#5:8 | G5:4 B5:4 A5:4 C#6:4 | D6:12 -:4' },
+  fish: { bpm: 90, lead: 'flute', arp: 'pluck', arpStyle: 'broken', bass: 'bass', bassStyle: 'long', pad: 'strings', drums: ['k.......k.......', '....h.......h..h'],
+    chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'G', 'E'],
+    mel: 'E5:6 A5:2 C6:8 | A5:4 G5:4 F5:8 | E5:6 G5:2 C6:4 B5:4 | D5:12 -:4 | E5:6 A5:2 C6:4 E6:4 | D6:4 C6:4 A5:8 | B5:4 G5:4 D5:4 G5:4 | G#5:12 -:4' },
+  shop: { bpm: 112, swing: 0.16, lead: 'piano', lead2: 'marimba', arp: 'piano', arpStyle: 'off', bass: 'bass', bassStyle: 'walk', drums: ['k...s...k.k.s...', 'h.hhh.hhh.hhh.hh'],
+    chords: ['C', 'A7', 'Dm', 'G7', 'C', 'A7', 'Dm G7', 'C'],
+    mel: 'G5:3 E5:1 G5:2 C6:2 E6:4 C6:4 | C#6:2 E6:2 A5:4 G5:4 E5:4 | F5:2 A5:2 D6:4 C6:2 A5:2 F5:4 | G5:2 B5:2 D6:2 F6:2 E6:4 D6:4 | E6:3 C6:1 G5:2 E5:2 G5:4 C6:4 | A5:2 C#6:2 E6:4 G6:4 E6:4 | F6:4 D6:4 B5:4 G5:4 | C6:12 -:4' },
+};
+// compile a song into per-step events: {step, kind, inst, note, len, vel}
+function compileSong(def) {
+  const ev = [], bars = def.chords.length, steps = bars * 16;
+  const add = (step, inst, note, len, vel) => ev.push({ step, inst, note, len, vel });
+  // melody (lead2 doubles an octave down, quieter, from the second half)
+  let pos = 0;
+  def.mel.split('|').forEach((bar, bi) => {
+    let p = 0;
+    bar.trim().split(/\s+/).forEach(tok => {
+      const [n, l] = tok.split(':'), len = +l;
+      if (n !== '-') {
+        const m = parseNote(n);
+        add(bi * 16 + p, def.lead, m, len, 0.9);
+        if (def.lead2 && bi >= bars / 2) add(bi * 16 + p, def.lead2, m - 12, len, 0.45);
+      }
+      p += len;
+    });
+    if (p !== 16) console.warn('song bar length', bi, p);
+  });
+  // harmony from chords (a bar may hold two chords: "Gm C")
+  def.chords.forEach((cs, bi) => {
+    const parts = cs.split(' '), each = 16 / parts.length;
+    parts.forEach((sym, ci) => {
+      const tones = chordTones(sym), root = tones[0], s0 = bi * 16 + ci * each;
+      const bassRoot = 36 + ((root % 12) + 12) % 12, fifth = bassRoot + 7;
+      if (def.bass) {
+        const B = def.bassStyle;
+        if (B === 'long') { add(s0, def.bass, bassRoot, each, 0.8); }
+        else if (B === 'pump') { for (const [o, n] of [[0, bassRoot], [6, bassRoot], [8, fifth], [12, bassRoot + 12]]) if (o < each) add(s0 + o, def.bass, n, 2, 0.8); }
+        else if (B === 'drive') { for (let o = 0; o < each; o += 2) add(s0 + o, def.bass, o % 8 === 6 ? fifth : bassRoot, 2, o % 4 ? 0.6 : 0.85); }
+        else if (B === 'walk') { const w = [bassRoot, bassRoot + (tones[1] - root), fifth, bassRoot + 9]; for (let o = 0, k = 0; o < each; o += 4, k++) add(s0 + o, def.bass, w[k % 4], 4, 0.8); }
+      }
+      if (def.pad) for (const t of tones.slice(0, 3)) add(s0, def.pad, 60 + ((t % 12) + 12) % 12 - (t % 12 > 7 ? 12 : 0), each, 0.6);
+      if (def.arp) {
+        const ch = tones.slice(0, 3).map(t => 60 + ((t % 12) + 12) % 12);
+        if (def.arpStyle === 'up8') { const seq = ch.concat(ch.map(x => x + 12)); for (let o = 0, k = 0; o < each; o += 2, k++) add(s0 + o, def.arp, seq[k % seq.length], 2, 0.5); }
+        else if (def.arpStyle === 'broken') { const seq = [ch[0], ch[2], ch[1] + 12, ch[2]]; for (let o = 0, k = 0; o < each; o += 2, k++) add(s0 + o, def.arp, seq[k % 4] - 12, 3, 0.5); }
+        else if (def.arpStyle === 'off') { for (let o = 2; o < each; o += 4) for (const n of ch) add(s0 + o, def.arp, n, 1, 0.38); }
+      }
+    });
+  });
+  if (def.drums) for (let s = 0; s < steps; s++) for (const line of def.drums) {
+    const c = line[s % 16]; if (c !== '.') ev.push({ step: s, drum: c, vel: s % 4 === 0 ? 0.9 : 0.6 });
+  }
+  ev.sort((a, b) => a.step - b.step);
+  return { ev, steps, stepDur: 60 / def.bpm / 4, swing: def.swing || 0 };
+}
+const SONGS = {};
+for (const k in SONG_DEFS) SONGS[k] = compileSong(SONG_DEFS[k]);
+
+let curSong = null, songStep = 0, songIdx = 0, nextStepT = 0;
+function playSong(name) { if (curSong === name) return; curSong = name; songStep = 0; songIdx = 0; nextStepT = 0; }
+function musicTick() {
+  if (!AC || !AU.music || !musicOn || !curSong) return;
+  const S = SONGS[curSong];
+  if (nextStepT < AC.currentTime) nextStepT = AC.currentTime + 0.05;
+  while (nextStepT < AC.currentTime + 0.15) {
+    const st = songStep % S.steps;
+    if (st === 0) songIdx = 0;
+    const t = nextStepT + (st % 4 === 2 ? S.swing * S.stepDur * 2 : 0);
+    while (songIdx < S.ev.length && S.ev[songIdx].step === st) {
+      const e = S.ev[songIdx++];
+      try {
+        if (e.drum) {
+          if (e.drum === 'k') INST.kick(t, e.vel * 0.8, AU.music);
+          else if (e.drum === 's') INST.snare(t, e.vel * 0.7, AU.music);
+          else if (e.drum === 'h' || e.drum === 'o') INST.hat(t, e.vel * 0.6, AU.music, e.drum === 'o');
+        } else INST[e.inst](t, e.note, e.len * S.stepDur * 0.95, e.vel, AU.music);
+      } catch (err) {}
+    }
+    nextStepT += S.stepDur; songStep++;
+  }
+}
+
+// ---- sound effects ----
+function sNote(inst, n, when, d, v) { INST[inst](AC.currentTime + when, n, d, v, AU.sfx); }
+function sNoise(when, dur, type, f, v, f2) {
+  const t = AC.currentTime + when, g = AC.createGain();
+  g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); g.connect(AU.sfx);
+  const fl = filt(type, f, g, 1); if (f2) fl.frequency.exponentialRampToValueAtTime(f2, t + dur);
+  noiseSrc(t, dur, fl);
+}
+const SFX = {
+  blip: () => sNote('marimba', 88, 0, 0.05, 0.35),
+  ok: () => { sNote('marimba', 84, 0, 0.05, 0.4); sNote('marimba', 91, 0.05, 0.05, 0.4); },
+  cancel: () => { sNote('marimba', 79, 0, 0.05, 0.4); sNote('marimba', 72, 0.05, 0.05, 0.35); },
+  err: () => { sNote('brass', 43, 0, 0.12, 0.6); sNote('brass', 42, 0.13, 0.12, 0.6); },
+  coin: () => { sNote('bell', 88, 0, 0.1, 0.5); sNote('bell', 95, 0.07, 0.3, 0.5); },
+  cast: () => sNoise(0, 0.35, 'bandpass', 600, 0.5, 3000),
+  splash: () => { sNoise(0, 0.5, 'lowpass', 2500, 0.7, 300); sNote('bass', 40, 0, 0.1, 0.5); sNoise(0.08, 0.3, 'highpass', 4000, 0.15); },
+  nibble: () => sNote('marimba', 81, 0, 0.04, 0.25),
+  bite: () => { sNote('bell', 91, 0, 0.1, 0.6); sNote('bell', 96, 0.09, 0.2, 0.6); },
+  catch: () => [72, 76, 79, 84].forEach((n, i) => { sNote('brass', n, i * 0.09, i === 3 ? 0.5 : 0.08, 0.6); }),
+  rare: () => { [72, 76, 79, 84, 88, 91].forEach((n, i) => sNote('brass', n, i * 0.08, i === 5 ? 0.7 : 0.07, 0.6)); [96, 100, 103].forEach((n, i) => sNote('bell', n, 0.5 + i * 0.08, 0.3, 0.35)); },
+  fail: () => [67, 64, 60].forEach((n, i) => sNote('flute', n, i * 0.14, 0.13, 0.7)),
+  level: () => { [72, 76, 79, 84, 79, 84, 88].forEach((n, i) => sNote('brass', n, i * 0.08, i === 6 ? 0.6 : 0.07, 0.6)); [60, 64, 67].forEach(n => sNote('strings', n, 0.5, 0.6, 0.8)); },
+  tick: () => INST.hat(AC.currentTime, 0.7, AU.sfx),
+  reel: () => sNoise(0, 0.025, 'bandpass', 1800 + Math.random() * 400, 0.25),
+  warp: () => { [60, 64, 67, 72, 76, 79, 84, 88].forEach((n, i) => sNote('harp', n, i * 0.05, 0.3, 0.4)); sNoise(0, 0.8, 'bandpass', 400, 0.2, 4000); },
+  door: () => { sNote('bass', 45, 0, 0.08, 0.6); sNote('pluck', 64, 0.06, 0.1, 0.4); },
+  bump: () => sNote('bass', 38, 0, 0.05, 0.4),
+};
+function sfx(n) { if (soundOn && AC && AU.sfx && SFX[n]) { try { SFX[n](); } catch (e) {} } }
 
 </script>
 <script>
@@ -670,16 +901,31 @@ function sellPrice(f) { return f.id === fishOfTheDay() ? Math.round(f.value * 1.
 // ---- js/art.js ----
 'use strict';
 // ============ Sprite helpers ============
-function makeSprite(rows, pal, outline = '#141420') {
+// shade=true gives the 16-bit look: each colour region gets a lit top edge and a shaded
+// bottom/right edge, and the outline takes a dark tint of the colour it borders.
+const NO_SHADE = 'EWQY';
+function makeSprite(rows, pal, outline = '#141420', shadeOn = false) {
   const h = rows.length, w = rows[0].length;
   const c = mkCanvas(w + 2, h + 2), g = c.getContext('2d');
-  const filled = (x, y) => y >= 0 && y < h && x >= 0 && x < w && rows[y][x] !== '.' && !!pal[rows[y][x]];
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (filled(x, y)) { g.fillStyle = pal[rows[y][x]]; g.fillRect(x + 1, y + 1, 1, 1); }
+  const ch = (x, y) => (y >= 0 && y < h && x >= 0 && x < w) ? rows[y][x] : '.';
+  const filled = (x, y) => { const k = ch(x, y); return k !== '.' && !!pal[k]; };
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (!filled(x, y)) continue;
+    const k = rows[y][x]; let col = pal[k];
+    if (shadeOn && !NO_SHADE.includes(k) && col[0] === '#') {
+      if (ch(x, y - 1) !== k) col = shade(col, 0.22);
+      else if (ch(x, y + 1) !== k || ch(x + 1, y) !== k) col = shade(col, -0.2);
+    }
+    g.fillStyle = col; g.fillRect(x + 1, y + 1, 1, 1);
+  }
   if (outline) {
-    g.fillStyle = outline;
     for (let y = -1; y <= h; y++) for (let x = -1; x <= w; x++) {
       if (filled(x, y)) continue;
-      if (filled(x - 1, y) || filled(x + 1, y) || filled(x, y - 1) || filled(x, y + 1)) g.fillRect(x + 1, y + 1, 1, 1);
+      const nb = [[x, y + 1], [x, y - 1], [x - 1, y], [x + 1, y]].find(([a, b]) => filled(a, b));
+      if (!nb) continue;
+      const nc = pal[ch(nb[0], nb[1])];
+      g.fillStyle = shadeOn && nc[0] === '#' ? mix(nc, '#0c0a14', 0.72) : outline;
+      g.fillRect(x + 1, y + 1, 1, 1);
     }
   }
   return c;
@@ -735,7 +981,7 @@ function charSprites(type, col, hat) {
   const key = type + JSON.stringify(col) + (hat ? hat.type + hat.color : '');
   if (charCache[key]) return charCache[key];
   const def = CHAR[type];
-  const pal = { H: col.hair, S: col.skin || '#f2c8a0', E: '#1a1a2a', C: col.shirt, P: col.pants || '#30406a', B: col.shoes || '#5a3420', D: col.dress || col.shirt, R: col.ribbon || '#40c0e0', A: hat ? hat.color : '#fff', G: '#e03050' };
+  const pal = { H: col.hair, S: col.skin || '#f2c8a0', E: '#1a1a2a', C: col.shirt, P: col.pants || '#30406a', B: col.shoes || '#5a3420', D: col.dress || col.shirt, R: col.ribbon || '#40c0e0', A: hat ? hat.color : '#fff', G: '#e03050', K: '#f4a8a0' };
   const out = {};
   for (const dir of ['down', 'up', 'left']) {
     out[dir] = [0, 1, 2].map(f => {
@@ -747,7 +993,8 @@ function charSprites(type, col, hat) {
           let s = ''; for (let x = 0; x < 16; x++) s += hr[i][x] && hr[i][x] !== '.' ? hr[i][x] : r[x]; return s;
         });
       }
-      return makeSprite(rows, pal);
+      if (dir === 'down') rows = rows.map((r, i) => i === 8 ? r.slice(0, 4) + (r[4] === 'S' ? 'K' : r[4]) + r.slice(5, 11) + (r[11] === 'S' ? 'K' : r[11]) + r.slice(12) : r);
+      return makeSprite(rows, pal, '#141420', true);
     });
   }
   out.right = out.left.map(flipH);
@@ -774,44 +1021,68 @@ const tilesetCache = new Map();
 function tileset(th) {
   if (tilesetCache.has(th)) return tilesetCache.get(th);
   const mk = fn => { const c = mkCanvas(16, 16); fn(c.getContext('2d')); return c; };
-  const grassFn = (seed) => g => {
+  const deep = shade(th.dark, -0.18), hi = shade(th.light, 0.15);
+  const grassFn = seed => g => {
     rect(0, 0, 16, 16, th.grass, g);
-    const r = seeded(seed);
-    for (let i = 0; i < 10; i++) { const x = Math.floor(r() * 16), y = Math.floor(r() * 15); rect(x, y, 1, 2, th.dark, g); }
-    for (let i = 0; i < 5; i++) { const x = Math.floor(r() * 16), y = Math.floor(r() * 16); rect(x, y, 1, 1, th.light, g); }
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const v = hash2(x * 7 + seed, y * 13 + seed * 3) % 100;
+      if (v < 9) rect(x, y, 1, 1, th.dark, g); else if (v < 14) rect(x, y, 1, 1, th.light, g);
+    }
+    const r = seeded(seed * 17 + 5);
+    for (let i = 0; i < 4; i++) { // grass tufts: lit tip, shaded blades
+      const x = 1 + Math.floor(r() * 12), y = 1 + Math.floor(r() * 11);
+      rect(x + 1, y, 1, 1, hi, g); rect(x, y + 1, 1, 2, th.dark, g); rect(x + 2, y + 1, 1, 2, th.dark, g); rect(x + 1, y + 1, 1, 2, th.light, g); rect(x, y + 3, 3, 1, deep, g);
+    }
   };
   const ts = {};
   ts.grass = [1, 2, 3].map(s => mk(grassFn(s * 31)));
   ts.flower = [7, 8].map(s => mk(g => {
     grassFn(s)(g); const r = seeded(s * 99);
     for (let i = 0; i < 3; i++) {
-      const x = 2 + Math.floor(r() * 11), y = 2 + Math.floor(r() * 11), c = th.flower[Math.floor(r() * th.flower.length)];
-      rect(x, y + 1, 1, 2, th.dark, g); rect(x - 1, y, 3, 1, c, g); rect(x, y - 1, 1, 3, c, g); rect(x, y, 1, 1, '#f8e040', g);
+      const x = 3 + Math.floor(r() * 10), y = 3 + Math.floor(r() * 9), c = th.flower[Math.floor(r() * th.flower.length)];
+      rect(x, y + 2, 1, 2, deep, g); rect(x + 1, y + 3, 1, 1, th.dark, g);
+      rect(x - 1, y, 3, 1, c, g); rect(x, y - 1, 1, 3, c, g);
+      rect(x - 1, y - 1, 1, 1, shade(c, 0.35), g); rect(x + 1, y + 1, 1, 1, shade(c, -0.3), g); rect(x, y, 1, 1, '#f8d040', g);
     }
   }));
   ts.path = mk(g => {
-    rect(0, 0, 16, 16, th.path, g);
+    rect(0, 0, 16, 16, shade(th.pathD, -0.15), g);
     const r = seeded(5);
-    for (let i = 0; i < 6; i++) { const x = Math.floor(r() * 14), y = Math.floor(r() * 14); rect(x, y, 3, 2, th.pathD, g); rect(x, y, 2, 1, shade(th.path, 0.25), g); }
+    for (let row = 0; row < 4; row++) {
+      let x = row % 2 ? -2 : 0;
+      while (x < 16) {
+        const w = 4 + Math.floor(r() * 3), c = shade(th.path, (r() - 0.5) * 0.12);
+        rect(x + 1, row * 4 + 1, w - 1, 3, c, g);
+        rect(x + 1, row * 4 + 1, w - 1, 1, shade(c, 0.28), g); rect(x + 1, row * 4 + 1, 1, 3, shade(c, 0.15), g);
+        rect(x + 1, row * 4 + 3, w - 1, 1, th.pathD, g);
+        x += w;
+      }
+    }
   });
   ts.plaza = mk(g => {
-    rect(0, 0, 16, 16, '#b8b4c4', g);
-    rect(0, 7, 16, 1, '#8c88a0', g); rect(0, 15, 16, 1, '#8c88a0', g); rect(7, 0, 1, 8, '#8c88a0', g); rect(15, 8, 1, 8, '#8c88a0', g);
-    rect(1, 1, 5, 1, '#d4d0e0', g); rect(9, 9, 5, 1, '#d4d0e0', g);
+    rect(0, 0, 16, 16, '#7c7890', g);
+    for (let row = 0; row < 4; row++) for (let k = -1; k < 2; k++) {
+      const x = k * 8 + (row % 2) * 4, y = row * 4;
+      rect(x + 1, y + 1, 7, 3, '#bab6ca', g); rect(x + 1, y + 1, 7, 1, '#e0dcee', g); rect(x + 1, y + 3, 7, 1, '#9894ac', g); rect(x + 7, y + 1, 1, 3, '#a8a4bc', g);
+    }
   });
-  ts.sand = mk(g => { rect(0, 0, 16, 16, '#e8d49a', g); const r = seeded(9); for (let i = 0; i < 8; i++) rect(Math.floor(r() * 16), Math.floor(r() * 16), 1, 1, '#c8b070', g); });
+  ts.sand = mk(g => { rect(0, 0, 16, 16, '#e8d49a', g); const r = seeded(9); for (let i = 0; i < 14; i++) rect(Math.floor(r() * 16), Math.floor(r() * 16), 1, 1, i % 3 ? '#c8b070' : '#f8ecc0', g); });
+  const canopy = (g, cx, cy, rx, ry) => {
+    pellipse(cx, cy, rx + 1, ry + 1, mix(th.tree, '#000000', 0.62), g);
+    pellipse(cx, cy, rx, ry, shade(th.tree, -0.22), g);
+    pellipse(cx - rx * 0.3, cy - ry * 0.15, rx * 0.6, ry * 0.6, th.tree, g);
+    pellipse(cx + rx * 0.35, cy - ry * 0.3, rx * 0.5, ry * 0.5, th.tree, g);
+    pellipse(cx - rx * 0.35, cy - ry * 0.45, rx * 0.35, ry * 0.3, th.treeL, g);
+    pellipse(cx + rx * 0.3, cy - ry * 0.6, rx * 0.22, ry * 0.2, th.treeL, g);
+    rect(Math.round(cx - rx * 0.45), Math.round(cy - ry * 0.6), 1, 1, shade(th.treeL, 0.4), g);
+  };
   ts.tree = mk(g => {
     grassFn(3)(g);
-    rect(3, 13, 10, 2, th.dark, g);
-    rect(7, 10, 2, 5, th.trunk, g);
-    pellipse(8, 7, 6, 6, '#101c18', g); pellipse(8, 7, 5, 5, th.tree, g);
-    pellipse(7, 5, 3, 3, th.treeL, g); rect(5, 3, 2, 1, shade(th.treeL, 0.3), g);
-    rect(10, 9, 2, 1, shade(th.tree, -0.3), g); rect(4, 9, 1, 1, shade(th.tree, -0.3), g);
+    pellipse(8, 14, 6, 1.5, deep, g);
+    rect(7, 10, 2, 5, th.trunk, g); rect(7, 10, 1, 5, shade(th.trunk, 0.25), g); rect(6, 14, 4, 1, shade(th.trunk, -0.3), g);
+    canopy(g, 8, 6.5, 6, 5.5);
   });
-  ts.bush = mk(g => {
-    grassFn(4)(g);
-    pellipse(8, 10, 6, 4, '#101c18', g); pellipse(8, 10, 5, 3, th.tree, g); pellipse(7, 9, 3, 2, th.treeL, g);
-  });
+  ts.bush = mk(g => { grassFn(4)(g); pellipse(8, 13, 6, 1.5, deep, g); canopy(g, 8, 10, 5, 3.5); });
   tilesetCache.set(th, ts);
   return ts;
 }
@@ -829,15 +1100,19 @@ function drawTile(field, ts, x, y, sx, sy) {
   }
 }
 function drawWater(f, x, y, sx, sy) {
-  rect(sx, sy, 16, 16, '#3a7ed4');
-  const ph = (T / 12 + x * 3 + y * 5) | 0;
-  rect(sx + (ph % 12), sy + 4 + (y % 2) * 6, 4, 1, '#6aa8ec');
-  rect(sx + ((ph + 6) % 12), sy + 11 - (y % 2) * 6, 3, 1, '#5a98e0');
+  rect(sx, sy, 16, 8, '#3c82d8'); rect(sx, sy + 8, 16, 8, '#3474cc');
+  const hv = hash2(x, y), ph = T / 18 + (hv % 16);
+  for (let k = 0; k < 2; k++) { // drifting wave crests
+    const wx = Math.floor((ph * 2 + k * 8 + (hv >> 4) % 8) % 16), wy = 3 + k * 7 + (hv >> 8) % 3;
+    rect(sx + wx, sy + wy, 3, 1, '#78b8f4'); rect(sx + wx - 1, sy + wy + 1, 1, 1, '#5c9cec'); rect(sx + wx + 3, sy + wy + 1, 1, 1, '#5c9cec');
+  }
+  if (((T >> 3) + hv) % 29 === 0) { const gx = sx + 3 + hv % 10, gy = sy + 3 + (hv >> 5) % 10; rect(gx, gy, 1, 1, '#ffffff'); rect(gx - 1, gy, 3, 1, 'rgba(255,255,255,0.6)'); }
   const land = (dx, dy) => f.tile(x + dx, y + dy) !== TL.WATER;
-  if (land(0, -1)) { rect(sx, sy, 16, 2, '#2a5a9a'); rect(sx, sy + 2, 16, 1, '#9ad0f8'); }
-  if (land(0, 1)) rect(sx, sy + 15, 16, 1, '#bfe4ff');
-  if (land(-1, 0)) rect(sx, sy, 1, 16, '#bfe4ff');
-  if (land(1, 0)) rect(sx + 15, sy, 1, 16, '#bfe4ff');
+  const foam = Math.round(Math.sin(T / 15 + x + y) + 1);
+  if (land(0, -1)) { rect(sx, sy, 16, 2, '#24508c'); rect(sx, sy + 2 + (foam > 1 ? 1 : 0), 16, 1, '#bfe4ff'); }
+  if (land(0, 1)) rect(sx, sy + 15 - (foam > 1 ? 1 : 0), 16, 1, '#d8f0ff');
+  if (land(-1, 0)) rect(sx + (foam > 1 ? 1 : 0), sy, 1, 16, '#d8f0ff');
+  if (land(1, 0)) rect(sx + 15 - (foam > 1 ? 1 : 0), sy, 1, 16, '#d8f0ff');
 }
 
 // ============ Buildings ============
@@ -845,13 +1120,18 @@ function makeBuilding(w, h, o) {
   const c = mkCanvas(w * 16, h * 16), g = c.getContext('2d');
   const roofH = (h - 2) * 16, cw = w * 16;
   // walls
-  rect(2, roofH - 2, cw - 4, h * 16 - roofH + 2, o.wall, g);
-  for (let y = roofH + 3; y < h * 16; y += 5) rect(2, y, cw - 4, 1, shade(o.wall, -0.12), g);
+  for (let y = roofH - 2; y < h * 16; y++) rect(2, y, cw - 4, 1, mix(shade(o.wall, 0.08), shade(o.wall, -0.14), (y - roofH) / (h * 16 - roofH)), g);
+  for (let y = roofH + 3; y < h * 16; y += 5) { rect(2, y, cw - 4, 1, shade(o.wall, -0.16), g); rect(2, y + 1, cw - 4, 1, shade(o.wall, 0.12), g); }
+  rect(2, roofH, cw - 4, 3, shade(o.wall, -0.35), g); rect(2, roofH + 3, cw - 4, 1, shade(o.wall, -0.2), g); // eave shadow
+  rect(2, roofH, 2, h * 16 - roofH, shade(o.wall, 0.15), g); rect(cw - 4, roofH, 2, h * 16 - roofH, shade(o.wall, -0.25), g);
   rect(2, h * 16 - 2, cw - 4, 2, shade(o.wall, -0.35), g);
   // windows
   const win = wx => {
     rect(wx - 1, roofH + 5, 14, 12, '#3a2a20', g); rect(wx, roofH + 6, 12, 10, '#ffe08a', g);
-    rect(wx, roofH + 6, 12, 3, '#fff4c0', g); rect(wx + 5, roofH + 6, 1, 10, '#3a2a20', g); rect(wx, roofH + 11, 12, 1, '#3a2a20', g);
+    rect(wx, roofH + 6, 12, 3, '#fff4c0', g);
+    for (let k = 0; k < 4; k++) rect(wx + 1 + k, roofH + 13 - k, 1, 1, '#fffbe0', g); // glass shine
+    rect(wx + 5, roofH + 6, 1, 10, '#3a2a20', g); rect(wx, roofH + 11, 12, 1, '#3a2a20', g);
+    rect(wx - 1, roofH + 5, 14, 1, '#6a4a30', g);
     rect(wx - 2, roofH + 16, 16, 2, shade(o.wall, -0.4), g);
   };
   const doorX = Math.floor(w / 2) * 16;
@@ -866,7 +1146,8 @@ function makeBuilding(w, h, o) {
   // roof
   for (let y = 0; y < roofH; y++) {
     const inset = Math.max(0, Math.floor((roofH - y) / 3) - 4);
-    const col = (y % 6 < 1) ? shade(o.roof, -0.3) : (y % 6 < 2 ? shade(o.roof, 0.18) : o.roof);
+    const base = mix(shade(o.roof, 0.18), shade(o.roof, -0.22), y / roofH);
+    const col = (y % 6 < 1) ? shade(base, -0.35) : (y % 6 < 2 ? shade(base, 0.22) : base);
     rect(inset, y, cw - inset * 2, 1, col, g);
     if (y % 6 >= 2) for (let x = inset + ((y / 6 | 0) % 2) * 4; x < cw - inset; x += 8) rect(x, y, 1, 1, shade(o.roof, -0.2), g);
   }
@@ -966,7 +1247,7 @@ function genFish(sp, L, Ht, pal) {
   if (g[ey] && g[ey][ex] !== '.') g[ey][ex] = 'E';
   if (sp.whisk && rows > ey + 3) { g[ey + 2][0] = 'D'; if (g[ey + 3]) g[ey + 3][0] = 'D'; }
   if (sp.lure) { g[0][1] = 'Q'; g[1][2] = 'D'; }
-  return makeSprite(g.map(r => r.join('')), pal);
+  return makeSprite(g.map(r => r.join('')), pal, '#141420', true);
 }
 function fishPal(sp) {
   return { B: sp.col, L: sp.belly, D: shade(sp.col, -0.35), F: sp.fin, E: '#101018', W: '#ffffff', R: '#e86a90', Y: '#f8f080', Q: '#80ffe0' };
@@ -2055,8 +2336,16 @@ class Field {
       drawTile(this, ts, x, y, x * TS - camX, y * TS - camY);
     }
     const list = [];
-    for (const o of this.objs) list.push({ y: (o.y + o.h) * TS + (o.z || 0), d: () => o.draw(o.x * TS - camX, o.y * TS - camY) });
-    for (const e of this.npcs.concat([p])) list.push({ y: e.y + 16.5, d: () => { const s = entSprite(e); ctx.drawImage(s, Math.round(e.x - camX) - 1, Math.round(e.y - camY) - 3); } });
+    for (const o of this.objs) list.push({ y: (o.y + o.h) * TS + (o.z || 0), d: () => {
+      const sx = o.x * TS - camX, sy = o.y * TS - camY;
+      if (o.shadow) { ctx.fillStyle = 'rgba(0,0,20,0.22)'; ctx.fillRect(sx + 4, sy + o.h * TS - 3, o.w * TS, 5); ctx.fillRect(sx + o.w * TS, sy + 6, 4, o.h * TS - 4); }
+      o.draw(sx, sy);
+    } });
+    for (const e of this.npcs.concat([p])) list.push({ y: e.y + 16.5, d: () => {
+      const ex = Math.round(e.x - camX), ey = Math.round(e.y - camY);
+      pellipse(ex + 8, ey + 14, 5, 1.5, 'rgba(0,0,20,0.28)');
+      ctx.drawImage(entSprite(e), ex - 1, ey - 3);
+    } });
     list.sort((a, b) => a.y - b.y).forEach(o => o.d());
     if (this.overlay) this.overlay(camX, camY);
     // HUD
@@ -2097,7 +2386,7 @@ function buildCity() {
   for (const [kind, x, y, o] of shops) {
     const img = makeBuilding(7, 5, Object.assign({ chimney: kind === 'tackle' || kind === 'market' }, o));
     const door = [x + 3, y + 4];
-    f.objs.push({ x, y, w: 7, h: 5, solid: true, door, draw: (sx, sy) => ctx.drawImage(img, sx, sy) });
+    f.objs.push({ x, y, w: 7, h: 5, solid: true, door, shadow: true, draw: (sx, sy) => ctx.drawImage(img, sx, sy) });
     f.triggers[door[0] + ',' + door[1]] = () => enterShop(kind, door);
   }
   // prize wheel
@@ -2200,7 +2489,7 @@ function buildHome() {
   for (let y = 1; y < f.h - 1; y++) for (let x = 1; x < f.w - 1; x++) if (f.tile(x, y) === TL.GRASS && r() < 0.12) f.set(x, y, TL.FLOWER);
   // house
   const himg = makeHouse(w.house, w.theme);
-  f.objs.push({ x: 7, y: 1, w: 6, h: 4, solid: true, door: [10, 4], draw: (sx, sy) => ctx.drawImage(himg, sx, sy) });
+  f.objs.push({ x: 7, y: 1, w: 6, h: 4, solid: true, door: [10, 4], shadow: true, draw: (sx, sy) => ctx.drawImage(himg, sx, sy) });
   f.triggers['10,4'] = () => houseMenu();
   // portal
   f.objs.push({ x: 10, y: 13, w: 1, h: 1, solid: false, z: -40, draw: (sx, sy) => drawPortal(sx - 8, sy + 1) });
@@ -2213,7 +2502,7 @@ function buildHome() {
   TANK_PLOTS.forEach(([x, y], i) => {
     const t = w.tanks[i];
     f.objs.push({
-      x, y, w: 2, h: 2, solid: true,
+      x, y, w: 2, h: 2, solid: true, shadow: !!t,
       draw: (sx, sy) => t ? drawTank(t.type, sx, sy, t.fish, i) : drawPlot(sx, sy),
       interact: () => t ? pushUI(new TankUI(i)) : say('An empty plot. Buy aquariums at the Tank Emporium in the city and they will appear here!'),
     });
@@ -2221,7 +2510,7 @@ function buildHome() {
   // decor
   for (const id of w.decor) {
     const [x, y] = DECOR_SPOTS[DECOR[id].spot];
-    f.objs.push({ x, y, w: 2, h: 2, solid: true, draw: (sx, sy) => drawDecor(id, sx, sy), interact: () => say('Your ' + DECOR[id].name + '. Visitors love it!') });
+    f.objs.push({ x, y, w: 2, h: 2, solid: true, shadow: true, draw: (sx, sy) => drawDecor(id, sx, sy), interact: () => say('Your ' + DECOR[id].name + '. Visitors love it!') });
   }
   // visitors
   const inc = dailyIncome();
@@ -2532,43 +2821,101 @@ const LAKE_ART = {
   moonfall: { sky: ['#0a0628', '#40307a'], far: '#2a2058', near: '#181238', water: ['#4a3aa0', '#120c40'], hi: '#a090ff', dock: '#5a4a6a' },
 };
 const backdrops = {};
+const HORIZON = 104;
+// Each lake is drawn in layers: sky (back), clouds, mountains/shore (mid), Mode-7 style water,
+// and the dock (fg). The water is a texture redrawn every frame row by row with perspective.
 function lakeBackdrop(L) {
   if (backdrops[L.id]) return backdrops[L.id];
-  const a = LAKE_ART[L.id], c = mkCanvas(W, H), g = c.getContext('2d'), r = seeded(L.id.length * 97);
-  for (let y = 0; y < 104; y += 4) rect(0, y, W, 4, mix(a.sky[0], a.sky[1], y / 104), g);
-  if (L.id === 'moonfall') {
-    for (let i = 0; i < 80; i++) rect(Math.floor(r() * W), Math.floor(r() * 90), 1, 1, r() < 0.3 ? '#fff8c0' : '#c0c8ff', g);
-    pellipse(250, 34, 16, 16, '#f0ecff', g); pellipse(244, 30, 4, 3, '#d0c8f0', g); pellipse(256, 40, 3, 2, '#d0c8f0', g);
-  } else if (L.id === 'marsh') {
-    pellipse(70, 34, 12, 12, '#e8ecd8', g);
-  } else pellipse(64, 30, 12, 12, '#fff4b0', g);
-  // far mountains
-  for (let x = 0; x < W; x++) {
-    const hh = L.id === 'crystal' ? 36 + Math.abs(((x * 0.7) % 60) - 30) * 1.2 + Math.sin(x * 0.1) * 4 : 20 + Math.sin(x * 0.035) * 9 + Math.sin(x * 0.11) * 4;
-    rect(x, 104 - hh, 1, hh, a.far, g);
-    if (L.id === 'crystal') rect(x, 104 - hh, 1, Math.max(0, hh - 46), '#ffffff', g);
+  const a = LAKE_ART[L.id], r = seeded(L.id.length * 97);
+  const layer = (w = W, h = H) => { const c = mkCanvas(w, h); return [c, c.getContext('2d')]; };
+  // --- sky ---
+  const [back, g] = layer();
+  for (let y = 0; y < HORIZON; y += 2) rect(0, y, W, 2, mix(a.sky[0], a.sky[1], y / HORIZON), g);
+  const night = L.id === 'moonfall';
+  const sun = night ? { x: 250, y: 34, r: 16, col: '#f0ecff', glow: '#8070d0' } : L.id === 'marsh' ? { x: 70, y: 34, r: 12, col: '#eef0de', glow: '#c8d0b0' } : { x: 64, y: 30, r: 12, col: '#fff6c0', glow: '#fff0a0' };
+  for (let k = 4; k >= 1; k--) { g.globalAlpha = 0.12; pellipse(sun.x, sun.y, sun.r + k * 6, sun.r + k * 6, sun.glow, g); }
+  g.globalAlpha = 1;
+  pellipse(sun.x, sun.y, sun.r, sun.r, sun.col, g); pellipse(sun.x - 3, sun.y - 3, sun.r * 0.55, sun.r * 0.55, shade(sun.col, 0.4), g);
+  if (night) {
+    for (let i = 0; i < 90; i++) rect(Math.floor(r() * W), Math.floor(r() * 92), 1, 1, r() < 0.3 ? '#fff8c0' : '#c0c8ff', g);
+    pellipse(244, 30, 4, 3, '#d0c8f0', g); pellipse(256, 40, 3, 2, '#d0c8f0', g);
   }
-  // tree line
+  // --- clouds (wide strip that scrolls) ---
+  const [clouds, cg] = layer(640, 60);
+  const cl = night ? '#3a3070' : L.id === 'marsh' ? '#b8c0aa' : '#ffffff';
+  for (let i = 0; i < 7; i++) {
+    const cx = 40 + i * 90 + r() * 40, cy = 18 + r() * 24, w = 22 + r() * 18;
+    for (const [dx, dy, rr] of [[-w * 0.5, 4, w * 0.35], [0, 0, w * 0.5], [w * 0.5, 4, w * 0.38], [w * 0.2, -4, w * 0.3]]) pellipse(cx + dx, cy + dy, rr, rr * 0.55, shade(cl, -0.18), cg);
+    for (const [dx, dy, rr] of [[-w * 0.5, 2, w * 0.3], [0, -2, w * 0.45], [w * 0.5, 2, w * 0.32]]) pellipse(cx + dx, cy + dy, rr, rr * 0.5, cl, cg);
+    pellipse(cx - w * 0.15, cy - 5, w * 0.25, w * 0.1, shade(cl, 0.3), cg);
+  }
+  // --- mountains + shore (shaded by slope, lit from the left) ---
+  const [mid, mg] = layer();
+  const mh = x => L.id === 'crystal' ? 36 + Math.abs(((x * 0.7) % 60) - 30) * 1.2 + Math.sin(x * 0.1) * 4 : 20 + Math.sin(x * 0.035) * 9 + Math.sin(x * 0.11) * 4;
+  for (let x = 0; x < W; x++) {
+    const hh = mh(x), lit = mh(x + 3) >= mh(x - 3); // slopes facing the light are brighter
+    for (let y = HORIZON - hh; y < HORIZON; y++) {
+      const depth = (y - (HORIZON - hh)) / hh;
+      rect(x, y, 1, 1, mix(shade(a.far, lit ? 0.16 : -0.12), mix(a.far, a.sky[1], 0.35), depth * 0.8), mg);
+    }
+    if (L.id === 'crystal') { const sn = Math.max(0, hh - 46); rect(x, HORIZON - hh, 1, sn, lit ? '#ffffff' : '#cfd8ec', mg); }
+  }
   for (let x = -4; x < W + 8; x += 7) {
     const hh = 8 + Math.floor(r() * 8);
-    if (L.id === 'crystal') { for (let k = 0; k < hh; k++) rect(x + 3 - Math.floor(k / 3), 104 - hh + k, 1 + Math.floor(k / 3) * 2, 1, a.near, g); }
-    else pellipse(x + 3, 104 - hh / 2, 5, hh / 2, a.near, g);
+    if (L.id === 'crystal') {
+      for (let k = 0; k < hh; k++) { const half = Math.floor(k / 3); rect(x + 3 - half, HORIZON - hh + k, half + 1, 1, shade(a.near, 0.18), mg); rect(x + 4, HORIZON - hh + k, half, 1, shade(a.near, -0.15), mg); }
+    } else { pellipse(x + 3, HORIZON - hh / 2, 5, hh / 2, shade(a.near, -0.1), mg); pellipse(x + 2, HORIZON - hh / 2 - 1, 3, hh / 3, shade(a.near, 0.15), mg); }
   }
-  rect(0, 100, W, 4, a.near, g);
-  // water
-  for (let y = 104; y < H; y += 3) rect(0, y, W, 3, mix(a.water[0], a.water[1], Math.pow((y - 104) / 136, 0.7)), g);
-  for (let i = 0; i < 40; i++) rect(Math.floor(r() * W), 105 + Math.floor(r() * 12), 6 + Math.floor(r() * 10), 1, shade(a.water[0], 0.15), g);
+  rect(0, HORIZON - 4, W, 4, a.near, mg); rect(0, HORIZON - 1, W, 1, shade(a.near, -0.3), mg);
   if (L.id === 'willow') for (const wx of [190, 290]) {
-    rect(wx, 74, 3, 28, '#5a3a20', g); pellipse(wx + 1, 74, 16, 9, '#4a8a3a', g);
-    for (let j = -15; j <= 16; j += 2) rect(wx + j, 74, 1, 14 + Math.abs(j) % 7, '#3a7a2a', g);
+    rect(wx, 74, 3, 28, '#5a3a20', mg); rect(wx, 74, 1, 28, '#7a5a38', mg);
+    pellipse(wx + 1, 74, 16, 9, '#3e7e34', mg); pellipse(wx - 2, 71, 10, 5, '#5aa048', mg);
+    for (let j = -15; j <= 16; j += 2) { rect(wx + j, 74, 1, 14 + Math.abs(j) % 7, j % 4 ? '#3a7a2a' : '#5a9a40', mg); }
   }
-  if (L.id === 'marsh') for (let i = 0; i < 40; i++) { const x = 150 + Math.floor(r() * 170), hh = 10 + Math.floor(r() * 18); rect(x, 240 - hh, 1, hh, '#2a3a1a', g); rect(x, 240 - hh, 2, 4, '#6a4a2a', g); }
-  // dock
-  rect(0, 118, 78, 10, a.dock, g);
-  for (let x = 0; x < 78; x += 9) rect(x, 118, 1, 10, shade(a.dock, -0.35), g);
-  rect(0, 118, 78, 1, shade(a.dock, 0.3), g); rect(0, 128, 78, 2, shade(a.dock, -0.5), g);
-  for (const px of [6, 40, 72]) rect(px, 130, 4, 40, shade(a.dock, -0.4), g);
-  return (backdrops[L.id] = c);
+  // --- foreground: dock (+ reeds) ---
+  const [fg, fgc] = layer();
+  if (L.id === 'marsh') for (let i = 0; i < 40; i++) { const x = 150 + Math.floor(r() * 170), hh = 10 + Math.floor(r() * 18); rect(x, 240 - hh, 1, hh, '#2a3a1a', fgc); rect(x + 1, 240 - hh + 4, 1, hh - 4, '#3e5428', fgc); rect(x, 240 - hh, 2, 4, '#6a4a2a', fgc); }
+  for (const px of [6, 40, 72]) { rect(px, 130, 4, 40, shade(a.dock, -0.4), fgc); rect(px, 130, 1, 40, shade(a.dock, -0.2), fgc); fgc.globalAlpha = 0.3; rect(px - 1, 168, 6, 2, '#ffffff', fgc); fgc.globalAlpha = 1; }
+  rect(0, 118, 78, 10, a.dock, fgc);
+  for (let x = 0; x < 78; x += 9) { rect(x, 118, 1, 10, shade(a.dock, -0.35), fgc); rect(x + 1, 119, 1, 8, shade(a.dock, 0.15), fgc); }
+  rect(0, 118, 78, 1, shade(a.dock, 0.35), fgc); rect(0, 128, 78, 2, shade(a.dock, -0.55), fgc);
+  // --- water texture: wavy bands and crests, tiled 8x wide for the perspective pass ---
+  const TW = 128, TH = 64, [tile, tg] = layer(TW, TH);
+  for (let y = 0; y < TH; y++) rect(0, y, TW, 1, mix(a.water[0], a.water[1], 0.35 + 0.25 * Math.sin(y / TH * Math.PI * 4)), tg);
+  for (let k = 0; k < 14; k++) {
+    const y0 = (k * 4.6) | 0, len = 8 + (k * 7) % 14;
+    for (let x = 0; x < TW; x++) {
+      const y = (y0 + Math.round(Math.sin(x / TW * Math.PI * 4 + k) * 1.5) + TH) % TH;
+      if ((x + k * 11) % 32 < len) rect(x, y, 1, 1, k % 3 ? shade(a.water[0], 0.18) : a.hi, tg);
+      else if ((x + k * 5) % 40 < 4) rect(x, (y + 2) % TH, 1, 1, shade(a.water[1], -0.1), tg);
+    }
+  }
+  const [tex, xg] = layer(TW * 8, TH);
+  for (let i = 0; i < 8; i++) xg.drawImage(tile, i * TW, 0);
+  // haze where water meets the shore
+  const [fog, fog2] = layer(W, 60);
+  for (let y = 0; y < 60; y++) { fog2.globalAlpha = Math.pow(1 - y / 60, 2) * 0.55; rect(0, y, W, 1, a.sky[1], fog2); }
+  return (backdrops[L.id] = { back, clouds, mid, fg, tex, fog, sun, night });
+}
+function drawLakeWater(bd, t) {
+  const TW = 128, TH = 64;
+  for (let r = HORIZON; r < H; r++) {
+    const d = r - HORIZON + 5, scale = d / 38;              // texels get bigger toward the viewer
+    const v = (((900 / d) + t * 0.4) % TH + TH) % TH;
+    const sw = Math.min(TW * 7, W / scale);
+    const sx = (((t * 0.12) + Math.sin(r * 0.15 + t * 0.04) * 2.5 / Math.max(scale, 0.3)) % TW + TW) % TW;
+    ctx.drawImage(bd.tex, sx, Math.floor(v), sw, 1, 0, r, W, 1);
+  }
+  ctx.drawImage(bd.fog, 0, HORIZON);
+  // glitter path under the sun / moon
+  const s = bd.sun;
+  for (let k = 0; k < 22; k++) {
+    if (((t >> 2) + k * 7) % 5 < 2) continue;
+    const y = HORIZON + 3 + k * k * 0.28, spread = 2 + k * 0.9;
+    const x = s.x + Math.sin(t * 0.07 + k * 1.7) * spread;
+    ctx.fillStyle = bd.night ? 'rgba(240,236,255,0.7)' : 'rgba(255,250,215,0.75)';
+    ctx.fillRect(Math.round(x - k * 0.4), Math.round(y), 2 + Math.round(k / 4), 1);
+  }
 }
 
 // ============ Fishing ============
@@ -2769,16 +3116,14 @@ const FishingScene = {
     if (this.trip) setTimeout(() => toast('Day ' + G.day + ' begins. ' + this.trip + ' fish caught last trip!'), 600);
   },
   draw() {
-    ctx.drawImage(this.bd, 0, 0);
-    const a = this.art;
-    // shimmer
-    for (let k = 0; k < 26; k++) {
-      const y = 108 + ((k * 37) % 130), sp = 0.15 + (k % 5) * 0.06;
-      const x = ((k * 53 + T * sp) % 360) - 20;
-      rect(x, y, 4 + (k % 4) * 3, 1, a.hi);
-    }
+    const bd = this.bd;
+    ctx.drawImage(bd.back, 0, 0);
+    const cx = -((T * 0.08) % 640);
+    ctx.globalAlpha = bd.night ? 0.7 : 0.92; ctx.drawImage(bd.clouds, cx, 0); ctx.drawImage(bd.clouds, cx + 640, 0); ctx.globalAlpha = 1;
+    ctx.drawImage(bd.mid, 0, 0);
+    drawLakeWater(bd, T);
     if (this.L.id === 'marsh') for (let k = 0; k < 4; k++) { ctx.fillStyle = 'rgba(220,230,210,0.12)'; ctx.fillRect(((T * 0.2 * (k + 1)) % 480) - 160, 92 + k * 26, 160, 10); }
-    if (this.L.id === 'moonfall') for (let k = 0; k < 8; k++) if ((T + k * 13) % 40 < 20) rect(240 + Math.sin(k * 3) * 14, 120 + k * 12, 3, 1, '#f0ecff');
+    ctx.drawImage(bd.fg, 0, 0);
     // shadows
     for (const s of this.shadows) { ctx.fillStyle = 'rgba(0,0,30,0.22)'; pellipse(s.x, s.y, 7 * s.s, 2 * s.s, 'rgba(0,0,30,0.22)'); rect(s.x + (s.vx > 0 ? -9 : 7) * s.s, s.y - 1, 2, 3, 'rgba(0,0,30,0.22)'); }
     // ripples & splash
@@ -2919,9 +3264,10 @@ function drawAutosave() {
   if (autosaveT <= 0) return;
   autosaveT--;
   if (autosaveT > 100 || (autosaveT < 30 && (autosaveT >> 2) % 2)) return;
-  drawWin(4, H - 22, 58, 18, 'dark');
-  const r = (T >> 3) % 4; rect(10, H - 16, 6, 6, '#80e0ff'); rect(11 + (r % 2) * 3, H - 15 + (r >> 1) * 3, 1, 1, '#101028');
-  text('Saved', 20, H - 17, '#b0ffb0');
+  const y = 50;
+  drawWin(4, y, 58, 18, 'dark');
+  const r = (T >> 3) % 4; rect(10, y + 6, 6, 6, '#80e0ff'); rect(11 + (r % 2) * 3, y + 7 + (r >> 1) * 3, 1, 1, '#101028');
+  text('Saved', 20, y + 5, '#b0ffb0');
 }
 function fadeTo(fn, sp = 0.07) { if (fade) return; fade = { a: 0, d: 1, fn, sp }; }
 
@@ -2968,8 +3314,9 @@ const TitleScene = {
     for (let x = 6; x < W; x += 22) for (let k = 0; k < 18; k += 2) rect(x + Math.round(Math.sin((T / 20) + k / 4 + x) * 2), H - 14 - k, 2, 2, '#2a8a4a');
     for (const b of this.bub) pring(b.x, b.y, 1.5, 1.5, 'rgba(220,240,255,0.7)');
     const bob = Math.round(Math.sin(T / 30) * 3);
-    textBig('AQUARIUM', 160 - 26 * 3 + 6, 34 + bob, 3, '#7ae0ff', '#082040');
-    textBig('WORLD', 160 - 16 * 3 + 4, 70 + bob, 3, '#ffe060', '#3a2008');
+    const sh = (T % 240) * 0.5 - 20;
+    textLogo('AQUARIUM', 160 - 26 * 3 + 6, 34 + bob, 3, '#c8f8ff', '#2a8ad8', '#06183a', sh);
+    textLogo('WORLD', 160 - 16 * 3 + 4, 70 + bob, 3, '#fff6a0', '#e87818', '#3a1404', sh - 10);
     textC('A pixel fishing adventure', 160, 108, '#c8e8ff');
     this.menu.draw(!ui.length);
     textC(saveStatusLine(), 160, 202, saveStatus === 'cloud' ? '#a8ffa8' : saveStatus === 'blocked' ? '#ff9090' : '#c8e8ff', '#081838');
@@ -3046,6 +3393,20 @@ const WorldCreateScene = {
   },
 };
 
+// SNES-style transition: the screen pixelates into big blocks while it darkens
+let mosaicBuf = null;
+function drawMosaicFade(a) {
+  const block = 1 + Math.floor(a * 11);
+  if (block > 1) {
+    const w = Math.ceil(W / block), h = Math.ceil(H / block);
+    if (!mosaicBuf || mosaicBuf.width !== w) mosaicBuf = mkCanvas(w, h);
+    const mg = mosaicBuf.getContext('2d'); mg.imageSmoothingEnabled = false;
+    mg.drawImage(cv, 0, 0, W, H, 0, 0, w, h);
+    ctx.drawImage(mosaicBuf, 0, 0, w, h, 0, 0, w * block, h * block);
+  }
+  ctx.fillStyle = `rgba(0,0,0,${Math.pow(a, 1.6)})`; ctx.fillRect(0, 0, W, H);
+}
+
 // ============ Main loop ============
 try { const s = JSON.parse(localStorage.getItem('aquariumWorldSound')); if (s) { soundOn = s[0]; musicOn = s[1]; } } catch (e) {}
 function frame() {
@@ -3072,7 +3433,7 @@ function frame() {
   drawToasts();
   drawAutosave();
   overlaysEndFrame();
-  if (fade) { ctx.fillStyle = `rgba(0,0,0,${clamp(fade.a, 0, 1)})`; ctx.fillRect(0, 0, W, H); }
+  if (fade) drawMosaicFade(clamp(fade.a, 0, 1));
   inputEndFrame();
   T++;
 }

@@ -98,8 +98,16 @@ class Field {
       drawTile(this, ts, x, y, x * TS - camX, y * TS - camY);
     }
     const list = [];
-    for (const o of this.objs) list.push({ y: (o.y + o.h) * TS + (o.z || 0), d: () => o.draw(o.x * TS - camX, o.y * TS - camY) });
-    for (const e of this.npcs.concat([p])) list.push({ y: e.y + 16.5, d: () => { const s = entSprite(e); ctx.drawImage(s, Math.round(e.x - camX) - 1, Math.round(e.y - camY) - 3); } });
+    for (const o of this.objs) list.push({ y: (o.y + o.h) * TS + (o.z || 0), d: () => {
+      const sx = o.x * TS - camX, sy = o.y * TS - camY;
+      if (o.shadow) { ctx.fillStyle = 'rgba(0,0,20,0.22)'; ctx.fillRect(sx + 4, sy + o.h * TS - 3, o.w * TS, 5); ctx.fillRect(sx + o.w * TS, sy + 6, 4, o.h * TS - 4); }
+      o.draw(sx, sy);
+    } });
+    for (const e of this.npcs.concat([p])) list.push({ y: e.y + 16.5, d: () => {
+      const ex = Math.round(e.x - camX), ey = Math.round(e.y - camY);
+      pellipse(ex + 8, ey + 14, 5, 1.5, 'rgba(0,0,20,0.28)');
+      ctx.drawImage(entSprite(e), ex - 1, ey - 3);
+    } });
     list.sort((a, b) => a.y - b.y).forEach(o => o.d());
     if (this.overlay) this.overlay(camX, camY);
     // HUD
@@ -140,7 +148,7 @@ function buildCity() {
   for (const [kind, x, y, o] of shops) {
     const img = makeBuilding(7, 5, Object.assign({ chimney: kind === 'tackle' || kind === 'market' }, o));
     const door = [x + 3, y + 4];
-    f.objs.push({ x, y, w: 7, h: 5, solid: true, door, draw: (sx, sy) => ctx.drawImage(img, sx, sy) });
+    f.objs.push({ x, y, w: 7, h: 5, solid: true, door, shadow: true, draw: (sx, sy) => ctx.drawImage(img, sx, sy) });
     f.triggers[door[0] + ',' + door[1]] = () => enterShop(kind, door);
   }
   // prize wheel
@@ -243,7 +251,7 @@ function buildHome() {
   for (let y = 1; y < f.h - 1; y++) for (let x = 1; x < f.w - 1; x++) if (f.tile(x, y) === TL.GRASS && r() < 0.12) f.set(x, y, TL.FLOWER);
   // house
   const himg = makeHouse(w.house, w.theme);
-  f.objs.push({ x: 7, y: 1, w: 6, h: 4, solid: true, door: [10, 4], draw: (sx, sy) => ctx.drawImage(himg, sx, sy) });
+  f.objs.push({ x: 7, y: 1, w: 6, h: 4, solid: true, door: [10, 4], shadow: true, draw: (sx, sy) => ctx.drawImage(himg, sx, sy) });
   f.triggers['10,4'] = () => houseMenu();
   // portal
   f.objs.push({ x: 10, y: 13, w: 1, h: 1, solid: false, z: -40, draw: (sx, sy) => drawPortal(sx - 8, sy + 1) });
@@ -256,7 +264,7 @@ function buildHome() {
   TANK_PLOTS.forEach(([x, y], i) => {
     const t = w.tanks[i];
     f.objs.push({
-      x, y, w: 2, h: 2, solid: true,
+      x, y, w: 2, h: 2, solid: true, shadow: !!t,
       draw: (sx, sy) => t ? drawTank(t.type, sx, sy, t.fish, i) : drawPlot(sx, sy),
       interact: () => t ? pushUI(new TankUI(i)) : say('An empty plot. Buy aquariums at the Tank Emporium in the city and they will appear here!'),
     });
@@ -264,7 +272,7 @@ function buildHome() {
   // decor
   for (const id of w.decor) {
     const [x, y] = DECOR_SPOTS[DECOR[id].spot];
-    f.objs.push({ x, y, w: 2, h: 2, solid: true, draw: (sx, sy) => drawDecor(id, sx, sy), interact: () => say('Your ' + DECOR[id].name + '. Visitors love it!') });
+    f.objs.push({ x, y, w: 2, h: 2, solid: true, shadow: true, draw: (sx, sy) => drawDecor(id, sx, sy), interact: () => say('Your ' + DECOR[id].name + '. Visitors love it!') });
   }
   // visitors
   const inc = dailyIncome();

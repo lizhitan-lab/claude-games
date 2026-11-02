@@ -4,7 +4,7 @@ const VERSION = 'dev';
 const CACHE = 'aquarium-world-' + VERSION;
 const FILES = [
   './', './index.html', './manifest.webmanifest',
-  './js/engine.js', './js/data.js', './js/art.js', './js/ui.js', './js/field.js', './js/fishing.js', './js/main.js',
+  './js/engine.js', './js/audio.js', './js/data.js', './js/art.js', './js/ui.js', './js/field.js', './js/fishing.js', './js/main.js',
   './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png', './icons/apple-touch-icon.png',
 ];
 self.addEventListener('install', e => {

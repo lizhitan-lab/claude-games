@@ -18,9 +18,10 @@ function drawAutosave() {
   if (autosaveT <= 0) return;
   autosaveT--;
   if (autosaveT > 100 || (autosaveT < 30 && (autosaveT >> 2) % 2)) return;
-  drawWin(4, H - 22, 58, 18, 'dark');
-  const r = (T >> 3) % 4; rect(10, H - 16, 6, 6, '#80e0ff'); rect(11 + (r % 2) * 3, H - 15 + (r >> 1) * 3, 1, 1, '#101028');
-  text('Saved', 20, H - 17, '#b0ffb0');
+  const y = 50;
+  drawWin(4, y, 58, 18, 'dark');
+  const r = (T >> 3) % 4; rect(10, y + 6, 6, 6, '#80e0ff'); rect(11 + (r % 2) * 3, y + 7 + (r >> 1) * 3, 1, 1, '#101028');
+  text('Saved', 20, y + 5, '#b0ffb0');
 }
 function fadeTo(fn, sp = 0.07) { if (fade) return; fade = { a: 0, d: 1, fn, sp }; }
 
@@ -67,8 +68,9 @@ const TitleScene = {
     for (let x = 6; x < W; x += 22) for (let k = 0; k < 18; k += 2) rect(x + Math.round(Math.sin((T / 20) + k / 4 + x) * 2), H - 14 - k, 2, 2, '#2a8a4a');
     for (const b of this.bub) pring(b.x, b.y, 1.5, 1.5, 'rgba(220,240,255,0.7)');
     const bob = Math.round(Math.sin(T / 30) * 3);
-    textBig('AQUARIUM', 160 - 26 * 3 + 6, 34 + bob, 3, '#7ae0ff', '#082040');
-    textBig('WORLD', 160 - 16 * 3 + 4, 70 + bob, 3, '#ffe060', '#3a2008');
+    const sh = (T % 240) * 0.5 - 20;
+    textLogo('AQUARIUM', 160 - 26 * 3 + 6, 34 + bob, 3, '#c8f8ff', '#2a8ad8', '#06183a', sh);
+    textLogo('WORLD', 160 - 16 * 3 + 4, 70 + bob, 3, '#fff6a0', '#e87818', '#3a1404', sh - 10);
     textC('A pixel fishing adventure', 160, 108, '#c8e8ff');
     this.menu.draw(!ui.length);
     textC(saveStatusLine(), 160, 202, saveStatus === 'cloud' ? '#a8ffa8' : saveStatus === 'blocked' ? '#ff9090' : '#c8e8ff', '#081838');
@@ -145,6 +147,20 @@ const WorldCreateScene = {
   },
 };
 
+// SNES-style transition: the screen pixelates into big blocks while it darkens
+let mosaicBuf = null;
+function drawMosaicFade(a) {
+  const block = 1 + Math.floor(a * 11);
+  if (block > 1) {
+    const w = Math.ceil(W / block), h = Math.ceil(H / block);
+    if (!mosaicBuf || mosaicBuf.width !== w) mosaicBuf = mkCanvas(w, h);
+    const mg = mosaicBuf.getContext('2d'); mg.imageSmoothingEnabled = false;
+    mg.drawImage(cv, 0, 0, W, H, 0, 0, w, h);
+    ctx.drawImage(mosaicBuf, 0, 0, w, h, 0, 0, w * block, h * block);
+  }
+  ctx.fillStyle = `rgba(0,0,0,${Math.pow(a, 1.6)})`; ctx.fillRect(0, 0, W, H);
+}
+
 // ============ Main loop ============
 try { const s = JSON.parse(localStorage.getItem('aquariumWorldSound')); if (s) { soundOn = s[0]; musicOn = s[1]; } } catch (e) {}
 function frame() {
@@ -171,7 +187,7 @@ function frame() {
   drawToasts();
   drawAutosave();
   overlaysEndFrame();
-  if (fade) { ctx.fillStyle = `rgba(0,0,0,${clamp(fade.a, 0, 1)})`; ctx.fillRect(0, 0, W, H); }
+  if (fade) drawMosaicFade(clamp(fade.a, 0, 1));
   inputEndFrame();
   T++;
 }

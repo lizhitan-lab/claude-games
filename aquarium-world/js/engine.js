@@ -131,6 +131,34 @@ function text(str, x, y, color = '#fff', shadow = '#101028', g = ctx) {
 const tw = s => String(s).length * 6 - 1;
 function textR(str, xr, y, c, s, g) { text(str, xr - tw(str), y, c, s, g); }
 function textC(str, cx, y, c, s, g) { text(str, Math.round(cx - tw(str) / 2), y, c, s, g); }
+// big title text with a vertical colour gradient, a thick outline and a moving shine
+const logoCache = {};
+function textLogo(str, x, y, scale, top, bottom, outline, shine = -1) {
+  const k = str + top + bottom + outline;
+  let base = logoCache[k];
+  const w = str.length * 6 + 2, h = 9;
+  if (!base) {
+    base = mkCanvas(w, h); const g = base.getContext('2d');
+    for (const [ox, oy] of [[0, 0], [2, 0], [0, 2], [2, 2], [1, 0], [0, 1], [2, 1], [1, 2]]) drawRaw(str, ox, oy, outline, g);
+    const f = mkCanvas(w, h), fg = f.getContext('2d');
+    drawRaw(str, 1, 1, '#ffffff', fg);
+    const grad = mkCanvas(w, h), gg = grad.getContext('2d'); // paint the gradient once, then mask it to the letters
+    for (let yy = 0; yy < h; yy++) { gg.fillStyle = yy <= 1 ? shade(top, 0.5) : mix(top, bottom, (yy - 1) / 6); gg.fillRect(0, yy, w, 1); }
+    fg.globalCompositeOperation = 'source-in'; fg.drawImage(grad, 0, 0);
+    g.drawImage(f, 0, 0);
+    logoCache[k] = base;
+  }
+  const t = mkCanvas(w, h), tg = t.getContext('2d');
+  tg.drawImage(base, 0, 0);
+  if (shine >= 0) { // diagonal glint sweeping across the letters
+    const m = mkCanvas(w, h), mg = m.getContext('2d');
+    const band = mkCanvas(w, h), bg2 = band.getContext('2d'); bg2.fillStyle = 'rgba(255,255,255,0.85)';
+    for (let yy = 0; yy < h; yy++) bg2.fillRect(Math.round(shine - yy), yy, 3, 1);
+    drawRaw(str, 1, 1, '#ffffff', mg); mg.globalCompositeOperation = 'source-in'; mg.drawImage(band, 0, 0);
+    tg.drawImage(m, 0, 0);
+  }
+  ctx.drawImage(t, Math.round(x), Math.round(y), w * scale, h * scale);
+}
 function textBig(str, x, y, scale, color, outline = '#101028', g = ctx) {
   str = String(str);
   const t = mkCanvas(str.length * 6 + 2, 9), tg = t.getContext('2d');
@@ -253,83 +281,6 @@ function resize() {
   cv.style.height = H * sc + 'px';
 }
 addEventListener('resize', resize); resize();
-
-// ============ Audio ============
-let AC = null, soundOn = true, musicOn = true, noiseBuf = null;
-function audioUnlock() {
-  if (!AC) {
-    try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; }
-  }
-  if (AC && AC.state === 'suspended') AC.resume();
-}
-function toneAt(freq, dur, type, vol, t, slide = 0) {
-  if (!AC) return;
-  const o = AC.createOscillator(), g = AC.createGain();
-  o.type = type; o.frequency.setValueAtTime(freq, t);
-  if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(20, freq + slide), t + dur);
-  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.02);
-}
-function tone(freq, dur, type = 'square', vol = 0.06, when = 0, slide = 0) {
-  if (!AC) return; toneAt(freq, dur, type, vol, AC.currentTime + when, slide);
-}
-function noise(dur, vol = 0.12, when = 0) {
-  if (!AC) return;
-  if (!noiseBuf) {
-    noiseBuf = AC.createBuffer(1, AC.sampleRate * 0.5, AC.sampleRate);
-    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-  }
-  const s = AC.createBufferSource(), g = AC.createGain(), f = AC.createBiquadFilter();
-  f.type = 'lowpass'; f.frequency.value = 1200;
-  s.buffer = noiseBuf; const t = AC.currentTime + when;
-  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  s.connect(f); f.connect(g); g.connect(AC.destination); s.start(t); s.stop(t + dur);
-}
-const SFX = {
-  blip: () => tone(880, 0.035, 'square', 0.035),
-  ok: () => { tone(660, 0.05, 'square', 0.05); tone(990, 0.06, 'square', 0.05, 0.05); },
-  cancel: () => tone(520, 0.08, 'square', 0.045, 0, -260),
-  err: () => tone(140, 0.16, 'sawtooth', 0.06),
-  coin: () => { tone(988, 0.06, 'square', 0.05); tone(1319, 0.22, 'square', 0.05, 0.06); },
-  cast: () => tone(260, 0.3, 'triangle', 0.1, 0, 700),
-  splash: () => noise(0.35, 0.18),
-  nibble: () => tone(700, 0.04, 'square', 0.04),
-  bite: () => { tone(1200, 0.06, 'square', 0.07); tone(1500, 0.08, 'square', 0.07, 0.08); },
-  catch: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.16, 'square', 0.06, i * 0.09)),
-  rare: () => [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(f, 0.2, 'square', 0.06, i * 0.08)),
-  fail: () => [392, 330, 262].forEach((f, i) => tone(f, 0.2, 'triangle', 0.1, i * 0.13)),
-  level: () => [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, 0.13, 'square', 0.06, i * 0.08)),
-  tick: () => tone(1600, 0.02, 'square', 0.03),
-  reel: () => tone(180 + Math.random() * 60, 0.025, 'square', 0.02),
-  warp: () => { tone(200, 0.7, 'sine', 0.1, 0, 900); tone(300, 0.7, 'sine', 0.06, 0.1, 900); },
-  door: () => { tone(330, 0.06, 'square', 0.05); tone(247, 0.1, 'square', 0.05, 0.07); },
-  bump: () => tone(90, 0.05, 'square', 0.04),
-};
-function sfx(n) { if (soundOn && AC && SFX[n]) { try { SFX[n](); } catch (e) {} } }
-
-// tiny chiptune sequencer (MIDI notes, 0 = rest)
-const SONGS = {
-  title: { tempo: 0.17, mel: [60, 64, 67, 72, 71, 67, 64, 67, 65, 69, 72, 77, 76, 72, 69, 72, 67, 71, 74, 79, 77, 74, 71, 74, 72, 0, 67, 0, 72, 0, 0, 0], bass: [48, 53, 55, 48] },
-  town: { tempo: 0.15, mel: [72, 0, 76, 79, 77, 76, 74, 0, 72, 74, 76, 72, 74, 0, 67, 0, 72, 0, 76, 79, 81, 79, 77, 76, 74, 76, 77, 74, 72, 0, 0, 0], bass: [48, 48, 53, 55, 48, 57, 55, 48] },
-  home: { tempo: 0.22, mel: [64, 0, 67, 0, 72, 0, 71, 69, 67, 0, 64, 0, 65, 0, 67, 0, 64, 0, 67, 0, 72, 0, 74, 76, 74, 0, 72, 0, 71, 0, 0, 0], bass: [48, 45, 41, 43, 48, 45, 43, 48] },
-  map: { tempo: 0.18, mel: [67, 0, 72, 0, 74, 76, 74, 72, 69, 0, 72, 0, 67, 0, 0, 0, 65, 0, 69, 0, 72, 74, 72, 69, 67, 0, 69, 71, 72, 0, 0, 0], bass: [48, 45, 41, 43] },
-  fish: { tempo: 0.2, mel: [69, 0, 72, 0, 76, 0, 74, 72, 69, 0, 0, 67, 69, 0, 0, 0, 72, 0, 76, 0, 79, 0, 76, 74, 72, 0, 74, 0, 69, 0, 0, 0], bass: [45, 45, 50, 52, 45, 48, 50, 45] },
-  shop: { tempo: 0.16, mel: [76, 74, 72, 74, 76, 76, 76, 0, 74, 74, 74, 0, 76, 79, 79, 0, 76, 74, 72, 74, 76, 76, 76, 76, 74, 74, 76, 74, 72, 0, 0, 0], bass: [48, 43, 48, 43, 48, 43, 43, 48] },
-};
-let curSong = null, songStep = 0, nextNoteT = 0;
-const midi = n => 440 * Math.pow(2, (n - 69) / 12);
-function playSong(name) { if (curSong === name) return; curSong = name; songStep = 0; nextNoteT = 0; }
-function musicTick() {
-  if (!AC || !musicOn || !curSong) return;
-  const s = SONGS[curSong];
-  if (nextNoteT < AC.currentTime) nextNoteT = AC.currentTime + 0.02;
-  while (nextNoteT < AC.currentTime + 0.12) {
-    const i = songStep % s.mel.length, n = s.mel[i];
-    if (n) toneAt(midi(n), s.tempo * 0.9, 'square', 0.018, nextNoteT);
-    if (i % 4 === 0) toneAt(midi(s.bass[(i / 4) % s.bass.length]), s.tempo * 3.5, 'triangle', 0.05, nextNoteT);
-    nextNoteT += s.tempo; songStep++;
-  }
-}
 
 // ============ Windows ============
 function drawWin(x, y, w, h, style = 'blue') {

@@ -145,43 +145,101 @@ const LAKE_ART = {
   moonfall: { sky: ['#0a0628', '#40307a'], far: '#2a2058', near: '#181238', water: ['#4a3aa0', '#120c40'], hi: '#a090ff', dock: '#5a4a6a' },
 };
 const backdrops = {};
+const HORIZON = 104;
+// Each lake is drawn in layers: sky (back), clouds, mountains/shore (mid), Mode-7 style water,
+// and the dock (fg). The water is a texture redrawn every frame row by row with perspective.
 function lakeBackdrop(L) {
   if (backdrops[L.id]) return backdrops[L.id];
-  const a = LAKE_ART[L.id], c = mkCanvas(W, H), g = c.getContext('2d'), r = seeded(L.id.length * 97);
-  for (let y = 0; y < 104; y += 4) rect(0, y, W, 4, mix(a.sky[0], a.sky[1], y / 104), g);
-  if (L.id === 'moonfall') {
-    for (let i = 0; i < 80; i++) rect(Math.floor(r() * W), Math.floor(r() * 90), 1, 1, r() < 0.3 ? '#fff8c0' : '#c0c8ff', g);
-    pellipse(250, 34, 16, 16, '#f0ecff', g); pellipse(244, 30, 4, 3, '#d0c8f0', g); pellipse(256, 40, 3, 2, '#d0c8f0', g);
-  } else if (L.id === 'marsh') {
-    pellipse(70, 34, 12, 12, '#e8ecd8', g);
-  } else pellipse(64, 30, 12, 12, '#fff4b0', g);
-  // far mountains
-  for (let x = 0; x < W; x++) {
-    const hh = L.id === 'crystal' ? 36 + Math.abs(((x * 0.7) % 60) - 30) * 1.2 + Math.sin(x * 0.1) * 4 : 20 + Math.sin(x * 0.035) * 9 + Math.sin(x * 0.11) * 4;
-    rect(x, 104 - hh, 1, hh, a.far, g);
-    if (L.id === 'crystal') rect(x, 104 - hh, 1, Math.max(0, hh - 46), '#ffffff', g);
+  const a = LAKE_ART[L.id], r = seeded(L.id.length * 97);
+  const layer = (w = W, h = H) => { const c = mkCanvas(w, h); return [c, c.getContext('2d')]; };
+  // --- sky ---
+  const [back, g] = layer();
+  for (let y = 0; y < HORIZON; y += 2) rect(0, y, W, 2, mix(a.sky[0], a.sky[1], y / HORIZON), g);
+  const night = L.id === 'moonfall';
+  const sun = night ? { x: 250, y: 34, r: 16, col: '#f0ecff', glow: '#8070d0' } : L.id === 'marsh' ? { x: 70, y: 34, r: 12, col: '#eef0de', glow: '#c8d0b0' } : { x: 64, y: 30, r: 12, col: '#fff6c0', glow: '#fff0a0' };
+  for (let k = 4; k >= 1; k--) { g.globalAlpha = 0.12; pellipse(sun.x, sun.y, sun.r + k * 6, sun.r + k * 6, sun.glow, g); }
+  g.globalAlpha = 1;
+  pellipse(sun.x, sun.y, sun.r, sun.r, sun.col, g); pellipse(sun.x - 3, sun.y - 3, sun.r * 0.55, sun.r * 0.55, shade(sun.col, 0.4), g);
+  if (night) {
+    for (let i = 0; i < 90; i++) rect(Math.floor(r() * W), Math.floor(r() * 92), 1, 1, r() < 0.3 ? '#fff8c0' : '#c0c8ff', g);
+    pellipse(244, 30, 4, 3, '#d0c8f0', g); pellipse(256, 40, 3, 2, '#d0c8f0', g);
   }
-  // tree line
+  // --- clouds (wide strip that scrolls) ---
+  const [clouds, cg] = layer(640, 60);
+  const cl = night ? '#3a3070' : L.id === 'marsh' ? '#b8c0aa' : '#ffffff';
+  for (let i = 0; i < 7; i++) {
+    const cx = 40 + i * 90 + r() * 40, cy = 18 + r() * 24, w = 22 + r() * 18;
+    for (const [dx, dy, rr] of [[-w * 0.5, 4, w * 0.35], [0, 0, w * 0.5], [w * 0.5, 4, w * 0.38], [w * 0.2, -4, w * 0.3]]) pellipse(cx + dx, cy + dy, rr, rr * 0.55, shade(cl, -0.18), cg);
+    for (const [dx, dy, rr] of [[-w * 0.5, 2, w * 0.3], [0, -2, w * 0.45], [w * 0.5, 2, w * 0.32]]) pellipse(cx + dx, cy + dy, rr, rr * 0.5, cl, cg);
+    pellipse(cx - w * 0.15, cy - 5, w * 0.25, w * 0.1, shade(cl, 0.3), cg);
+  }
+  // --- mountains + shore (shaded by slope, lit from the left) ---
+  const [mid, mg] = layer();
+  const mh = x => L.id === 'crystal' ? 36 + Math.abs(((x * 0.7) % 60) - 30) * 1.2 + Math.sin(x * 0.1) * 4 : 20 + Math.sin(x * 0.035) * 9 + Math.sin(x * 0.11) * 4;
+  for (let x = 0; x < W; x++) {
+    const hh = mh(x), lit = mh(x + 3) >= mh(x - 3); // slopes facing the light are brighter
+    for (let y = HORIZON - hh; y < HORIZON; y++) {
+      const depth = (y - (HORIZON - hh)) / hh;
+      rect(x, y, 1, 1, mix(shade(a.far, lit ? 0.16 : -0.12), mix(a.far, a.sky[1], 0.35), depth * 0.8), mg);
+    }
+    if (L.id === 'crystal') { const sn = Math.max(0, hh - 46); rect(x, HORIZON - hh, 1, sn, lit ? '#ffffff' : '#cfd8ec', mg); }
+  }
   for (let x = -4; x < W + 8; x += 7) {
     const hh = 8 + Math.floor(r() * 8);
-    if (L.id === 'crystal') { for (let k = 0; k < hh; k++) rect(x + 3 - Math.floor(k / 3), 104 - hh + k, 1 + Math.floor(k / 3) * 2, 1, a.near, g); }
-    else pellipse(x + 3, 104 - hh / 2, 5, hh / 2, a.near, g);
+    if (L.id === 'crystal') {
+      for (let k = 0; k < hh; k++) { const half = Math.floor(k / 3); rect(x + 3 - half, HORIZON - hh + k, half + 1, 1, shade(a.near, 0.18), mg); rect(x + 4, HORIZON - hh + k, half, 1, shade(a.near, -0.15), mg); }
+    } else { pellipse(x + 3, HORIZON - hh / 2, 5, hh / 2, shade(a.near, -0.1), mg); pellipse(x + 2, HORIZON - hh / 2 - 1, 3, hh / 3, shade(a.near, 0.15), mg); }
   }
-  rect(0, 100, W, 4, a.near, g);
-  // water
-  for (let y = 104; y < H; y += 3) rect(0, y, W, 3, mix(a.water[0], a.water[1], Math.pow((y - 104) / 136, 0.7)), g);
-  for (let i = 0; i < 40; i++) rect(Math.floor(r() * W), 105 + Math.floor(r() * 12), 6 + Math.floor(r() * 10), 1, shade(a.water[0], 0.15), g);
+  rect(0, HORIZON - 4, W, 4, a.near, mg); rect(0, HORIZON - 1, W, 1, shade(a.near, -0.3), mg);
   if (L.id === 'willow') for (const wx of [190, 290]) {
-    rect(wx, 74, 3, 28, '#5a3a20', g); pellipse(wx + 1, 74, 16, 9, '#4a8a3a', g);
-    for (let j = -15; j <= 16; j += 2) rect(wx + j, 74, 1, 14 + Math.abs(j) % 7, '#3a7a2a', g);
+    rect(wx, 74, 3, 28, '#5a3a20', mg); rect(wx, 74, 1, 28, '#7a5a38', mg);
+    pellipse(wx + 1, 74, 16, 9, '#3e7e34', mg); pellipse(wx - 2, 71, 10, 5, '#5aa048', mg);
+    for (let j = -15; j <= 16; j += 2) { rect(wx + j, 74, 1, 14 + Math.abs(j) % 7, j % 4 ? '#3a7a2a' : '#5a9a40', mg); }
   }
-  if (L.id === 'marsh') for (let i = 0; i < 40; i++) { const x = 150 + Math.floor(r() * 170), hh = 10 + Math.floor(r() * 18); rect(x, 240 - hh, 1, hh, '#2a3a1a', g); rect(x, 240 - hh, 2, 4, '#6a4a2a', g); }
-  // dock
-  rect(0, 118, 78, 10, a.dock, g);
-  for (let x = 0; x < 78; x += 9) rect(x, 118, 1, 10, shade(a.dock, -0.35), g);
-  rect(0, 118, 78, 1, shade(a.dock, 0.3), g); rect(0, 128, 78, 2, shade(a.dock, -0.5), g);
-  for (const px of [6, 40, 72]) rect(px, 130, 4, 40, shade(a.dock, -0.4), g);
-  return (backdrops[L.id] = c);
+  // --- foreground: dock (+ reeds) ---
+  const [fg, fgc] = layer();
+  if (L.id === 'marsh') for (let i = 0; i < 40; i++) { const x = 150 + Math.floor(r() * 170), hh = 10 + Math.floor(r() * 18); rect(x, 240 - hh, 1, hh, '#2a3a1a', fgc); rect(x + 1, 240 - hh + 4, 1, hh - 4, '#3e5428', fgc); rect(x, 240 - hh, 2, 4, '#6a4a2a', fgc); }
+  for (const px of [6, 40, 72]) { rect(px, 130, 4, 40, shade(a.dock, -0.4), fgc); rect(px, 130, 1, 40, shade(a.dock, -0.2), fgc); fgc.globalAlpha = 0.3; rect(px - 1, 168, 6, 2, '#ffffff', fgc); fgc.globalAlpha = 1; }
+  rect(0, 118, 78, 10, a.dock, fgc);
+  for (let x = 0; x < 78; x += 9) { rect(x, 118, 1, 10, shade(a.dock, -0.35), fgc); rect(x + 1, 119, 1, 8, shade(a.dock, 0.15), fgc); }
+  rect(0, 118, 78, 1, shade(a.dock, 0.35), fgc); rect(0, 128, 78, 2, shade(a.dock, -0.55), fgc);
+  // --- water texture: wavy bands and crests, tiled 8x wide for the perspective pass ---
+  const TW = 128, TH = 64, [tile, tg] = layer(TW, TH);
+  for (let y = 0; y < TH; y++) rect(0, y, TW, 1, mix(a.water[0], a.water[1], 0.35 + 0.25 * Math.sin(y / TH * Math.PI * 4)), tg);
+  for (let k = 0; k < 14; k++) {
+    const y0 = (k * 4.6) | 0, len = 8 + (k * 7) % 14;
+    for (let x = 0; x < TW; x++) {
+      const y = (y0 + Math.round(Math.sin(x / TW * Math.PI * 4 + k) * 1.5) + TH) % TH;
+      if ((x + k * 11) % 32 < len) rect(x, y, 1, 1, k % 3 ? shade(a.water[0], 0.18) : a.hi, tg);
+      else if ((x + k * 5) % 40 < 4) rect(x, (y + 2) % TH, 1, 1, shade(a.water[1], -0.1), tg);
+    }
+  }
+  const [tex, xg] = layer(TW * 8, TH);
+  for (let i = 0; i < 8; i++) xg.drawImage(tile, i * TW, 0);
+  // haze where water meets the shore
+  const [fog, fog2] = layer(W, 60);
+  for (let y = 0; y < 60; y++) { fog2.globalAlpha = Math.pow(1 - y / 60, 2) * 0.55; rect(0, y, W, 1, a.sky[1], fog2); }
+  return (backdrops[L.id] = { back, clouds, mid, fg, tex, fog, sun, night });
+}
+function drawLakeWater(bd, t) {
+  const TW = 128, TH = 64;
+  for (let r = HORIZON; r < H; r++) {
+    const d = r - HORIZON + 5, scale = d / 38;              // texels get bigger toward the viewer
+    const v = (((900 / d) + t * 0.4) % TH + TH) % TH;
+    const sw = Math.min(TW * 7, W / scale);
+    const sx = (((t * 0.12) + Math.sin(r * 0.15 + t * 0.04) * 2.5 / Math.max(scale, 0.3)) % TW + TW) % TW;
+    ctx.drawImage(bd.tex, sx, Math.floor(v), sw, 1, 0, r, W, 1);
+  }
+  ctx.drawImage(bd.fog, 0, HORIZON);
+  // glitter path under the sun / moon
+  const s = bd.sun;
+  for (let k = 0; k < 22; k++) {
+    if (((t >> 2) + k * 7) % 5 < 2) continue;
+    const y = HORIZON + 3 + k * k * 0.28, spread = 2 + k * 0.9;
+    const x = s.x + Math.sin(t * 0.07 + k * 1.7) * spread;
+    ctx.fillStyle = bd.night ? 'rgba(240,236,255,0.7)' : 'rgba(255,250,215,0.75)';
+    ctx.fillRect(Math.round(x - k * 0.4), Math.round(y), 2 + Math.round(k / 4), 1);
+  }
 }
 
 // ============ Fishing ============
@@ -382,16 +440,14 @@ const FishingScene = {
     if (this.trip) setTimeout(() => toast('Day ' + G.day + ' begins. ' + this.trip + ' fish caught last trip!'), 600);
   },
   draw() {
-    ctx.drawImage(this.bd, 0, 0);
-    const a = this.art;
-    // shimmer
-    for (let k = 0; k < 26; k++) {
-      const y = 108 + ((k * 37) % 130), sp = 0.15 + (k % 5) * 0.06;
-      const x = ((k * 53 + T * sp) % 360) - 20;
-      rect(x, y, 4 + (k % 4) * 3, 1, a.hi);
-    }
+    const bd = this.bd;
+    ctx.drawImage(bd.back, 0, 0);
+    const cx = -((T * 0.08) % 640);
+    ctx.globalAlpha = bd.night ? 0.7 : 0.92; ctx.drawImage(bd.clouds, cx, 0); ctx.drawImage(bd.clouds, cx + 640, 0); ctx.globalAlpha = 1;
+    ctx.drawImage(bd.mid, 0, 0);
+    drawLakeWater(bd, T);
     if (this.L.id === 'marsh') for (let k = 0; k < 4; k++) { ctx.fillStyle = 'rgba(220,230,210,0.12)'; ctx.fillRect(((T * 0.2 * (k + 1)) % 480) - 160, 92 + k * 26, 160, 10); }
-    if (this.L.id === 'moonfall') for (let k = 0; k < 8; k++) if ((T + k * 13) % 40 < 20) rect(240 + Math.sin(k * 3) * 14, 120 + k * 12, 3, 1, '#f0ecff');
+    ctx.drawImage(bd.fg, 0, 0);
     // shadows
     for (const s of this.shadows) { ctx.fillStyle = 'rgba(0,0,30,0.22)'; pellipse(s.x, s.y, 7 * s.s, 2 * s.s, 'rgba(0,0,30,0.22)'); rect(s.x + (s.vx > 0 ? -9 : 7) * s.s, s.y - 1, 2, 3, 'rgba(0,0,30,0.22)'); }
     // ripples & splash
