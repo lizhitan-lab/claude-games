@@ -79,8 +79,11 @@ function loadImages() {
   })));
 }
 // draw sprite with bottom-center anchor
+// Oliver's picture is mostly hat: scale him so his head and body match everyone else
+const SCALE_FIX = { oliver: 2.4 };
 function spr(id, x, y, h, o = {}) {
   const im = IMG[id]; if (!im) return;
+  h *= SCALE_FIX[id] || 1;
   const w = im.width * h / im.height;
   ctx.save(); ctx.translate(x, y);
   if (o.rot) ctx.rotate(o.rot);
@@ -91,7 +94,7 @@ function spr(id, x, y, h, o = {}) {
   ctx.restore();
   return w;
 }
-function sprW(id, h) { const im = IMG[id]; return im ? im.width * h / im.height : h * .7; }
+function sprW(id, h) { h *= SCALE_FIX[id] || 1; const im = IMG[id]; return im ? im.width * h / im.height : h * .7; }
 
 // ================= audio =================
 let AC = null, muted = store.get('muted', false);
@@ -414,7 +417,7 @@ const Menu = {
     this.parade.forEach((f, i) => {
       let x = ((i * gap + T * 40) % span) - 40;
       if (x > W + 40) return;
-      spr(f.id, x, 500 - Math.abs(Math.sin(T * 7 + i)) * 7, f.id === 'oliver' ? 66 : 54);
+      spr(f.id, x, 500 - Math.abs(Math.sin(T * 7 + i)) * 7, 54);
       const parts = f.name.includes("'s ") ? [f.name.split(' ').slice(0, -1).join(' '), f.name.split(' ').pop()] : [f.name];
       parts.forEach((l, k) => text(l, x, 514 + k * 15 - (parts.length - 1) * 5, 16, INK, { font: 'b', stroke: '#fff', lw: 4, maxW: gap - 6 }));
     });
@@ -425,7 +428,7 @@ function cardArt(i, x, y) {
   if (i === 0) { bubble(x - 40, y - 10, 34, T); spr('gavin', x - 40, y + 14, 44); grumble(x + 45, y - 20, .9, T); spr('joshin', x + 30, y + 58, 60); }
   if (i === 1) { gift(x - 70, y + 50, 38, 36, '#7ed957'); candle(x - 10, y - 10, 1, T); candle(x + 20, y - 25, 1, T); spr('joshin', x + 45, y + 55, 70); ctx.fillStyle = '#9ad97a'; ctx.fillRect(x - 100, y + 50, 200, 20); }
   if (i === 2) {
-    ['stella', 'oliver', 'isaac', 'yuki'].forEach((id, k) => spr(id, x - 60 + k * 40, y + 55, id === 'oliver' ? 90 : 62));
+    ['stella', 'oliver', 'isaac', 'yuki'].forEach((id, k) => spr(id, x - 60 + k * 40, y + 55, 62));
     ctx.beginPath(); ctx.arc(x + 25, y - 18, 24, 0, 7); ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fill(); ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.stroke();
     ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x + 42, y); ctx.lineTo(x + 62, y + 22); ctx.lineWidth = 10; ctx.stroke(); ctx.lineCap = 'butt';
   }
@@ -898,7 +901,7 @@ const Find = {
       const [c, r] = cs[i];
       const x = 70 + c * 117 + rnd(-18, 18), y = 238 + r * 128 + rnd(-10, 10);
       const sp = lvl < 3 ? 0 : lvl < 6 ? 40 : 75, a = rnd(0, 7);
-      return { f, x, y, h: f.id === 'oliver' ? h * 1.25 : h, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp * .5, shake: 0, flip: Math.random() < .5 };
+      return { f, x, y, h, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp * .5, shake: 0, flip: Math.random() < .5 };
     });
   },
   next() {
