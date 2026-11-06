@@ -780,7 +780,7 @@ const GY = 450;
 const Dash = {
   enter() { this.reset(); },
   reset() {
-    this.state = 'ready'; this.t = 0; this.speed = 340; this.dist = 0; this.score = 0; this.candles = 0; this.bonus = 0;
+    this.state = 'ready'; this.t = 0; this.speed = 340; this.level = 1; this.dist = 0; this.score = 0; this.candles = 0; this.bonus = 0;
     this.p = { y: GY, vy: 0, jumps: 0, slide: 0, ground: true };
     this.obs = []; this.items = []; this.parts = []; this.next = 500; this.friendT = 4; this.bag = shuffle(FRIENDS); this.cheer = [];
     this.pow = { shield: 0, magnet: 0, rush: 0 }; this.slideHeld = false; this.buttons = []; this.groundOff = 0;
@@ -811,7 +811,11 @@ const Dash = {
     updParts(this.parts, dt);
     if (this.state !== 'run') return;
     const p = this.p; this.t += dt;
-    this.speed = Math.min(720, 340 + this.t * 7);
+    // speed level goes up every 12 seconds; each level is faster, and speed keeps creeping up in between
+    const lvl = 1 + Math.floor(this.t / 12);
+    if (lvl > this.level) { this.level = lvl; SFX.power(); popText(this.parts, 480, 200, `Faster! Speed ${lvl}`, '#ff7a2e', 36); burst(this.parts, 480, 200, 24, ['#ff7a2e', '#ffd23f', '#fff']); }
+    const target = Math.min(1150, 340 * Math.pow(1.13, lvl - 1) + (this.t % 12) * 4);
+    this.speed += (target - this.speed) * Math.min(1, dt * 2);
     const sp = this.speed * (this.pow.rush > 0 ? 1.5 : 1);
     this.dist += sp * dt; this.groundOff += sp * dt;
     this.score += sp * dt / 10 * (this.pow.rush > 0 ? 2 : 1);
@@ -909,6 +913,8 @@ const Dash = {
     // HUD
     rr(80, 12, 200, 46, 23); fillStroke('rgba(255,255,255,.88)', INK, 3); text(`${Math.floor(this.score)}`, 180, 36, 28, INK);
     rr(292, 12, 110, 46, 23); fillStroke('rgba(255,255,255,.88)', INK, 3); candle(318, 50, .8, T); text(`${this.candles % 9}/9`, 362, 36, 22, INK);
+    rr(80, 64, 140, 34, 17); fillStroke('#ff7a2e', INK, 3); text(`Speed ${this.level}`, 150, 82, 20, '#fff', { stroke: INK, lw: 4 });
+    for (let k = 0; k < Math.min(this.level, 8); k++) { ctx.beginPath(); ctx.moveTo(232 + k * 12, 70); ctx.lineTo(240 + k * 12, 81); ctx.lineTo(232 + k * 12, 92); ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.stroke(); }
     let px = 414; for (const [k, c] of [['shield', '#5fc3e4'], ['magnet', '#ffd23f'], ['rush', '#ff6b8b']]) if (this.pow[k] > 0) { rr(px, 16, 120, 38, 19); fillStroke(c, INK, 3); text({ shield: 'Shield', magnet: 'Magnet', rush: 'Rush!' }[k], px + 60, 36, 20, '#fff', { stroke: INK, lw: 4 }); px += 128; }
     if (this.state === 'ready') {
       paperPanel(220, 110, 520, 290);
@@ -917,7 +923,7 @@ const Dash = {
       lines.concat(['Grab candles: 9 candles = cake bonus!', 'Run into friends with balloons for power-ups.']).forEach((l, i) => text(l, 480, 200 + i * 34, 22, INK, { font: 'b' }));
       text(touchMode ? 'Press JUMP to start!' : 'Press Space to start!', 480, 360, 28, PINK, { stroke: '#fff', lw: 5 });
     }
-    if (this.state === 'over') resultCard(this.newBest ? 'New best!' : 'Bonk!', [`Score: ${this.final}`, `Candles: ${this.candles}   Cake bonuses: ${this.bonus}`, `Best: ${store.get('best_dash', 0)}   Friends who helped: ${this.cheer.length}`], this.cheer.slice(-8));
+    if (this.state === 'over') resultCard(this.newBest ? 'New best!' : 'Bonk!', [`Score: ${this.final}`, `Candles: ${this.candles}   Cake bonuses: ${this.bonus}   Top speed: ${this.level}`, `Best: ${store.get('best_dash', 0)}   Friends who helped: ${this.cheer.length}`], this.cheer.slice(-8));
   }
 };
 
