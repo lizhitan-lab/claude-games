@@ -380,7 +380,7 @@ const GAMES = [
 const Menu = {
   enter() {
     this.buttons = GAMES.map((g, i) => ({ x: 40 + i * 225, y: 168, w: 205, h: 262, fn: () => go(g.scene()), card: g, custom: true }));
-    if (store.get('partyDone', false)) this.buttons.push(button(390, 444, 180, 46, 'Party room', () => go(Party), '#c58cf0'));
+    if (store.get('partyDone', false)) this.buttons.push(button(12, 12, 150, 44, 'Party room', () => go(Party), '#c58cf0'));
     this.parade = shuffle(FRIENDS);
   },
   key(c) { const n = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3 }[c]; if (n != null) go(GAMES[n].scene()); },
@@ -410,11 +410,13 @@ const Menu = {
       text(g.best(), b.x + b.w / 2, y + 231, 17, '#fff', { stroke: INK, lw: 4, maxW: b.w - 70 });
     });
     // friend parade
-    const span = 24 * 62;
+    const gap = 76, span = 24 * gap;
     this.parade.forEach((f, i) => {
-      let x = ((i * 62 + T * 45) % span) - 40;
+      let x = ((i * gap + T * 40) % span) - 40;
       if (x > W + 40) return;
-      spr(f.id, x, 540 - Math.abs(Math.sin(T * 7 + i)) * 7, 60);
+      spr(f.id, x, 500 - Math.abs(Math.sin(T * 7 + i)) * 7, f.id === 'oliver' ? 66 : 54);
+      const parts = f.name.includes("'s ") ? [f.name.split(' ').slice(0, -1).join(' '), f.name.split(' ').pop()] : [f.name];
+      parts.forEach((l, k) => text(l, x, 514 + k * 15 - (parts.length - 1) * 5, 16, INK, { font: 'b', stroke: '#fff', lw: 4, maxW: gap - 6 }));
     });
     if (touchMode && innerHeight > innerWidth) text('Tip: turn your phone sideways', 480, 150, 18, INK, { font: 'b' });
   }
