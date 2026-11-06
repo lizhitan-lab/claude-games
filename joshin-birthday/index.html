@@ -12,11 +12,28 @@
   #wrap { position: fixed; inset: 0; padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
     env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); box-sizing: border-box;
     display: flex; align-items: center; justify-content: center; }
-  #box { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  #box { position: relative; width: 100%; height: 100%; display: grid; grid-template-areas: "S"; grid-template-columns: 1fr; grid-template-rows: 1fr; }
+  #stage { grid-area: S; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; position: relative; }
   canvas { display: block; touch-action: none; border-radius: 6px; outline: none; }
+  /* touch control pads sit outside the game picture */
+  .pad { display: none; box-sizing: border-box; padding: 10px; gap: 12px; align-items: center; justify-content: center; }
+  #padL { grid-area: L; } #padR { grid-area: R; }
+  #box.land { grid-template-areas: "L S R"; grid-template-columns: auto 1fr auto; }
+  #box.port { grid-template-areas: "S S" "L R"; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; }
+  #box.land .pad, #box.port .pad { display: flex; }
+  #box.land .pad { width: clamp(140px, 22vw, 250px); height: 100%; }
+  #box.port .pad { height: clamp(180px, 38vh, 340px); }
+  .cbtn { flex: 1 1 0; min-width: 0; height: min(100%, 230px); max-width: 230px; border: 4px solid var(--ink); border-radius: 30px;
+    background: #fff8e8; color: var(--ink); box-shadow: 0 7px 0 var(--ink); font: 800 clamp(22px, 4.5vmin, 40px)/1 "Baloo 2", system-ui, sans-serif;
+    display: flex; align-items: center; justify-content: center; touch-action: none; -webkit-user-select: none; user-select: none; padding: 0; }
+  .cbtn.jump { background: #ff6b8b; color: #fff; text-shadow: 0 3px 0 var(--ink); }
+  #box.port #stage { align-items: flex-end; padding-bottom: 8px; }
+  .cbtn.slide { background: #ffd23f; }
+  .cbtn svg { width: 46%; height: auto; max-height: 60%; }
+  .cbtn.on { transform: translateY(6px); box-shadow: 0 1px 0 var(--ink); filter: brightness(.93); }
   #loading { position: absolute; color: var(--ink); font: 700 22px "Baloo 2", system-ui, sans-serif; }
 </style>
-<div id="wrap"><div id="box"><canvas id="c" tabindex="0" aria-label="Joshin's Birthday Arcade game"></canvas><div id="loading">Loading the party…</div></div></div>
+<div id="wrap"><div id="box"><div class="pad" id="padL"></div><div id="stage"><canvas id="c" tabindex="0" aria-label="Joshin's Birthday Arcade game"></canvas><div id="loading">Loading the party…</div></div><div class="pad" id="padR"></div></div></div>
 <script>
 "use strict";
 // ================= basics =================
@@ -35,7 +52,8 @@ const store = {
 };
 
 function resize() {
-  const box = document.getElementById('box');
+  layoutPads();
+  const box = document.getElementById('stage');
   const s = Math.min(box.clientWidth / W, box.clientHeight / H);
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   cv.style.width = Math.floor(W * s) + 'px'; cv.style.height = Math.floor(H * s) + 'px';
@@ -329,6 +347,37 @@ addEventListener('keydown', e => {
 });
 addEventListener('keyup', e => { keys[e.code] = false; });
 addEventListener('blur', () => { for (const k in keys) keys[k] = false; pointers.clear(); });
+// ---- on-screen control pads (touch only), outside the canvas ----
+const PADBTN = {
+  left: { code: 'ArrowLeft', html: '<svg viewBox="0 0 40 40"><path d="M28 6 L8 20 L28 34 Z" fill="#1d2b5c"/></svg>', label: 'Move left' },
+  right: { code: 'ArrowRight', html: '<svg viewBox="0 0 40 40"><path d="M12 6 L32 20 L12 34 Z" fill="#1d2b5c"/></svg>', label: 'Move right' },
+  jump: { code: 'Space', html: 'JUMP', label: 'Jump', cls: 'jump' },
+  slide: { code: 'ArrowDown', html: 'SLIDE', label: 'Slide', cls: 'slide' },
+};
+let padSig = '';
+function wantedPads() { return touchMode && scene && scene.pads ? scene.pads() : null; }
+function releasePadKeys() { for (const b of Object.values(PADBTN)) keys[b.code] = false; document.querySelectorAll('.cbtn.on').forEach(e => e.classList.remove('on')); }
+function layoutPads() {
+  const want = wantedPads(), box = document.getElementById('box');
+  const orient = want ? (innerWidth > innerHeight ? 'land' : 'port') : 'none';
+  const sig = orient + JSON.stringify(want);
+  if (sig === padSig) return false;
+  padSig = sig; releasePadKeys();
+  box.className = orient === 'none' ? '' : orient;
+  for (const side of ['L', 'R']) {
+    const el = document.getElementById('pad' + side); el.innerHTML = '';
+    for (const name of (want ? want[side] : [])) {
+      const b = PADBTN[name], d = document.createElement('button');
+      d.className = 'cbtn ' + (b.cls || ''); d.innerHTML = b.html; d.setAttribute('aria-label', b.label); d.tabIndex = -1;
+      const press = e => { e.preventDefault(); ac(); try { d.setPointerCapture(e.pointerId); } catch (_) {} d.classList.add('on'); if (!keys[b.code]) { keys[b.code] = true; scene.key && scene.key(b.code); } };
+      const lift = () => { d.classList.remove('on'); keys[b.code] = false; };
+      d.addEventListener('pointerdown', press); d.addEventListener('pointerup', lift); d.addEventListener('pointercancel', lift); d.addEventListener('lostpointercapture', lift);
+      d.addEventListener('contextmenu', e => e.preventDefault());
+      el.appendChild(d);
+    }
+  }
+  return true;
+}
 const K = {
   left: () => keys.ArrowLeft || keys.KeyA, right: () => keys.ArrowRight || keys.KeyD,
   up: () => keys.ArrowUp || keys.KeyW || keys.Space, down: () => keys.ArrowDown || keys.KeyS,
@@ -421,7 +470,6 @@ const Menu = {
       const parts = f.name.includes("'s ") ? [f.name.split(' ').slice(0, -1).join(' '), f.name.split(' ').pop()] : [f.name];
       parts.forEach((l, k) => text(l, x, 514 + k * 15 - (parts.length - 1) * 5, 16, INK, { font: 'b', stroke: '#fff', lw: 4, maxW: gap - 6 }));
     });
-    if (touchMode && innerHeight > innerWidth) text('Tip: turn your phone sideways', 480, 150, 18, INK, { font: 'b' });
   }
 };
 function cardArt(i, x, y) {
@@ -495,16 +543,7 @@ const Rescue = {
   },
   solid(c, r) { if (c < 0 || c >= this.cols || r < 0 || r >= ROWS) return false; return this.grid[r][c] === '#'; },
   plat(c, r) { if (c < 0 || c >= this.cols || r < 0 || r >= ROWS) return false; return this.grid[r][c] === '-'; },
-  touch() {
-    const t = { left: false, right: false, jump: false };
-    if (!touchMode) return t;
-    for (const p of pointers.values()) {
-      if (Math.hypot(p.x - 80, p.y - 470) < 60) t.left = true;
-      else if (Math.hypot(p.x - 200, p.y - 470) < 60) t.right = true;
-      else if (p.x > 600) t.jump = true;
-    }
-    return t;
-  },
+  pads() { return this.state === 'play' || this.state === 'intro' ? { L: ['left', 'right'], R: ['jump'] } : null; },
   hurt() {
     const p = this.p; if (p.inv > 0) return;
     this.hearts--; p.inv = 1.6; p.vy = -420; p.vx = -p.face * 220; SFX.hurt();
@@ -516,8 +555,8 @@ const Rescue = {
     if (this.state === 'select' || this.state === 'fail' || this.state === 'clear') { this.stateT += dt; return; }
     this.stateT += dt;
     if (this.state === 'intro' && this.stateT > 1.6) this.state = 'play';
-    const p = this.p, tc = this.touch();
-    const L = K.left() || tc.left, R = K.right() || tc.right, J = K.up() || tc.jump;
+    const p = this.p;
+    const L = K.left(), R = K.right(), J = K.up();
     const jp = J && !this.prevJump; this.prevJump = J;
     if (this.state !== 'play') return;
     // horizontal
@@ -706,17 +745,11 @@ const Rescue = {
     this.friends.forEach((f, k) => { const x = 214 + k * 36; if (f.got) spr(f.f.id, x, 54, 38); else { ctx.beginPath(); ctx.arc(x, 35, 13, 0, 7); fillStroke('#e8eefc', INK, 2); text('?', x, 36, 18, INK); } });
     rr(452, 12, 92, 46, 23); fillStroke('rgba(255,255,255,.85)', INK, 3); candle(478, 50, .8, T); text('' + this.cnt, 518, 36, 26, INK);
     text(`${this.lvl + 1}. ${L.name}`, 880 - 140, 36, 22, INK, { align: 'right', font: 'b' });
-    if (touchMode && this.state === 'play') {
-      ctx.globalAlpha = .45;
-      for (const [x, dir] of [[80, -1], [200, 1]]) { ctx.beginPath(); ctx.arc(x, 470, 44, 0, 7); fillStroke('#fff', INK, 3); ctx.beginPath(); ctx.moveTo(x + dir * 16, 470); ctx.lineTo(x - dir * 10, 452); ctx.lineTo(x - dir * 10, 488); ctx.closePath(); fillStroke(INK, INK, 2); }
-      ctx.beginPath(); ctx.arc(870, 460, 54, 0, 7); fillStroke('#fff', INK, 3); text('JUMP', 870, 462, 24, INK);
-      ctx.globalAlpha = 1;
-    }
     if (this.msg && this.msg.t > 0) { rr(260, 84, 440, 46, 23); fillStroke('#fff', INK, 3); text(this.msg.s, 480, 108, 24, INK, { font: 'b', maxW: 420 }); }
     if (this.state === 'intro') {
       const a = Math.min(1, this.stateT * 3, (1.6 - this.stateT) * 3);
       ctx.globalAlpha = a; bannerSign(250, 200, 460, 110); text(`Level ${this.lvl + 1}`, 480, 236, 26, PINK); text(L.name, 480, 276, 42, INK); ctx.globalAlpha = 1;
-      if (this.lvl === 0) text(touchMode ? 'Use the arrows to move, JUMP twice to fly!' : 'Arrow keys to move. Space or Up to jump. Jump again in the air to fly!', 480, 340, 22, INK, { font: 'b', stroke: '#fff', lw: 5 });
+      if (this.lvl === 0) text(touchMode ? 'Use the arrow buttons to move. Press JUMP twice to fly!' : 'Arrow keys to move. Space or Up to jump. Jump again in the air to fly!', 480, 340, 22, INK, { font: 'b', stroke: '#fff', lw: 5 });
     }
     if (this.state === 'fail') resultCard('Oh no!', ['The Grumble Cloud got you.', 'Have another go!'], ['joshin']);
     if (this.state === 'clear') resultCard('Level clear!', [`${L.name} is saved!`, `You freed ${this.got.length} friends and found ${this.cnt} candles.`], this.got);
@@ -760,8 +793,8 @@ const Dash = {
     else if (p.jumps < 2) { p.vy = -720; p.jumps = 2; SFX.flap(); burst(this.parts, 170, p.y - 20, 8, ['#f0605d', '#ffd23f']); }
   },
   key(c) { if (['Space', 'ArrowUp', 'KeyW'].includes(c)) this.jump(); },
-  down(p) { if (this.state === 'over') return; if (touchMode && p.x < 300 && p.y > 360) this.slideHeld = true; else this.jump(); },
-  up() { this.slideHeld = [...pointers.values()].some(p => p.x < 300 && p.y > 360); },
+  down() { if (this.state !== 'over') this.jump(); },
+  pads() { return this.state === 'over' ? null : { L: ['slide'], R: ['jump'] }; },
   box() {
     const p = this.p, sl = p.slide > 0 && p.ground;
     return sl ? { x: 140, y: p.y - 34, w: 62, h: 32 } : { x: 150, y: p.y - 64, w: 40, h: 62 };
@@ -877,13 +910,12 @@ const Dash = {
     rr(80, 12, 200, 46, 23); fillStroke('rgba(255,255,255,.88)', INK, 3); text(`${Math.floor(this.score)}`, 180, 36, 28, INK);
     rr(292, 12, 110, 46, 23); fillStroke('rgba(255,255,255,.88)', INK, 3); candle(318, 50, .8, T); text(`${this.candles % 9}/9`, 362, 36, 22, INK);
     let px = 414; for (const [k, c] of [['shield', '#5fc3e4'], ['magnet', '#ffd23f'], ['rush', '#ff6b8b']]) if (this.pow[k] > 0) { rr(px, 16, 120, 38, 19); fillStroke(c, INK, 3); text({ shield: 'Shield', magnet: 'Magnet', rush: 'Rush!' }[k], px + 60, 36, 20, '#fff', { stroke: INK, lw: 4 }); px += 128; }
-    if (touchMode && this.state === 'run') { ctx.globalAlpha = .6; rr(30, 400, 200, 110, 22); fillStroke('#fff', INK, 3); text('SLIDE', 130, 456, 30, INK); ctx.globalAlpha = 1; text('Tap anywhere else to jump', 600, 510, 20, '#fff', { font: 'b', stroke: INK, lw: 4 }); }
     if (this.state === 'ready') {
       paperPanel(220, 110, 520, 290);
       text('Party Dash', 480, 150, 42, INK);
-      const lines = touchMode ? ['Tap to jump (tap again in the air to fly higher).', 'Hold SLIDE to duck under PARTY banners.'] : ['Space or Up to jump (press again to fly higher).', 'Down to slide under PARTY banners.'];
+      const lines = touchMode ? ['Press JUMP to jump (again in the air to fly higher).', 'Hold SLIDE to duck under PARTY banners.'] : ['Space or Up to jump (press again to fly higher).', 'Down to slide under PARTY banners.'];
       lines.concat(['Grab candles: 9 candles = cake bonus!', 'Run into friends with balloons for power-ups.']).forEach((l, i) => text(l, 480, 200 + i * 34, 22, INK, { font: 'b' }));
-      text(touchMode ? 'Tap to start!' : 'Press Space to start!', 480, 360, 28, PINK, { stroke: '#fff', lw: 5 });
+      text(touchMode ? 'Press JUMP to start!' : 'Press Space to start!', 480, 360, 28, PINK, { stroke: '#fff', lw: 5 });
     }
     if (this.state === 'over') resultCard(this.newBest ? 'New best!' : 'Bonk!', [`Score: ${this.final}`, `Candles: ${this.candles}   Cake bonuses: ${this.bonus}`, `Best: ${store.get('best_dash', 0)}   Friends who helped: ${this.cheer.length}`], this.cheer.slice(-8));
   }
@@ -997,7 +1029,8 @@ const Catch = {
     this.spawnT = 0; this.cloud = { x: 200, dir: 1, dropT: 2 }; this.lit = 0; this.helpT = 4; this.bag = shuffle(FRIENDS); this.runner = null; this.helped = [];
     this.pow = { double: 0, slow: 0, big: 0, magnet: 0, shield: 0 }; this.targetX = null; this.buttons = []; this.elapsed = 0; this.hurtT = 0;
   },
-  key(c) { if (this.state === 'ready' && (c === 'Space' || c === 'Enter')) this.state = 'play'; },
+  key(c) { if (this.state === 'ready' && ['Space', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(c)) this.state = 'play'; },
+  pads() { return this.state === 'over' ? null : { L: ['left'], R: ['right'] }; },
   down(p) { if (this.state === 'ready') { this.state = 'play'; return; } this.targetX = p.x; },
   move(p) { this.targetX = p.x; },
   up() { if (!pointers.size) this.targetX = null; },
@@ -1101,8 +1134,8 @@ const Catch = {
     if (this.state === 'ready') {
       paperPanel(220, 110, 520, 280);
       text('Cake Catch', 480, 150, 42, INK);
-      [touchMode ? 'Drag your finger to move Joshin.' : 'Arrow keys or the mouse move Joshin.', 'Catch candles, berries, cupcakes and stars.', "Don't catch the Grumble Cloud's stink bombs!", 'Friends run by with power-ups. 60 seconds!'].forEach((l, i) => text(l, 480, 198 + i * 34, 22, INK, { font: 'b' }));
-      text(touchMode ? 'Tap to start!' : 'Click or press Space to start!', 480, 350, 28, PINK, { stroke: '#fff', lw: 5 });
+      [touchMode ? 'Use the arrow buttons to move Joshin.' : 'Arrow keys or the mouse move Joshin.', 'Catch candles, berries, cupcakes and stars.', "Don't catch the Grumble Cloud's stink bombs!", 'Friends run by with power-ups. 60 seconds!'].forEach((l, i) => text(l, 480, 198 + i * 34, 22, INK, { font: 'b' }));
+      text(touchMode ? 'Press an arrow to start!' : 'Click or press Space to start!', 480, 350, 28, PINK, { stroke: '#fff', lw: 5 });
     }
     if (this.state === 'over') resultCard(this.lives <= 0 ? 'Stinky!' : this.newBest ? 'New best!' : "Time's up!", [`Score: ${this.score}`, `Best: ${store.get('best_catch', 0)}`, `Friends who helped: ${this.helped.length}`], this.helped.slice(-8));
   }
@@ -1139,6 +1172,7 @@ const Party = {
 let last = 0;
 function frame(ts) {
   const dt = Math.min(.033, (ts - last) / 1000 || 0); last = ts; T += dt;
+  if (layoutPads()) resize();
   scene.update(dt);
   ctx.save(); scene.draw(); drawButtons(); drawGlobalButtons(); ctx.restore();
   requestAnimationFrame(frame);
