@@ -102,7 +102,7 @@ function loadImages() {
 const SCALE_FIX = { oliver: 2.4 };
 function spr(id, x, y, h, o = {}) {
   const im = IMG[id]; if (!im) return;
-  h *= SCALE_FIX[id] || 1;
+  if (!o.noFix) h *= SCALE_FIX[id] || 1;
   const w = im.width * h / im.height;
   ctx.save(); ctx.translate(x, y);
   if (o.rot) ctx.rotate(o.rot);
@@ -576,8 +576,9 @@ const CharSelect = {
     for (const k of this.cells()) {
       const sel = k.i === this.sel, cx = k.x + k.w / 2;
       rr(k.x + 4, k.y + 4, k.w - 8, k.h - 8, 14); fillStroke(sel ? '#ffe9a8' : PAPER, sel ? PINK : INK, sel ? 5 : 2.5);
-      const hgt = k.h * (k.c.id === 'joshin' ? .62 : .56);
-      spr(k.c.id, cx, k.y + k.h - 30 - (sel ? Math.abs(Math.sin(T * 7)) * 8 : 0), hgt);
+      // Oliver is drawn whole (hat included) so his hat stays inside his own box
+      const tall = k.c.id === 'oliver', hgt = tall ? k.h - 46 : k.h * (k.c.id === 'joshin' ? .62 : .56);
+      spr(k.c.id, cx, k.y + k.h - 30 - (sel ? Math.abs(Math.sin(T * 7)) * (tall ? 4 : 8) : 0), hgt, { noFix: tall });
       const two = k.c.name.includes("'s ");
       const parts = two ? [k.c.name.split(' ').slice(0, -1).join(' '), k.c.name.split(' ').pop()] : [k.c.name];
       parts.forEach((l, j) => text(l, cx, k.y + k.h - 19 + j * 13 - (parts.length - 1) * 6, two ? 14 : 16, INK, { font: 'b', maxW: k.w - 12 }));
