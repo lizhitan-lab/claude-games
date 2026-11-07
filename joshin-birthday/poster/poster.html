@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Joshin's Birthday Arcade Poster</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Patrick+Hand&display=swap">
+<style>
+  /* A4 portrait poster (794 x 1123 CSS px), crayon-party look matching the game */
+  :root { --ink: #1d2b5c; --pink: #ff2e78; --rose: #ff6b8b; --paper: #fff8e8; --banner: #f7e3a1; --sky1: #79c7f2; --sky2: #d4f0ff; --grass: #9ad97a;
+    --ft: "Baloo 2", system-ui, sans-serif; --fb: "Patrick Hand", "Comic Sans MS", system-ui, sans-serif; }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { width: 794px; height: 1123px; overflow: hidden; background: var(--sky1); color: var(--ink); font-family: var(--fb);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .poster { position: relative; width: 794px; height: 1123px; overflow: hidden; background: linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 70%); }
+  .bunting { position: absolute; left: 0; top: 0; width: 100%; height: 50px; }
+  .cloud { position: absolute; background: #fff; border-radius: 50px; box-shadow: 0 0 0 4px #c4e3f5; }
+  .cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; border-radius: 50%; }
+  .cloud::before { width: 55%; height: 140%; left: 14%; top: -60%; }
+  .cloud::after { width: 40%; height: 110%; right: 12%; top: -40%; }
+
+  /* the highlight: gift ribbon */
+  .gift { position: absolute; top: 44px; left: 50%; transform: translateX(-50%) rotate(-2deg); display: flex; align-items: center; gap: 14px; z-index: 5; }
+  .ribbon { position: relative; background: var(--pink); color: #fff; font: 800 44px/1 var(--ft); padding: 16px 44px 10px; border: 4px solid var(--ink);
+    border-radius: 14px; box-shadow: 0 7px 0 var(--ink); white-space: nowrap; text-shadow: 0 3px 0 var(--ink); letter-spacing: .5px; }
+  .ribbon::before, .ribbon::after { content: ""; position: absolute; top: 18px; width: 46px; height: 62px; background: #d81b60; border: 4px solid var(--ink); z-index: -1; }
+  .ribbon::before { left: -34px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 30% 50%); }
+  .ribbon::after { right: -34px; clip-path: polygon(0 0, 100% 0, 70% 50%, 100% 100%, 0 100%); }
+  .ribbon b { color: #ffe066; }
+  .giftbox { width: 78px; height: 78px; flex: none; }
+
+  .title { position: absolute; top: 150px; left: 50%; transform: translateX(-50%); width: 660px; text-align: center; padding: 18px 20px 14px;
+    background: var(--banner); border: 4px solid var(--ink); border-radius: 8px; clip-path: polygon(0 3%, 10% 0, 20% 3%, 30% 0, 40% 3%, 50% 0, 60% 3%, 70% 0, 80% 3%, 90% 0, 100% 3%, 99% 50%, 100% 97%, 90% 100%, 80% 97%, 70% 100%, 60% 97%, 50% 100%, 40% 97%, 30% 100%, 20% 97%, 10% 100%, 0 97%, 1% 50%); }
+  .title h1 { margin: 0; font: 800 48px/1.05 var(--ft); letter-spacing: -.5px; white-space: nowrap; }
+  .title p { margin: 2px 0 0; font: 32px/1.1 var(--fb); color: var(--pink); }
+
+  .hero { position: absolute; top: 290px; left: 34px; right: 34px; height: 330px; }
+  .joshin { position: absolute; left: 40px; top: 24px; width: 245px; transform: rotate(-4deg); filter: drop-shadow(0 6px 0 rgba(29,43,92,.18)); }
+  .speech { position: absolute; left: 22px; top: 262px; background: #fff; border: 3px solid var(--ink); border-radius: 22px; padding: 8px 16px; font: 24px/1.15 var(--fb); width: 290px; text-align: center; }
+  .spark { position: absolute; width: 30px; height: 30px; }
+  .qrcard { position: absolute; right: 0; top: 0; width: 360px; background: #fff; border: 5px solid var(--ink); border-radius: 26px; box-shadow: 0 8px 0 var(--ink);
+    padding: 14px 18px 12px; text-align: center; }
+  .qrcard h2 { margin: 0; font: 800 38px/1 var(--ft); color: var(--pink); }
+  .qrcard img { display: block; width: 232px; height: 232px; margin: 6px auto 2px; }
+  .qrcard .hint { font: 21px/1.15 var(--fb); }
+  .qrcard .url { font: 14px/1.2 var(--fb); color: #4b5683; margin-top: 2px; }
+
+  .games { position: absolute; top: 660px; left: 30px; right: 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .game { background: var(--paper); border: 4px solid var(--ink); border-radius: 16px; padding: 7px 7px 8px; box-shadow: 0 5px 0 var(--ink); text-align: center; }
+  .game img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 9px; border: 2px solid var(--ink); }
+  .game h3 { margin: 6px 0 0; font: 800 18px/1.05 var(--ft); white-space: nowrap; }
+  .game p { margin: 2px 0 0; font: 17px/1.1 var(--fb); }
+  .game .n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--c); color: #fff; font: 800 15px/1 var(--ft); border: 2px solid var(--ink); margin-right: 4px; vertical-align: 2px; }
+
+  .facts { position: absolute; top: 840px; left: 0; right: 0; display: flex; justify-content: center; gap: 10px; }
+  .facts span { background: #fff; border: 3px solid var(--ink); border-radius: 999px; padding: 4px 14px 2px; font: 20px/1.2 var(--fb); }
+
+  .hills { position: absolute; left: -20px; right: -20px; bottom: -40px; height: 250px; background: var(--grass); border-radius: 50% 50% 0 0 / 60px 60px 0 0; border-top: 4px solid rgba(29,43,92,.25); }
+  .crowd { position: absolute; left: 22px; right: 22px; display: grid; grid-template-columns: repeat(12, 1fr); align-items: end; justify-items: center; }
+  .crowd.back { top: 896px; } .crowd.front { top: 990px; }
+  .crowd figure { margin: 0; display: flex; flex-direction: column; align-items: center; }
+  .crowd img { height: 64px; width: auto; }
+  .crowd img.oliver { height: 82px; margin-top: -18px; }
+  .crowd figcaption { font: 13px/1 var(--fb); margin-top: 1px; white-space: nowrap; text-shadow: 0 0 3px #fff, 0 0 3px #fff; }
+  .footer { position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font: 800 20px/1 var(--ft); color: var(--ink); }
+  .footer em { font-style: normal; color: var(--pink); }
+</style>
+</head>
+<body>
+<div class="poster">
+  <svg class="bunting" viewBox="0 0 794 50" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 4 Q397 34 794 4" fill="none" stroke="#1d2b5c" stroke-width="2.5"/>
+    <g stroke="#1d2b5c" stroke-width="2.5" stroke-linejoin="round">
+      <script>/* static triangles below */</script>
+    </g>
+  </svg>
+  <div class="cloud" style="left:40px;top:250px;width:120px;height:44px"></div>
+  <div class="cloud" style="right:60px;top:612px;width:90px;height:34px"></div>
+  <div class="cloud" style="left:330px;top:592px;width:70px;height:26px"></div>
+
+  <div class="gift">
+    <svg class="giftbox" viewBox="0 0 80 80" aria-hidden="true">
+      <ellipse cx="29" cy="17" rx="13" ry="9" transform="rotate(-25 29 17)" fill="#ffe066" stroke="#1d2b5c" stroke-width="4"/>
+      <ellipse cx="51" cy="17" rx="13" ry="9" transform="rotate(25 51 17)" fill="#ffe066" stroke="#1d2b5c" stroke-width="4"/>
+      <rect x="8" y="26" width="64" height="48" rx="6" fill="#c58cf0" stroke="#1d2b5c" stroke-width="4"/>
+      <rect x="34" y="26" width="12" height="48" fill="#ffe066" stroke="#1d2b5c" stroke-width="3"/>
+      <rect x="10" y="40" width="60" height="10" fill="#ffe066"/>
+    </svg>
+    <div class="ribbon">A little gift from <b>Lucas</b></div>
+  </div>
+
+  <div class="title">
+    <h1>Joshin's Birthday Arcade</h1>
+    <p>Happy 9th Birthday, Joshin!</p>
+  </div>
+
+  <div class="hero">
+    <svg class="spark" style="left:0;top:10px" viewBox="0 0 30 30"><path d="M15 1 L18.5 11.5 L29 15 L18.5 18.5 L15 29 L11.5 18.5 L1 15 L11.5 11.5 Z" fill="#ffd23f" stroke="#1d2b5c" stroke-width="2"/></svg>
+    <svg class="spark" style="left:290px;top:30px;width:24px" viewBox="0 0 30 30"><path d="M15 1 L18.5 11.5 L29 15 L18.5 18.5 L15 29 L11.5 18.5 L1 15 L11.5 11.5 Z" fill="#ff8ac6" stroke="#1d2b5c" stroke-width="2"/></svg>
+    <img class="joshin" src="../img/joshin.png" alt="Joshin flying in his red cape">
+    <div class="speech">4 party games starring<br>Joshin and all his friends!</div>
+    <div class="qrcard">
+      <h2>Scan to play!</h2>
+      <img src="qr-code.png" alt="QR code that opens Joshin's Birthday Arcade">
+      <div class="hint">Point your phone camera here</div>
+      <div class="url">claude.ai/artifact/GcLtihDv84Jrt7sG8SmD17</div>
+    </div>
+  </div>
+
+  <div class="games">
+    <div class="game" style="--c:#ff6b8b"><img src="shot-rescue.png" alt=""><h3><span class="n">1</span>Birthday Rescue</h3><p>Free all 24 friends!</p></div>
+    <div class="game" style="--c:#ffb02e"><img src="shot-dash.png" alt=""><h3><span class="n">2</span>Party Dash</h3><p>Run, jump and slide!</p></div>
+    <div class="game" style="--c:#36b37e"><img src="shot-find.png" alt=""><h3><span class="n">3</span>Find Your Friend</h3><p>Spot them fast!</p></div>
+    <div class="game" style="--c:#4c8de8"><img src="shot-catch.png" alt=""><h3><span class="n">4</span>Cake Catch</h3><p>Catch the treats!</p></div>
+  </div>
+
+  <div class="facts"><span>Play as any of 25 characters</span><span>Phone, tablet or computer</span><span>Free, no download</span></div>
+
+  <div class="hills"></div>
+  <div class="crowd back" id="back"></div>
+  <div class="crowd front" id="front"></div>
+  <div class="footer">TQ for coming to my birthday party! <em>&hearts;</em></div>
+</div>
+<script>
+  // bunting flags
+  const g = document.querySelector('.bunting g'), cols = ['#f0605d', '#ffd23f', '#5fc3e4', '#7ed957', '#c58cf0', '#ff8ac6'];
+  for (let i = 0; i < 16; i++) {
+    const u = (i + .5) / 16, x = u * 794, y = 4 + 30 * 4 * u * (1 - u) * .5 + 1;
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', `M${x - 17} ${y} L${x + 17} ${y} L${x} ${y + 34} Z`); p.setAttribute('fill', cols[i % cols.length]); g.appendChild(p);
+  }
+  const F = [['isaac','Isaac'],['josiah','Josiah'],['brandon','Brandon'],['jaytzen','Jay Tzen'],['olivia','Olivia'],['jaytzen_sister',"Jay Tzen's sis"],
+    ['oliver','Oliver'],['kaile','Kaile'],['yaning','Yaning'],['chloe','Chloe'],['lavain','Lavain'],['nathaneil','Nathaneil'],
+    ['natanya','Natanya'],['jacob','Jacob'],['jayden','Jayden'],['jayden_sister',"Jayden's sis"],['gavin','Gavin'],['yuki','Yuki'],
+    ['yuki_brother',"Yuki's bro"],['angus','Angus'],['stella','Stella'],['alice','Alice'],['aly','Aly'],['abigail','Abigail']];
+  F.forEach(([id, name], i) => {
+    const fig = document.createElement('figure');
+    fig.innerHTML = `<img class="${id === 'oliver' ? 'oliver' : ''}" src="../img/${id}.png" alt=""><figcaption>${name}</figcaption>`;
+    document.getElementById(i < 12 ? 'back' : 'front').appendChild(fig);
+  });
+</script>
+</body>
+</html>
