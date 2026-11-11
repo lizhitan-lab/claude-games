@@ -1,5 +1,5 @@
 /* Offline cache: every file the game needs. Bump VERSION when files change. */
-const VERSION = 'camp-ch1-v1';
+const VERSION = 'camp-ch1-v2';
 const FILES = [
   './', './index.html', './style.css', './data.js', './app.js', './manifest.webmanifest',
   './lib/pinyin-pro.js', './lib/hanzi-writer.min.js', './lib/hanzi-data.js',

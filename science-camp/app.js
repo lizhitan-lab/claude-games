@@ -16,7 +16,53 @@
   } catch (e) { P = null; }
   if (!P || P.v !== 1) P = freshState();
   function save() {
+    P.t = Date.now();
     try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) { /* storage unavailable: keep playing in memory */ }
+    scheduleCloud();
+  }
+
+  /* Optional cloud save (only when running as a claude.ai artifact): the
+     viewer's own private document, so progress follows them across devices. */
+  let cloudRef = null, cloudTimer = 0, cloudBusy = false, cloudDirty = false;
+  function scheduleCloud() {
+    if (!cloudRef) return;
+    clearTimeout(cloudTimer);
+    cloudTimer = setTimeout(pushCloud, 1500);
+  }
+  function pushCloud() {
+    if (!cloudRef) return;
+    if (cloudBusy) { cloudDirty = true; return; }
+    cloudBusy = true;
+    cloudRef.set({ state: JSON.stringify(P), t: P.t || 0 })
+      .catch(() => {})
+      .finally(() => { cloudBusy = false; if (cloudDirty) { cloudDirty = false; pushCloud(); } });
+  }
+  async function cloudInit() {
+    const cl = window.claude;
+    if (!cl || typeof cl.use !== 'function') return;
+    try {
+      const [db, user] = await Promise.all([cl.use('db'), cl.use('user')]);
+      if (!db || !user) return;
+      const uid = await user.id();
+      if (!uid) return;
+      const ref = db.collection('data/users/' + uid).doc('camp-ch1');
+      const snap = await ref.get();
+      let remoteT = -1;
+      if (snap.exists) {
+        const d = snap.data() || {};
+        remoteT = +d.t || 0;
+        let remote = null;
+        try { remote = JSON.parse(d.state); } catch (e) { remote = null; }
+        if (remote && remote.v === 1 && remoteT > (P.t || 0) && !curKey) {
+          P = remote;
+          try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) { /* ignore */ }
+          applyPy();
+          showHome();
+        }
+      }
+      cloudRef = ref;
+      if ((P.t || 0) > remoteT) pushCloud();
+    } catch (e) { cloudRef = null; }
   }
 
   /* ================= helpers ================= */
@@ -304,11 +350,16 @@
     const test = h('button', { class: 'big-btn secondary zh', style: 'margin-top:14px' }, '🔊 ' + R('试一试声音'));
     test.onclick = () => speak('你好！我是芽芽博士。我们一起学科学吧！');
     const reset = h('button', { class: 'big-btn secondary zh', style: 'margin-top:12px;color:#c0392b' }, '🗑️ ' + R('重新开始（删除所有记录）'));
+    let armed = false;
     reset.onclick = () => {
-      if (confirm('确定要删除所有记录吗？Delete all progress?')) {
-        const keep = { py: P.py, snd: P.snd, auto: P.auto };
-        P = Object.assign(freshState(), keep); save(); m.remove(); showHome();
+      if (!armed) {
+        armed = true;
+        reset.innerHTML = '⚠️ ' + R('再按一次，确定删除');
+        setTimeout(() => { armed = false; reset.innerHTML = '🗑️ ' + R('重新开始（删除所有记录）'); }, 4000);
+        return;
       }
+      const keep = { py: P.py, snd: P.snd, auto: P.auto };
+      P = Object.assign(freshState(), keep); save(); m.remove(); showHome();
     };
     const close = h('button', { class: 'big-btn zh', style: 'margin-top:12px' }, R('好了'));
     close.onclick = () => m.remove();
@@ -1472,7 +1523,8 @@
   /* ================= boot ================= */
   applyPy();
   showHome();
-  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  cloudInit();
+  if ('serviceWorker' in navigator && !window.claude && (location.protocol === 'https:' || location.hostname === 'localhost')) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
   window.__camp = { get P() { return P; }, startMission, runMission, showHome, R };
