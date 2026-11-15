@@ -1,5 +1,5 @@
 ---
-name: chaoxie-practice
+name: chaoxie
 description: Turn a child's Chinese 抄写 (copy-writing) or 生字/词语 homework into an interactive 描红 handwriting practice page on the iPad. Each word gets a stroke-order animation, one tracing pass, then is written N times without the outline, with strict stroke-order checking, then a 听写 dictation and a 错字本 mistake book. Use this whenever the user shares a photo or list of Chinese words to copy, practise or memorise (抄写, 描红, 生字表, 词语表, 听写 list, 默写, 写字 homework, "help my kid practise writing these characters"), even if they don't say 抄写 or ask for a page explicitly.
 ---
 
@@ -15,6 +15,10 @@ Defaults this family chose: **trace 1 + write 3**, **dictation on**, **mistake b
 **a new artifact link for each list**.
 
 ## 1. Get the words
+
+If the user just types `/chaoxie` with nothing else, reply briefly (in the language they use) asking
+them to send a photo of the 抄写 homework or type the words, and mention they can add how many times
+to write each one. Then continue from here when they answer.
 
 Usually the user sends a **photo of the homework** (抄写本, worksheet, 生字表, a teacher's list in a
 chat app). Read it carefully:
