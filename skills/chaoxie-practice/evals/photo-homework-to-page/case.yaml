@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: photo-homework-to-page
+expected_outcome: |
+  Claude reads the six words from the worksheet photo in order (花园 蝴蝶 美丽 蜜蜂 快乐 长大),
+  uses the printed pinyin (长大 = zhǎng dà), sets repeats to 3 from "每个词语抄写三遍",
+  builds the practice page with the skill's script and returns it (artifact link or standalone file)
+  with the word list shown back to the parent.
+context:
+  scaffold_script: place-files.sh

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: typed-list-with-repeat-count
+expected_outcome: |
+  Claude builds a page with the four distinct words 认真 仔细 观察 耐心 (duplicate removed,
+  punctuation ignored), repeats set to 5, short English hints for each word, and returns the page.
