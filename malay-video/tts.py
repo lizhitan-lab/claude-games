@@ -6,14 +6,11 @@ Usage: python3 tts.py [scene_id ...]
 import base64, json, os, sys, time, wave, urllib.request, urllib.error
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-MODEL = os.environ.get("TTS_MODEL", "gemini-2.5-flash-preview-tts")
+MODEL = os.environ.get("TTS_MODEL", "gemini-3.8-flash-tts")
 VOICE = os.environ.get("TTS_VOICE", "Leda")  # youthful, bright
 URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 
-STYLE = ("Read this aloud as a warm, cheerful, playful children's TV host talking to a "
-         "9-year-old. Speak English clearly at a relaxed pace. Pronounce every Malay word "
-         "with a natural Malaysian Malay accent, and when a word is broken into syllables, "
-         "say each syllable slowly with a short pause between them. Text:\n\n")
+STYLE = "Say in a warm, cheerful, playful voice for a 9-year-old, with Malay words in a Malaysian accent: "
 
 
 def tts(text, out_path):
