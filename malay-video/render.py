@@ -116,10 +116,39 @@ def read_wav(path):
     return a
 
 
+def fades(a, ms=15):
+    n = min(int(ms / 1000 * SR), len(a) // 2)
+    if n:
+        a = a.copy(); r = np.linspace(0, 1, n)
+        a[:n] *= r; a[-n:] *= r[::-1]
+    return a
+
+
+def clean_voice(a):
+    """Gemini TTS clips end with a ~0.16 s full-scale noise burst after a short
+    silence: cut everything from the last silent gap onward, then trim, fade and
+    bring the level down so nothing clips when chimes and music are mixed in."""
+    win = int(0.02 * SR)
+    rms = np.array([np.sqrt((a[i:i + win] ** 2).mean()) for i in range(0, len(a) - win + 1, win)])
+    loud = rms > 0.01
+    tail = int(0.8 / 0.02)
+    # last loud window that is followed by >=0.2 s of silence before the burst
+    end = len(rms)
+    for i in range(len(rms) - 1, max(len(rms) - tail, 0), -1):
+        if not loud[i] and not loud[max(i - 9, 0):i].any():
+            end = max(i - 9, 0); break
+    while end > 0 and not loud[end - 1]:
+        end -= 1
+    start = int(np.argmax(loud))
+    a = a[max(start - 2, 0) * win:(end + 3) * win]
+    peak = np.percentile(np.abs(a), 99.95) or 1
+    return fades(a * (0.5 / peak), 20)
+
+
 def voice(name, est_text=""):
     p = os.path.join(HERE, "audio", name + ".wav")
     if os.path.exists(p):
-        return read_wav(p)
+        return clean_voice(read_wav(p))
     if not PREVIEW:
         raise SystemExit(f"missing audio/{name}.wav (run tts.py, or use --preview)")
     secs = max(1.5, len(est_text.split()) / 2.4)
@@ -133,10 +162,10 @@ def chime(kind="ding"):
     for i, f in enumerate(notes):
         st = int(i * 0.08 * SR)
         tt = t[: len(t) - st]
-        out[st:] += np.sin(2 * np.pi * f * tt) * np.exp(-tt * 6) * 0.25
+        out[st:] += np.sin(2 * np.pi * f * tt) * np.exp(-tt * 6) * 0.07
     if kind == "tick":
         out = out[: int(0.25 * SR)]
-    return out
+    return fades(out, 8)
 
 
 def music(total_s):
@@ -239,12 +268,9 @@ def answer_overlay(word, meaning):
 # ---------- render ----------
 
 def render_seg(i, seg):
+    """Render one silent video segment; returns (path, exact duration)."""
     dur = len(seg.audio) / SR
     frames = int(math.ceil(dur * FPS))
-    wav = os.path.join(BUILD, f"s{i:03d}.wav")
-    a16 = (np.clip(seg.audio, -1, 1) * 32767).astype(np.int16)
-    with wave.open(wav, "wb") as w:
-        w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes(a16.tobytes())
     ov = os.path.join(BUILD, f"o{i:03d}.png")
     (seg.ov or Image.new("RGBA", (W, H), (0, 0, 0, 0))).save(ov)
     if seg.zoom:
@@ -254,45 +280,57 @@ def render_seg(i, seg):
         bgf = f"[0:v]scale={W}:{H},fps={FPS}[bg]"
     out = os.path.join(BUILD, f"s{i:03d}.mp4")
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", str(FPS), "-i", seg.bg,
-           "-i", ov, "-i", wav, "-filter_complex", f"{bgf};[bg][1:v]overlay=0:0,format=yuv420p[v]",
-           "-map", "[v]", "-map", "2:a", "-frames:v", str(frames), "-c:v", "libx264", "-preset", "medium",
-           "-crf", "20", "-c:a", "aac", "-b:a", "192k", "-ar", str(SR), "-shortest", out]
-    subprocess.run(cmd, check=True)
-    return out, frames / FPS
+           "-i", ov, "-filter_complex", f"{bgf};[bg][1:v]overlay=0:0,format=yuv420p[v]",
+           "-map", "[v]", "-frames:v", str(frames), "-c:v", "libx264", "-preset", "medium",
+           "-crf", "20", "-an", out]
+    if not (os.path.exists(out) and "--reuse-video" in sys.argv):
+        subprocess.run(cmd, check=True)
+    return out, frames
 
 
 def main():
     segs = build_segments()
-    files, total = [], 0.0
+    files, track = [], []
     for i, s in enumerate(segs):
-        f, dur = render_seg(i, s); files.append(f); total += dur
-        print(f"seg {i:02d} {dur:5.1f}s", flush=True)
+        f, frames = render_seg(i, s); files.append(f)
+        n = int(round(frames / FPS * SR))          # audio length == video length exactly
+        a = np.zeros(n, np.float32); m = min(n, len(s.audio)); a[:m] = s.audio[:m]
+        track.append(a)
+        print(f"seg {i:02d} {frames / FPS:5.1f}s", flush=True)
+    voice_track = np.concatenate(track)
+    write_wav(os.path.join(BUILD, "voice.wav"), voice_track)
     lst = os.path.join(BUILD, "list.txt")
     open(lst, "w").write("".join(f"file '{f}'\n" for f in files))
     joined = os.path.join(BUILD, "joined.mp4")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined], check=True)
-    finish(joined, total)
+    finish(joined, len(voice_track) / SR)
+
+
+def write_wav(path, a):
+    with wave.open(path, "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
+        w.writeframes((np.clip(a, -1, 1) * 32767).astype(np.int16).tobytes())
 
 
 def finish(joined, total):
-    m = music(total + 1)
+    v = read_wav(os.path.join(BUILD, "voice.wav"))
+    m = music(total)[: len(v)]
     fade = int(3 * SR); m[-fade:] *= np.linspace(1, 0, fade)
-    mw = os.path.join(BUILD, "music.wav")
-    with wave.open(mw, "wb") as w:
-        w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(m, -1, 1) * 32767).astype(np.int16).tobytes())
+    # duck music under the voice (smooth envelope follower)
+    env = np.abs(v); k = int(0.25 * SR)
+    env = np.convolve(env, np.ones(k) / k, "same")
+    duck = 1 - 0.75 * np.clip(env / 0.03, 0, 1)
+    mix = v + m * 0.45 * duck
+    peak = np.abs(mix).max()
+    if peak > 0.89:
+        mix *= 0.89 / peak
+    mw = os.path.join(BUILD, "mix.wav"); write_wav(mw, mix)
     final = os.path.join(OUT, "malay_lesson_preview.mp4" if PREVIEW else "malay_lesson.mp4")
-    # music ducks under the voice via sidechain compression
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", joined, "-i", mw, "-filter_complex",
-                    "[1:a]volume=0.55[m];[0:a]asplit=2[v1][v2];[m][v2]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=400[md];"
-                    "[v1][md]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:TP=-1.5[a]",
-                    "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", final], check=True)
-    print("done", final, f"{total/60:.1f} min")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", joined, "-i", mw,
+                    "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+                    "-shortest", final], check=True)
+    print("done", final, f"{total/60:.1f} min, peak {np.abs(mix).max():.2f}")
 
 
 if __name__ == "__main__":
-    if "--mix-only" in sys.argv:
-        j = os.path.join(BUILD, "joined.mp4")
-        dur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", j]))
-        finish(j, dur)
-    else:
-        main()
+    main()
