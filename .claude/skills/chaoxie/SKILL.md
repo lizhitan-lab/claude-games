@@ -104,6 +104,13 @@ Keep it short and parent-friendly:
 
 ## How the page behaves (for answering questions)
 
+- **Choosing words**: the home screen lists every word as a card. Tapping a card selects or unselects
+  it (全选 / 没写过的 / 清空 help), and 抄写 / 听写 use only the selected words. Each card's ✍️ writes
+  just that one word. Cards show ✅ and stars once a word has been copied.
+- **Skipping and jumping**: ⏭ 跳过这个字 skips the current character (not scored), ⏩ 下一个词 / 下一题
+  moves on and leaves the word unfinished, and 📋 in the top bar lists every word in the session to jump
+  to in any order (✅ finished, ▶️ current), or to end early and see the score. A session ends once every
+  word is finished; skipped ones come round again first. A round where everything was skipped gets no stars.
 - **Strict stroke order**: a stroke out of order or in the wrong direction is a mistake. After 1 miss
   when tracing, 2 when copying, and 3 in dictation, the next stroke flashes as a hint.
 - **👀 看笔顺** replays the animation (costs 2 mistakes outside tracing); **🔁 重写** restarts the character.

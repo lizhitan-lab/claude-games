@@ -12,10 +12,11 @@
 
   /* ================= storage (device + optional private cloud copy) ================= */
   const KEY = 'chaoxie-' + S.id;
-  const fresh = () => ({ v: 1, py: true, snd: true, auto: true, m: {}, best: {}, mistakes: {}, t: 0 });
+  const fresh = () => ({ v: 1, py: true, snd: true, auto: true, m: {}, best: {}, mistakes: {}, t: 0, sel: null, wdone: {} });
   let P;
   try { P = JSON.parse(localStorage.getItem(KEY)); } catch (e) { P = null; }
   if (!P || P.v !== 1) P = fresh();
+  if (!P.wdone) P.wdone = {};
   let cloudRef = null, cloudTimer = 0, cloudBusy = false, cloudDirty = false;
   function save() {
     P.t = Date.now();
@@ -161,11 +162,12 @@
   const app = document.getElementById('app');
   let curKey = null, rerender = () => {};
 
-  function topbar(title, back) {
+  function topbar(title, back, extra) {
     const bar = h('div', { class: 'topbar' });
     bar.append(
       back ? h('button', { class: 'icon-btn', 'aria-label': '返回', onclick: () => { if (window.speechSynthesis) speechSynthesis.cancel(); back(); } }, '⬅️') : h('span', { class: 'icon-btn ghost' }, ''),
       h('div', { class: 'title zh' }, R(title)),
+      ...(extra ? [extra] : []),
       h('button', { class: 'icon-btn small' + (P.py ? ' on' : ''), 'aria-label': '拼音', onclick: (e) => { P.py = !P.py; save(); applyPy(); e.currentTarget.classList.toggle('on', P.py); } }, 'pīn'),
       h('button', { class: 'icon-btn', 'aria-label': '设置', onclick: openSettings }, '⚙️'),
     );
@@ -271,14 +273,20 @@
     const bShow = h('button', { class: 'mini big' }, '👀 ' + R('看笔顺'));
     const bRedo = h('button', { class: 'mini big' }, '🔁 ' + R('重写'));
     const bSay = h('button', { class: 'mini big', 'aria-label': '朗读' }, '🔊');
-    tools.append(bShow, bRedo, bSay);
+    const bSkip = h('button', { class: 'mini big' }, '⏭ ' + R('跳过这个字'));
+    tools.append(bShow, bRedo, bSay, bSkip);
     const msg = h('div', { class: 'muted center zh pad-msg' });
     wrap.append(tag, strip, box, tools, msg);
     root.append(wrap);
 
     const chars = hanOf(word);
     const results = [];
-    let pi = 0, writer = null, mistakes = 0, penalty = 0;
+    let pi = 0, writer = null, mistakes = 0, penalty = 0, dead = false;
+    function advance() {
+      if (dead) return;
+      pi++;
+      if (pi < phases.length) start(); else cb(results);
+    }
     const LABEL = (ph) => ph.mode === 'trace' ? '描红：跟着灰色的字写'
       : ph.mode === 'dict' ? '听写：写出你听到的词语'
         : `抄写：第${ph.round}遍（共${REPEATS}遍）`;
@@ -309,7 +317,8 @@
       });
       if (ph.mode === 'trace') {
         msg.innerHTML = R('先看笔顺……'); msg.dataset.st = 'anim';
-        writer.animateCharacter({ onComplete: () => { msg.innerHTML = R('轮到你了！跟着笔顺写。'); quiz(); } });
+        const mine = writer;
+        writer.animateCharacter({ onComplete: () => { if (dead || writer !== mine) return; msg.innerHTML = R('轮到你了！跟着笔顺写。'); quiz(); } });
       } else {
         msg.innerHTML = R(ph.mode === 'dict' ? '写出你听到的字。' : '不看字，自己写！');
         quiz();
@@ -327,7 +336,7 @@
           const total = mistakes + penalty;
           results.push({ ch: ph.ch, mode: ph.mode, idx: ph.idx, round: ph.round, mistakes: total });
           msg.innerHTML = total <= 1 ? R('写得很好！') + ' ⭐' : total <= 3 ? R('不错！') : R('多练习几次就会了！');
-          setTimeout(() => { pi++; if (pi < phases.length) start(); else cb(results); }, 900);
+          setTimeout(advance, 900);
         },
       });
     }
@@ -335,17 +344,28 @@
       if (!writer || pi >= phases.length) return;
       if (phases[pi].mode !== 'trace') penalty += 2;
       writer.cancelQuiz();
-      writer.animateCharacter({ onComplete: () => { writer.hideCharacter(); quiz(); } });
+      const mine = writer;
+      writer.animateCharacter({ onComplete: () => { if (dead || writer !== mine) return; writer.hideCharacter(); quiz(); } });
+    };
+    bSkip.onclick = () => {
+      if (!writer || pi >= phases.length || dead) return;
+      const ph = phases[pi];
+      try { writer.cancelQuiz(); } catch (e) { /* ignore */ }
+      writer = null;
+      results.push({ ch: ph.ch, mode: ph.mode, idx: ph.idx, round: ph.round, mistakes: 0, skipped: true });
+      msg.innerHTML = R('跳过了');
+      setTimeout(advance, 250);
     };
     bRedo.onclick = () => { if (!writer || pi >= phases.length) return; writer.cancelQuiz(); quiz(); };
     bSay.onclick = () => speak(word);
     start();
+    return { kill() { dead = true; try { if (writer) writer.cancelQuiz(); } catch (e) { /* ignore */ } } };
   }
   /* Score non-trace characters and keep the mistake book up to date. */
   function record(m, results, isReview) {
     let got = 0, total = 0;
     results.forEach((r) => {
-      if (r.mode === 'trace') return;
+      if (r.mode === 'trace' || r.skipped) return;
       total++;
       if (r.mistakes <= 1) got += 1; else if (r.mistakes <= 3) got += 0.5;
       if (isReview) { if (r.mistakes <= 1) delete P.mistakes[r.ch]; }
@@ -359,28 +379,76 @@
 
   /* ================= missions ================= */
   const NAMES = { copy: '抄写', dict: '听写', review: '练习错字' };
-  function genSteps(key) {
-    if (key === 'copy') return WORDS.map((x) => ({ t: 'copy', w: x.w })).concat([{ t: 'end' }]);
-    if (key === 'dict') return shuffle(WORDS.map((x) => x.w)).map((w) => ({ t: 'dict', w })).concat([{ t: 'end' }]);
+  function selected() {
+    const all = WORDS.map((x) => x.w);
+    const set = Array.isArray(P.sel) ? P.sel : all;
+    return all.filter((w) => set.includes(w));
+  }
+  function genSteps(key, only) {
+    const list = only || selected();
+    if (key === 'copy') return list.map((w) => ({ t: 'copy', w })).concat([{ t: 'end' }]);
+    if (key === 'dict') return shuffle(list).map((w) => ({ t: 'dict', w })).concat([{ t: 'end' }]);
     const chars = Object.keys(P.mistakes).sort((a, b) => P.mistakes[b] - P.mistakes[a]).slice(0, 10);
     return chars.map((c) => ({ t: 'copy', w: c, review: true })).concat([{ t: 'end' }]);
   }
-  function startMission(key, freshRun) {
+  function startMission(key, freshRun, only) {
     let m = P.m[key];
-    if (freshRun || !m || m.done) { m = P.m[key] = { steps: genSteps(key), idx: 0, got: 0, total: 0, done: false, newMist: [] }; save(); }
+    if (freshRun || !m || m.done) { m = P.m[key] = { steps: genSteps(key, only), idx: 0, got: 0, total: 0, done: false, newMist: [], doneSteps: [] }; save(); }
+    if (!m.doneSteps) m.doneSteps = [];
     runMission(key);
+  }
+  /* Next step that is not finished yet, looking after `from` first, then from the start. */
+  function nextOpen(m, from) {
+    const last = m.steps.length - 1;
+    for (let j = from + 1; j < last; j++) if (!m.doneSteps.includes(j)) return j;
+    for (let j = 0; j < from && j < last; j++) if (!m.doneSteps.includes(j)) return j;
+    return last;
+  }
+  let curPad = null;
+  function killPad() { if (curPad) { curPad.kill(); curPad = null; } }
+  function openSteps(key) {
+    const m = P.m[key];
+    const md = h('div', { class: 'modal' });
+    const card = h('div', { class: 'card steplist' });
+    card.append(h('h2', { class: 'zh', style: 'margin-top:0' }, R(key === 'dict' ? '选一题' : '选一个词')));
+    const list = h('div', { class: 'steps' });
+    m.steps.forEach((st, j) => {
+      if (st.t === 'end') return;
+      const done = m.doneSteps.includes(j), cur = j === m.idx;
+      const label = st.t === 'dict' && !done ? '第' + (j + 1) + '题' : st.w;
+      const b = h('button', { class: 'step-item' + (done ? ' done' : '') + (cur ? ' cur' : '') },
+        `<span class="zh">${R(label)}</span><span class="st">${done ? '✅' : cur ? '▶️' : ''}</span>`);
+      b.onclick = () => { md.remove(); killPad(); m.idx = j; save(); runMission(key); };
+      list.append(b);
+    });
+    const fin = h('button', { class: 'big-btn secondary zh', style: 'margin-top:12px' }, '🏁 ' + R('结束，看成绩'));
+    fin.onclick = () => { md.remove(); killPad(); m.idx = m.steps.length - 1; save(); runMission(key); };
+    const close = h('button', { class: 'big-btn zh', style: 'margin-top:10px' }, R('关闭'));
+    close.onclick = () => md.remove();
+    card.append(list, fin, close);
+    md.append(card);
+    md.addEventListener('click', (e) => { if (e.target === md) md.remove(); });
+    document.body.append(md);
   }
   function runMission(key) {
     curKey = key;
     const m = P.m[key];
     app.innerHTML = '';
-    app.append(topbar(NAMES[key], showHome));
-    app.append(h('div', { class: 'progress' }, `<i style="width:${Math.round((m.idx / Math.max(1, m.steps.length - 1)) * 100)}%"></i>`));
+    killPad();
+    const listBtn = h('button', { class: 'icon-btn', 'aria-label': '选词' }, '📋');
+    listBtn.onclick = () => openSteps(key);
+    app.append(topbar(NAMES[key], () => { killPad(); showHome(); }, m.steps[m.idx].t === 'end' ? null : listBtn));
+    app.append(h('div', { class: 'progress' }, `<i style="width:${Math.round((m.doneSteps.length / Math.max(1, m.steps.length - 1)) * 100)}%"></i>`));
     const main = h('main'); app.append(main);
     const step = m.steps[m.idx];
     const api = {
       key, m,
-      done(got, total) { m.got += got || 0; m.total += total || 0; m.idx++; save(); runMission(key); },
+      done(got, total) {
+        m.got += got || 0; m.total += total || 0;
+        if (!m.doneSteps.includes(m.idx)) m.doneSteps.push(m.idx);
+        m.idx = nextOpen(m, m.idx); save(); runMission(key);
+      },
+      skip() { killPad(); m.idx = nextOpen(m, m.idx); save(); runMission(key); },
     };
     rerender = () => runMission(key);
     STEPS[step.t](main, step, api);
@@ -400,16 +468,30 @@
     return card;
   }
 
+  function skipRow(root, label, api) {
+    const row = h('div', { class: 'skip-row' });
+    const b = h('button', { class: 'mini big zh' }, R(label));
+    b.onclick = () => api.skip();
+    row.append(b);
+    root.append(row);
+  }
+
   const STEPS = {};
   STEPS.copy = (root, s, api) => {
     const chars = hanOf(s.w);
     root.append(bubble(s.review ? '练习这个字：先描红，再写' + REPEATS + '遍。' : '抄写“' + s.w + '”：先描红，再写' + REPEATS + '遍。',
       'Trace it once, then write it ' + REPEATS + ' times without the grey outline.', { say: s.review ? s.w : '抄写，' + s.w }));
     wordCard(root, s.w);
+    skipRow(root, '⏩ 下一个词', api);
     const phases = chars.map((ch, idx) => ({ ch, idx, mode: 'trace', round: 0 }));
     for (let r = 1; r <= REPEATS; r++) chars.forEach((ch, idx) => phases.push({ ch, idx, mode: 'copy', round: r }));
-    writePad(root, s.w, phases, (res) => {
+    curPad = writePad(root, s.w, phases, (res) => {
+      curPad = null;
       const [got, total] = record(api.m, res, !!s.review);
+      if (!s.review && total) {
+        const pct = got / total;
+        P.wdone[s.w] = Math.max(P.wdone[s.w] || 0, pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : 1);
+      }
       setMood(root, 'happy');
       feedback(root, true, got === total ? '写得真好！' : '完成了！继续加油！');
       nextBtn(root, '继续', () => api.done(got, total));
@@ -418,8 +500,10 @@
   STEPS.dict = (root, s, api) => {
     root.append(bubble('听写：听一听，写出这个词语。', 'Dictation: listen, then write the word.', { say: '听写。' + s.w }));
     const card = wordCard(root, s.w, true);
+    skipRow(root, '⏩ 下一题', api);
     const phases = hanOf(s.w).map((ch, idx) => ({ ch, idx, mode: 'dict', round: 0 }));
-    writePad(root, s.w, phases, (res) => {
+    curPad = writePad(root, s.w, phases, (res) => {
+      curPad = null;
       const [got, total] = record(api.m, res, false);
       card.querySelector('.word-big').innerHTML = R(s.w);
       setMood(root, 'happy');
@@ -430,14 +514,14 @@
   STEPS.end = (root, s, api) => {
     const m = api.m;
     const pct = m.total ? m.got / m.total : 1;
-    const stars = pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : 1;
+    const stars = !m.total ? 0 : pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : 1;
     m.done = true;
-    P.best[api.key] = Math.max(P.best[api.key] || 0, stars);
-    save(); confetti(); sGood();
-    const word = stars === 3 ? '太棒了！' : stars === 2 ? '做得好！' : '完成了！继续加油！';
+    if (stars) P.best[api.key] = Math.max(P.best[api.key] || 0, stars);
+    save(); if (stars) { confetti(); sGood(); }
+    const word = !stars ? '这次都跳过了，下次写一写吧！' : stars === 3 ? '太棒了！' : stars === 2 ? '做得好！' : '完成了！继续加油！';
     const sum = h('div', { class: 'summary' });
     sum.innerHTML = guideSVG('happy').replace('class="guide"', 'class="guide guide-lg"') +
-      `<div class="stars-big">${starsText(stars)}</div><h2 class="zh">${R(word)}</h2>` +
+      (stars ? `<div class="stars-big">${starsText(stars)}</div>` : '') + `<h2 class="zh">${R(word)}</h2>` +
       (m.total ? `<p class="zh score">${R('得分')}：${Math.round(m.got * 10) / 10} / ${m.total}</p>` : '');
     root.append(sum);
     speak(word);
@@ -458,7 +542,7 @@
   /* ================= home ================= */
   function status(key) {
     const m = P.m[key], best = P.best[key] || 0;
-    if (m && !m.done && m.idx > 0) return { label: '继续', sub: `${m.idx}/${m.steps.length - 1}`, again: false };
+    if (m && !m.done && (m.doneSteps || []).length > 0) return { label: '继续', sub: `${m.doneSteps.length}/${m.steps.length - 1}`, again: false };
     if (best) return { label: '再来', sub: starsText(best), again: true };
     return { label: '开始', sub: '', again: false };
   }
@@ -470,26 +554,59 @@
     const hero = h('div', { class: 'hero' });
     hero.innerHTML = `<h1 class="zh">${R(S.title || '抄写练习')}</h1>` + (S.subtitle ? `<div class="zh muted sub">${R(S.subtitle)}</div>` : '');
     main.append(hero);
-    main.append(bubble('今天要抄写' + WORDS.length + '个词语。每个词语先描红，再写' + REPEATS + '遍。' + (S.dictation === false ? '' : '最后来听写！'),
-      `${WORDS.length} words today. Trace each once, then write it ${REPEATS} times.` + (S.dictation === false ? '' : ' Then a dictation.'), { autoSay: false }));
+    main.append(bubble('点词语来选择要抄写的词，不用按顺序。也可以点 ✍️ 只写一个词。',
+      'Tap words to choose which ones to practise, in any order. Tap ✍️ to write just one word.', { autoSay: false }));
+    const sel = selected();
+    const pick = h('div', { class: 'card' });
+    pick.append(h('div', { class: 'zh card-h' }, R('选择词语') + ` <span class="muted">(${sel.length}/${WORDS.length})</span>`));
+    const tools = h('div', { class: 'sel-tools' });
+    const setSel = (list) => { P.sel = list; save(); showHome(); };
+    tools.append(
+      h('button', { class: 'mini zh', onclick: () => setSel(WORDS.map((x) => x.w)) }, R('全选')),
+      h('button', { class: 'mini zh', onclick: () => setSel(WORDS.map((x) => x.w).filter((w) => !P.wdone[w])) }, R('没写过的')),
+      h('button', { class: 'mini zh', onclick: () => setSel([]) }, R('清空')),
+    );
+    pick.append(tools);
+    const grid = h('div', { class: 'pickgrid' });
+    WORDS.forEach((x) => {
+      const on = sel.includes(x.w);
+      const done = P.wdone[x.w];
+      const card = h('div', { class: 'wpick' + (on ? ' on' : ''), role: 'button', 'aria-pressed': on ? 'true' : 'false' });
+      card.innerHTML = `<span class="tick">${on ? '☑️' : '⬜'}</span><div class="w zh">${R(x.w)}</div><div class="small muted">${done ? '✅ ' + starsText(done) : R('还没写')}</div>`;
+      card.onclick = () => { const cur = selected(); setSel(on ? cur.filter((w) => w !== x.w) : cur.concat([x.w])); };
+      const acts = h('div', { class: 'acts' });
+      const say = h('button', { class: 'mini', 'aria-label': '朗读' }, '🔊');
+      say.onclick = (e) => { e.stopPropagation(); speak(x.w); };
+      const one = h('button', { class: 'mini', 'aria-label': '只写这个词' }, '✍️');
+      one.onclick = (e) => { e.stopPropagation(); startMission('copy', true, [x.w]); };
+      acts.append(say, one);
+      card.append(acts);
+      grid.append(card);
+    });
+    pick.append(grid);
+    main.append(pick);
     const mk = (key, e, n, sub) => {
-      const st = status(key);
+      const m = P.m[key];
+      const resume = m && !m.done && (m.doneSteps || []).length > 0;
+      if (resume) {
+        const r = h('button', { class: 'mission' });
+        r.innerHTML = `<span class="e">⏯️</span><div class="mi"><div class="n zh">${R('继续上次的' + NAMES[key])}</div><div class="s">${m.doneSteps.length}/${m.steps.length - 1}</div></div><span class="go zh">${R('继续')}</span>`;
+        r.onclick = () => startMission(key, false);
+        main.append(r);
+      }
       const b = h('button', { class: 'mission' });
-      b.innerHTML = `<span class="e">${e}</span><div class="mi"><div class="n zh">${R(n)}</div><div class="s zh">${R(sub)}</div><div class="s">${st.sub}</div></div><span class="go zh">${R(st.label)}</span>`;
-      b.onclick = () => startMission(key, st.again);
-      return b;
+      b.disabled = !sel.length;
+      b.innerHTML = `<span class="e">${e}</span><div class="mi"><div class="n zh">${R(n)}（${sel.length}）</div><div class="s zh">${R(sub)}</div><div class="s">${P.best[key] ? starsText(P.best[key]) : ''}</div></div><span class="go zh">${R('开始')}</span>`;
+      b.onclick = () => startMission(key, true);
+      main.append(b);
     };
-    main.append(mk('copy', '✍️', '抄写', '描红一遍 · 自己写' + REPEATS + '遍'));
-    if (S.dictation !== false) main.append(mk('dict', '👂', '听写', '听一听，写出来'));
+    mk('copy', '✍️', '抄写选中的词', '描红一遍 · 自己写' + REPEATS + '遍');
+    if (S.dictation !== false) mk('dict', '👂', '听写选中的词', '听一听，写出来');
     const nm = Object.keys(P.mistakes).length;
     const mb = h('button', { class: 'mission' });
     mb.innerHTML = `<span class="e">📕</span><div class="mi"><div class="n zh">${R('错字本')}</div><div class="s zh">${nm ? nm + ' ' + R('个字要多练习') : R('空的，太棒了！')}</div></div><span class="go zh">${R(nm ? '练习' : '查看')}</span>`;
     mb.onclick = showMistakes;
     main.append(mb);
-    const c = h('div', { class: 'card' }, `<div class="zh card-h">${R('词语')}：</div>`);
-    const chips = h('div', { class: 'chips' });
-    WORDS.forEach((x) => { const ch = h('button', { class: 'chip zh' }, R(x.w)); ch.onclick = () => speak(x.w); chips.append(ch); });
-    c.append(chips); main.append(c);
   }
   function showMistakes() {
     rerender = showMistakes;

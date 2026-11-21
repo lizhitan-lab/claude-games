@@ -272,3 +272,19 @@ body.no-py .fill-sentence .blank .bpy { visibility: hidden; }
 .wcard .mini { margin-top: 6px; }
 .topbar { top: env(safe-area-inset-top, 0px); padding-top: 8px; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: #e9f7ff; }
+
+/* ---------- choose words / skip / jump ---------- */
+.sel-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.wpick { position: relative; background: #fff; border: 3px solid var(--line); border-radius: 18px; padding: 10px 8px 8px; text-align: center; cursor: pointer; box-shadow: 0 3px 0 #ecdcbf; }
+.wpick.on { border-color: var(--primary); background: #fff4ec; }
+.wpick .tick { position: absolute; top: 6px; left: 8px; font-size: 18px; }
+.wpick .w { font-size: 26px; font-weight: 800; margin-top: 6px; }
+.wpick .acts { display: flex; gap: 6px; justify-content: center; margin-top: 6px; }
+.mission:disabled { opacity: .45; }
+.skip-row { display: flex; justify-content: flex-end; margin: -4px 0 10px; }
+.steplist { max-height: 85vh; overflow: auto; }
+.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+.step-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 10px; border-radius: 14px; background: #fff; border: 3px solid var(--line); font-size: 19px; font-weight: 700; text-align: left; }
+.step-item.done { background: var(--good-bg); border-color: #9bd8b3; }
+.step-item.cur { border-color: var(--primary); }
