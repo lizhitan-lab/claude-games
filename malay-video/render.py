@@ -150,16 +150,18 @@ def music(total_s):
         t = np.arange(int(dur * SR)) / SR
         return (np.sin(2 * np.pi * f * t) + 0.3 * np.sin(4 * np.pi * f * t)) * np.exp(-t * 4) * amp
 
+    def put(pos, s):
+        i = int(pos * SR); j = min(n, i + len(s)); out[i:j] += s[: j - i]
+
     step = 0; pos = 0.0
     while pos < total_s:
         chord = prog[(step // 8) % 4]
         f = chord[step % 3] if step % 2 == 0 else chord[(step + 1) % 3] * 2
-        s = pluck(f, beat * 1.5, 0.12)
+        put(pos, pluck(f, beat * 1.5, 0.12))
         if step % 4 == 0:
-            s = s + pluck(chord[0] / 2, beat * 3, 0.10)
-        if step % 16 in (2, 6, 10) :
-            s = s + pluck(mel[(step // 2) % 8], beat * 1.2, 0.06)
-        i = int(pos * SR); j = min(n, i + len(s)); out[i:j] += s[: j - i]
+            put(pos, pluck(chord[0] / 2, beat * 3, 0.10))
+        if step % 16 in (2, 6, 10):
+            put(pos, pluck(mel[(step // 2) % 8], beat * 1.2, 0.06))
         step += 1; pos += beat / 2
     return out
 
@@ -269,6 +271,10 @@ def main():
     open(lst, "w").write("".join(f"file '{f}'\n" for f in files))
     joined = os.path.join(BUILD, "joined.mp4")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", joined], check=True)
+    finish(joined, total)
+
+
+def finish(joined, total):
     m = music(total + 1)
     fade = int(3 * SR); m[-fade:] *= np.linspace(1, 0, fade)
     mw = os.path.join(BUILD, "music.wav")
@@ -284,4 +290,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--mix-only" in sys.argv:
+        j = os.path.join(BUILD, "joined.mp4")
+        dur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", j]))
+        finish(j, dur)
+    else:
+        main()
