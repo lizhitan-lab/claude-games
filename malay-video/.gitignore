@@ -1,0 +1,5 @@
+build/
+out/
+audio/
+urls.txt
+__pycache__/
