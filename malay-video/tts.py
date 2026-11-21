@@ -10,7 +10,8 @@ MODEL = os.environ.get("TTS_MODEL", "gemini-3.8-flash-tts")
 VOICE = os.environ.get("TTS_VOICE", "Leda")  # youthful, bright
 URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 
-STYLE = "Say in a warm, cheerful, playful voice for a 9-year-old, with Malay words in a Malaysian accent: "
+# Note: gemini-3.8-flash-tts reads any style prefix aloud, so the script text is sent as-is.
+STYLE = os.environ.get("TTS_STYLE", "")
 
 
 def tts(text, out_path):

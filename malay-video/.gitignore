@@ -3,3 +3,4 @@ out/
 audio/
 urls.txt
 __pycache__/
+audio_raw/
